@@ -1,0 +1,1 @@
+# OpenRA_simplified_chinese
