@@ -17,6 +17,9 @@
 少数非 `.ftl` 载荷的清单、译文基线（汉化组 RASC / TDSC）——**全部在 [ANATOMY.md](ANATOMY.md)**，
 本文档不重复。
 
+与汉化组译名对齐相关的一次性脚本、比对报告与提取数据，在
+[`../tools/rasc-ref/`](../tools/rasc-ref/README.md)（参考仓库需自行从 Gitee 克隆）。
+
 维护时必须守住的三条硬约束：
 
 1. **绝不把 `map.yaml`（地图标题）纳入载荷**——会改变地图 UID，破坏联机与录像兼容性

@@ -43,6 +43,7 @@ OpenRA_simplified_chinese/
 ├─ files/                             载荷：覆盖树的根
 │   └─ mods/{common,ra,cnc,d2k,common-content,ra-content,cnc-content,d2k-content}/
 ├─ tools/                             10 个 Python 脚本（纯标准库）
+│   └─ rasc-ref/                      汉化组译名对齐工作的脚本与产物（参考仓库需自行克隆）
 ├─ docs/
 │   ├─ ANATOMY.md                     本文档
 │   └─ MAINTAINING.md                 维护者操作手册
@@ -193,6 +194,10 @@ CI 里还有一条内联守卫：`files/` 中若出现 `.ttf` / `.ttc` / `.otf` 
 | `check_font_glyphs.py` | 字体字形覆盖检查——看会不会出现方块字 |
 
 调用示例见 [MAINTAINING.md](MAINTAINING.md#校验工具-cli-备忘)。
+
+> 另有一个子目录 [`../tools/rasc-ref/`](../tools/rasc-ref/README.md)：把 `ra` / `cnc` 的单位建筑名
+> 对齐到汉化组 RASC / TDSC 译法时用到的一次性脚本、比对报告与提取数据。**参考仓库本身不入库**
+> （体积大且属他人作品），克隆命令在该目录的 README 里。
 
 ---
 
