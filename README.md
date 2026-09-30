@@ -1,5 +1,7 @@
 # OpenRA 简体中文汉化补丁
 
+[![validate](https://github.com/Janlhin/OpenRA_simplified_chinese/actions/workflows/validate.yml/badge.svg)](https://github.com/Janlhin/OpenRA_simplified_chinese/actions/workflows/validate.yml)
+
 给 **[OpenRA](https://www.openra.net/)**（`playtest-20260222`）加上简体中文的轻量补丁。
 
 - 覆盖 **红色警戒 (ra)**、**泰伯利亚黎明 (cnc)**、**沙丘 2000 (d2k)** 三个模组的界面、单位与建筑名称、

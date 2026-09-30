@@ -42,7 +42,7 @@ OpenRA_simplified_chinese/
 ├─ manifest.json
 ├─ files/                             载荷：覆盖树的根
 │   └─ mods/{common,ra,cnc,d2k,common-content,ra-content,cnc-content,d2k-content}/
-├─ tools/                             8 个 Python 脚本（纯标准库）
+├─ tools/                             9 个 Python 脚本（纯标准库）
 ├─ docs/
 │   ├─ ANATOMY.md                     本文档
 │   └─ MAINTAINING.md                 维护者操作手册
@@ -160,18 +160,26 @@ FluentMessages: ra|fluent/lua.ftl, ra|fluent/campaign.ftl, map.ftl
 
 ---
 
-## `tools/` 8 个脚本
+## `tools/` 9 个脚本
 
-纯标准库，任意平台可跑。分两类——**只有前 4 个进 CI**：
+纯标准库，任意平台可跑。按「谁在什么时候跑」分三组：
 
-### CI / 发布必跑
+### CI 每推必跑（4 个脚本）
 
 | 脚本 | 作用 |
 |---|---|
-| `verify_manifest.py` | `files/` 载荷 ↔ `manifest.json` 是否逐字节一致（CI 第一道闸） |
+| `verify_manifest.py` | `files/` 载荷 ↔ `manifest.json` 是否逐字节一致（第一道闸） |
 | `lint_ftl.py` | Fluent 规范：BOM / 换行 / 缩进 / 花括号。**载荷里出现 CRLF 即视为错误并返回退出码 1** |
 | `struct_check_maps.py` | 地图 `.ftl` 结构自检：键集合、空值、掉到第 0 列的值行 |
-| `build_manifest.py` | 维护者用：diff 英文原版与汉化目录，**重建 `files/` 与全部哈希** |
+| `check_links.py` | Markdown 相对链接与锚点是否存在（`docs/` 引用根目录文件必须写 `../`） |
+
+CI 里还有一条内联守卫：`files/` 中若出现 `.ttf` / `.ttc` / `.otf` 直接判失败。
+
+### 发布 / 维护时手动跑
+
+| 脚本 | 作用 |
+|---|---|
+| `build_manifest.py` | diff 英文原版与汉化目录，**重建 `files/` 与全部哈希**。它会清空并重拷 `files/`，运行前确认没有未提交的手工改动 |
 
 ### 开发审计（需要游戏本体或字体，CI 不跑）
 

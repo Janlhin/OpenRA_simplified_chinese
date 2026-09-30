@@ -35,7 +35,7 @@
    也可以只改 `manifest.json` 里那一个文件的 `size` / `sha256`,但用脚本更不容易出错。
 4. 提 PR,在描述里写清"改了哪个模组的哪句话、为什么"。
 
-> CI 会在 Linux 上重跑上面第 2 步的三个检查,任一失败都会挡下 PR。
+> CI 会在 Linux 上重跑上面第 2 步的三个检查(并额外做文档链接检查与字体分发守卫),任一失败都会挡下 PR。
 > 注意 `files/**` 在 `.gitattributes` 里标了 `-text`,**不要在编辑器里让它自动转换换行**,
 > 否则哈希会对不上。
 
@@ -82,10 +82,11 @@ OpenRA 升级会带来新键、删改旧键。Fluent **不会**在缺键时回�
 | `tools/verify_manifest.py` | 载荷 ↔ manifest 一致性(CI 必跑) |
 | `tools/lint_ftl.py` | Fluent 文件规范(CI 必跑) |
 | `tools/struct_check_maps.py` | 地图 .ftl 结构;给两个参数时与英文原版比对键集合 |
+| `tools/check_links.py` | Markdown 相对链接与锚点(CI 必跑) |
 | `tools/audit_coverage.py` | 覆盖率审计:列出还差哪些没翻,并说明哪些是故意不改的 |
 | `tools/validate_ftl.py` | 与英文原文逐键比对占位符 / 复数选择器 |
 | `tools/check_yaml_fluent_refs.py` | yaml 里引用的消息键是否都能解析(支持与原版差分) |
 | `tools/check_font_glyphs.py` | 检查某个字体是否覆盖所需汉字 |
 | `tools/build_manifest.py` | 维护者:diff 原版与汉化目录,重建 `files/` 与 `manifest.json` |
 
-脚本的调用示例、CI 的四步检查、以及端到端验证记录,都在 [docs/MAINTAINING.md](docs/MAINTAINING.md)。
+脚本的调用示例、CI 的五步检查、以及端到端验证记录,都在 [docs/MAINTAINING.md](docs/MAINTAINING.md)。

@@ -49,6 +49,9 @@
   `manifest.json` / `tools/build_manifest.py` / `docs/*`）由 `OpenRA-simplified-chinese` 统一改为
   GitHub 上的实际仓库名 **`OpenRA_simplified_chinese`**；`manifest.json` 的 `repository` 填为
   <https://github.com/Janlhin/OpenRA_simplified_chinese>，162 个载荷文件的哈希随之重算。
+- **新增 CI 第 5 步**：`tools/check_links.py` 校验 Markdown 的相对链接与锚点——此前 `docs/` 下把
+  `../README.md` 写成 `README.md` 会静默指向不存在的文件，现在会在 PR 上被挡下。脚本 8 → 9 个。
+- README 顶部启用 CI 徽章（`validate` 工作流）。
 
 ## 1.3.0 — 2026-09-30
 

@@ -7,7 +7,7 @@ on:
 
 jobs:
   payload:
-    name: 载荷校验
+    name: 载荷与文档校验
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -24,6 +24,9 @@ jobs:
 
       - name: 地图文案结构自检
         run: python tools/struct_check_maps.py files/mods
+
+      - name: Markdown 相对链接与锚点（docs/ 引用根目录文件须用 ../）
+        run: python tools/check_links.py .
 
       - name: 确认补丁包不包含字体
         run: |

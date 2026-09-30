@@ -66,10 +66,10 @@ git add -A && git commit -m "..." && git push
 - Topics：`openra` `chinese` `translation` `localization` `red-alert` `tiberian-dawn` `dune-2000` `fluent`
 - Release：把 `OpenRA_simplified_chinese-x.y.z.zip` 作为附件上传（zip 已在 `.gitignore` 中，不进仓库）
 
-CI 徽章（可加到 README 顶部，去掉注释符号即可）：
+CI 徽章已在 README 顶部启用：
 
 ```markdown
-<!-- ![validate](https://github.com/Janlhin/OpenRA_simplified_chinese/actions/workflows/validate.yml/badge.svg) -->
+[![validate](https://github.com/Janlhin/OpenRA_simplified_chinese/actions/workflows/validate.yml/badge.svg)](https://github.com/Janlhin/OpenRA_simplified_chinese/actions/workflows/validate.yml)
 ```
 
 ### 打包成 `.exe` 安装包（可选）
@@ -79,12 +79,13 @@ CI 徽章（可加到 README 顶部，去掉注释符号即可）：
 
 ## CI
 
-`.github/workflows/validate.yml` 在 `push` / `pull_request` 时跑四步（Linux runner）：
+`.github/workflows/validate.yml` 在 `push` / `pull_request` 时跑五步（Linux runner）：
 
 1. `verify_manifest.py` —— 载荷与 `manifest.json` 逐字节一致；
 2. `lint_ftl.py files/mods` —— Fluent 规范（BOM / 换行 / 缩进 / 花括号）；
 3. `struct_check_maps.py files/mods` —— 地图文案结构自检；
-4. 守卫：`files/` 中不得出现 `.ttf` / `.ttc` / `.otf`。
+4. `check_links.py .` —— Markdown 相对链接与锚点（`docs/` 引用根目录文件必须写 `../`）；
+5. 守卫：`files/` 中不得出现 `.ttf` / `.ttc` / `.otf`。
 
 > 第 2 步对 **CRLF 换行**判错并返回退出码 1。`.gitattributes` 已声明 `files/** -text`（不转换换行），
 > 所以载荷在本地就必须是 LF——不要用编辑器批量转换换行，否则 `manifest.json` 的哈希会全部失效。
