@@ -42,7 +42,7 @@ OpenRA_simplified_chinese/
 ├─ manifest.json
 ├─ files/                             载荷：覆盖树的根
 │   └─ mods/{common,ra,cnc,d2k,common-content,ra-content,cnc-content,d2k-content}/
-├─ tools/                             9 个 Python 脚本（纯标准库）
+├─ tools/                             10 个 Python 脚本（纯标准库）
 ├─ docs/
 │   ├─ ANATOMY.md                     本文档
 │   └─ MAINTAINING.md                 维护者操作手册
@@ -161,7 +161,7 @@ FluentMessages: ra|fluent/lua.ftl, ra|fluent/campaign.ftl, map.ftl
 
 ---
 
-## `tools/` 9 个脚本
+## `tools/` 10 个脚本
 
 纯标准库，任意平台可跑。按「谁在什么时候跑」分三组：
 
@@ -181,6 +181,7 @@ CI 里还有一条内联守卫：`files/` 中若出现 `.ttf` / `.ttc` / `.otf` 
 | 脚本 | 作用 |
 |---|---|
 | `build_manifest.py` | diff 英文原版与汉化目录，**重建 `files/` 与全部哈希**。它会清空并重拷 `files/`，运行前确认没有未提交的手工改动 |
+| `build_release.py` | 把仓库打成**确定性**发布包 zip（时间戳取自 `manifest.json` 的 `releaseDate`），`--verify` 会解压并重跑四项校验 |
 
 ### 开发审计（需要游戏本体或字体，CI 不跑）
 

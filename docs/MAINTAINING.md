@@ -58,24 +58,32 @@ python tools/struct_check_maps.py files/mods
 git add -A && git commit -m "..." && git push
 ```
 
-## 仓库设置备忘
+## 发新版本
 
-可选的仓库设置（GitHub 网页端）：
+1. 改版本号：`manifest.json` 的 `version` / `releaseDate`，并在 `CHANGELOG.md` 顶部加一节。
+2. 若动过 `files/`，按上节重建载荷与哈希。
+3. 构建发布包：`python tools/build_release.py --verify`
+   （产出 `dist/OpenRA_simplified_chinese-x.y.z.zip`，并打印 SHA-256——写进 Release 说明）
+4. 打 tag 并推送：`git tag -a vX.Y.Z -m "…" && git push origin vX.Y.Z`
+5. 在 GitHub 上以该 tag 创建 Release，把 `dist/*.zip` 作为附件上传；说明直接抄
+   `CHANGELOG.md` 对应版本那一节。
+
+`build_release.py` 打出的包是**确定性**的（zip 时间戳取自 `manifest.json` 的 `releaseDate`），
+同一份仓库内容重复构建得到字节一致的 zip；`--verify` 会把包解压到临时目录并重跑四项校验。
+
+想做成 `.exe` 安装包，可用 [Inno Setup](https://jrsoftware.org/isinfo.php) 打包 `files/`，
+并在 `[Run]` 中调用 `install.ps1 -Target "{app}" -Yes`。
+
+## 仓库信息（已设置）
 
 - 描述：`OpenRA（红警/泰伯利亚黎明/沙丘 2000）简体中文汉化补丁，覆盖界面、单位建筑名、任务目标与全部战役简报`
 - Topics：`openra` `chinese` `translation` `localization` `red-alert` `tiberian-dawn` `dune-2000` `fluent`
-- Release：把 `OpenRA_simplified_chinese-x.y.z.zip` 作为附件上传（zip 已在 `.gitignore` 中，不进仓库）
-
-CI 徽章已在 README 顶部启用：
+- 首个 Release：`v1.3.1`（2026-09-30），附件 `OpenRA_simplified_chinese-1.3.1.zip`
+- CI 徽章已在 README 顶部启用：
 
 ```markdown
 [![validate](https://github.com/Janlhin/OpenRA_simplified_chinese/actions/workflows/validate.yml/badge.svg)](https://github.com/Janlhin/OpenRA_simplified_chinese/actions/workflows/validate.yml)
 ```
-
-### 打包成 `.exe` 安装包（可选）
-
-用 [Inno Setup](https://jrsoftware.org/isinfo.php) 打包 `files/`，
-并在 `[Run]` 中调用 `install.ps1 -Target "{app}" -Yes`。
 
 ## CI
 

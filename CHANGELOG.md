@@ -52,6 +52,10 @@
 - **新增 CI 第 5 步**：`tools/check_links.py` 校验 Markdown 的相对链接与锚点——此前 `docs/` 下把
   `../README.md` 写成 `README.md` 会静默指向不存在的文件，现在会在 PR 上被挡下。脚本 8 → 9 个。
 - README 顶部启用 CI 徽章（`validate` 工作流）。
+- **`tools/build_release.py` 入库**：确定性打包发布包（zip 时间戳取自 `manifest.json` 的
+  `releaseDate`，同一份内容重复构建字节一致），`--verify` 会解压到临时目录并重跑四项校验。
+  脚本 9 → 10 个。
+- **首个 Release 已发布**：`v1.3.1`，附件 `OpenRA_simplified_chinese-1.3.1.zip`（296 KB）。
 
 ## 1.3.0 — 2026-09-30
 
