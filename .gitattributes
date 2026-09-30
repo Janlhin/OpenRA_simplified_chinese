@@ -1,0 +1,16 @@
+# 默认:仓库内文本统一 LF
+* text=auto eol=lf
+
+# Windows 专用脚本沿用 CRLF
+*.bat text eol=crlf
+*.ps1 text eol=crlf
+
+# 载荷必须逐字节保真:任何平台检出都要与 manifest.json 里的 SHA-256 一致,
+# 因此关闭换行转换。
+files/** -text
+
+# 二进制
+*.zip binary
+*.ttf binary
+*.ttc binary
+*.png binary

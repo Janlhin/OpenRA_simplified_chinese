@@ -1,0 +1,34 @@
+name: validate
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  payload:
+    name: 载荷校验
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: 载荷与 manifest.json 是否逐字节一致
+        run: python tools/verify_manifest.py
+
+      - name: Fluent 文件规范（BOM / 换行 / 缩进 / 花括号）
+        run: python tools/lint_ftl.py files/mods
+
+      - name: 地图文案结构自检
+        run: python tools/struct_check_maps.py files/mods
+
+      - name: 确认补丁包不包含字体
+        run: |
+          if find files -iname '*.tt[fc]' -o -iname '*.otf' | grep -q .; then
+            echo "::error::载荷里出现了字体文件,补丁不应分发字体"
+            exit 1
+          fi
+          echo "未发现字体文件 ✓"

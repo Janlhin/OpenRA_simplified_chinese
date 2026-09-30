@@ -1,0 +1,14 @@
+# 安装时生成的备份目录,不应提交
+_zhcn-backup/
+
+# 发布产物
+*.zip
+
+# 系统垃圾文件
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# 编辑器
+.vscode/
+.idea/

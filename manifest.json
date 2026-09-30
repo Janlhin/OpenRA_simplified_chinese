@@ -1,0 +1,1008 @@
+{
+  "name": "OpenRA_simplified_chinese",
+  "displayName": "OpenRA 简体中文汉化补丁",
+  "version": "1.3.1",
+  "releaseDate": "2026-09-30",
+  "engineVersion": "playtest-20260222",
+  "license": "GPL-3.0-or-later",
+  "repository": "https://github.com/Janlhin/OpenRA_simplified_chinese",
+  "stats": {
+    "fluentMessages": 2504,
+    "installerTitles": 30,
+    "mapBriefings": 129,
+    "payloadFiles": 196
+  },
+  "font": {
+    "required": true,
+    "deployTo": "mods/common/SimHei.ttf",
+    "candidates": [
+      "simhei.ttf",
+      "Deng.ttf",
+      "msyh.ttc",
+      "simsun.ttc"
+    ],
+    "note": "不随包分发字体,安装时从本机 Windows 字体目录复制"
+  },
+  "files": [
+    {
+      "path": "mods/cnc-content/fluent/chrome.ftl",
+      "size": 976,
+      "sha256": "f48df5533dc3fa96f951c6d7970ccc4302efda25dd1f5583cc3df9cc4529e2f3"
+    },
+    {
+      "path": "mods/cnc-content/installer/covertops.yaml",
+      "size": 376,
+      "sha256": "3d5f01c77c203be2d9a4c9a6a331d91b4a440a8d825300ac2df0ea5243c8bee9"
+    },
+    {
+      "path": "mods/cnc-content/installer/downloads.yaml",
+      "size": 625,
+      "sha256": "be3f5d808526144cdcead8cd4f53fe30805b1dda6c09d1b32b8b9fada673a267"
+    },
+    {
+      "path": "mods/cnc-content/installer/firstdecade.yaml",
+      "size": 9351,
+      "sha256": "76b2bec4aae32af965ec6473b0595c0e0da7e17990f583bb91e37926469640aa"
+    },
+    {
+      "path": "mods/cnc-content/installer/gdi95.yaml",
+      "size": 4926,
+      "sha256": "5a2948d852c4a0f73a4b60f6e18ff7aaaba6f7c84b08e93e4ebfb38f04fd09eb"
+    },
+    {
+      "path": "mods/cnc-content/installer/nod95.yaml",
+      "size": 4670,
+      "sha256": "2e77ad6e72d320522f2aab5e1fa2d72603e00131c01fd20a1a5d0f1d24db293c"
+    },
+    {
+      "path": "mods/cnc-content/installer/origin.yaml",
+      "size": 18186,
+      "sha256": "597f48d240cc13bffd0db83f9ca5eabd905e171e86f2ed8aba40443d061de151"
+    },
+    {
+      "path": "mods/cnc-content/installer/steam.yaml",
+      "size": 17856,
+      "sha256": "2339440668519cb8e276647f5270804e19a1f6aa6fb8946d0cfd45e3d75a5ed1"
+    },
+    {
+      "path": "mods/cnc-content/mod.yaml",
+      "size": 8264,
+      "sha256": "71fbf01e17c35eee67c5873912a49a01c519cc49dbe28343a8702e6242613957"
+    },
+    {
+      "path": "mods/cnc/chrome/multiplayer-createserver.yaml",
+      "size": 4880,
+      "sha256": "8db222d875baa9985ac4a95412d64348150009a0e0648637118ccbad7b864ae2"
+    },
+    {
+      "path": "mods/cnc/fluent/campaign.ftl",
+      "size": 781,
+      "sha256": "0c7b40e13553bb53d8dd7d842149d11842f68b6e32d4128d164b081290e9dd09"
+    },
+    {
+      "path": "mods/cnc/fluent/chrome.ftl",
+      "size": 31592,
+      "sha256": "323301cd3a8452b0efac9b102cb42195f77759b3ce8bc5195bda52aca01a234b"
+    },
+    {
+      "path": "mods/cnc/fluent/cnc.ftl",
+      "size": 443,
+      "sha256": "0dca0fc4bd591d7864dbcb1a9594d715ff010770884d5a47937e0a2d91857611"
+    },
+    {
+      "path": "mods/cnc/fluent/hotkeys.ftl",
+      "size": 597,
+      "sha256": "2078faa52ca5cb072337fc76a5dc27ad5e437b3b20290beeb934311b38247312"
+    },
+    {
+      "path": "mods/cnc/fluent/lua.ftl",
+      "size": 5580,
+      "sha256": "602ee6df0154e89663b470abfb01eec9691d0ae88732cbae9df22461b34ff0f1"
+    },
+    {
+      "path": "mods/cnc/fluent/rules.ftl",
+      "size": 32810,
+      "sha256": "dfda8aa3598e1966d8ce7706b8364c973828a65dd6c5258bb6ffb00a5e86cdc2"
+    },
+    {
+      "path": "mods/cnc/maps/cnc64gdi01/map.ftl",
+      "size": 474,
+      "sha256": "f269e3a6bcaeb92979b91cf5e2a800cccb66550623cdd8c10b0509b064034dd2"
+    },
+    {
+      "path": "mods/cnc/maps/eviction-notice/map.ftl",
+      "size": 450,
+      "sha256": "3ef35f8dc576c536552440ce0084f76d0ec7dbe227a94f08400de58475048fc0"
+    },
+    {
+      "path": "mods/cnc/maps/funpark01/map.ftl",
+      "size": 338,
+      "sha256": "b974f965b887739f2757550197f2dd54ab53199cb34312f3b9310488ba3275af"
+    },
+    {
+      "path": "mods/cnc/maps/gdi01/map.ftl",
+      "size": 500,
+      "sha256": "23b262924e7a63a2de117215224f997f048e2da9e5ffce461a3036d030bcee4e"
+    },
+    {
+      "path": "mods/cnc/maps/gdi02/map.ftl",
+      "size": 432,
+      "sha256": "91a50da17193a522f8b5079342b24ccd405d25b79b6f5fdae254a09356e72dec"
+    },
+    {
+      "path": "mods/cnc/maps/gdi03/map.ftl",
+      "size": 423,
+      "sha256": "307e1fdcc912c90317a624fe35e9f7786c060b2e8fa31487639fc371be1f21b2"
+    },
+    {
+      "path": "mods/cnc/maps/gdi04a/map.ftl",
+      "size": 433,
+      "sha256": "35fd72a35eb73cbdbabd33566e0e3d910401c1573770be89e790dfd20246a43f"
+    },
+    {
+      "path": "mods/cnc/maps/gdi04b/map.ftl",
+      "size": 433,
+      "sha256": "35fd72a35eb73cbdbabd33566e0e3d910401c1573770be89e790dfd20246a43f"
+    },
+    {
+      "path": "mods/cnc/maps/gdi04c/map.ftl",
+      "size": 417,
+      "sha256": "1566d19f479d3dfbc2c608f9bb937292db78319643440464d4be6068b13dd174"
+    },
+    {
+      "path": "mods/cnc/maps/gdi05a/map.ftl",
+      "size": 467,
+      "sha256": "3bc5f443cf80d520d1960f67b1d8d8a8e2fdc094d8462efb5edefe2b43b060bd"
+    },
+    {
+      "path": "mods/cnc/maps/gdi05b/map.ftl",
+      "size": 467,
+      "sha256": "3bc5f443cf80d520d1960f67b1d8d8a8e2fdc094d8462efb5edefe2b43b060bd"
+    },
+    {
+      "path": "mods/cnc/maps/gdi05c/map.ftl",
+      "size": 467,
+      "sha256": "3bc5f443cf80d520d1960f67b1d8d8a8e2fdc094d8462efb5edefe2b43b060bd"
+    },
+    {
+      "path": "mods/cnc/maps/gdi06/map.ftl",
+      "size": 356,
+      "sha256": "a8cd175a522224377fe6b7a601e6db56bada1d6b708692bf6fab80bdca62d1db"
+    },
+    {
+      "path": "mods/cnc/maps/gdi07/map.ftl",
+      "size": 387,
+      "sha256": "b2d43e65521488f8e1f48c7b6c1fdd6b3d78e72d67d2039dad9d4916c11d3ce5"
+    },
+    {
+      "path": "mods/cnc/maps/gdi08a/map.ftl",
+      "size": 459,
+      "sha256": "48337e9e6662083914f23d1f44f05d4731cf02a1f1eadff462430a0a69fb288a"
+    },
+    {
+      "path": "mods/cnc/maps/gdi08b/map.ftl",
+      "size": 400,
+      "sha256": "90cee8b39e8ebdc4ceebe39a4d135491b1ada200f3cc0407940c80f52f5a3293"
+    },
+    {
+      "path": "mods/cnc/maps/gdi09/map.ftl",
+      "size": 445,
+      "sha256": "0cc34df7fd672754df4331f6b64bb82f6ce0afa929af0b7e28a2cf24cc7ebb22"
+    },
+    {
+      "path": "mods/cnc/maps/nod01/map.ftl",
+      "size": 437,
+      "sha256": "b7f46f8e2aef686f3e6bf29265d45c9ea8e46d33f07edb9864caf13136da34ae"
+    },
+    {
+      "path": "mods/cnc/maps/nod02a/map.ftl",
+      "size": 453,
+      "sha256": "acf0952268cbc82145e0ece3d0c8e1e69a447f28727d62b8f82eab361fc91062"
+    },
+    {
+      "path": "mods/cnc/maps/nod02b/map.ftl",
+      "size": 453,
+      "sha256": "acf0952268cbc82145e0ece3d0c8e1e69a447f28727d62b8f82eab361fc91062"
+    },
+    {
+      "path": "mods/cnc/maps/nod03a/map.ftl",
+      "size": 395,
+      "sha256": "557ca10aa2bf8c4ece9d0009add7afb8f94494a5e05c8d3f88964947bfb039f3"
+    },
+    {
+      "path": "mods/cnc/maps/nod03b/map.ftl",
+      "size": 395,
+      "sha256": "557ca10aa2bf8c4ece9d0009add7afb8f94494a5e05c8d3f88964947bfb039f3"
+    },
+    {
+      "path": "mods/cnc/maps/nod04a/map.ftl",
+      "size": 396,
+      "sha256": "741f7c430fd08fe1afb299236e6c50f8b0796a0f2951cd97f6de59dcee2fe392"
+    },
+    {
+      "path": "mods/cnc/maps/nod04b/map.ftl",
+      "size": 399,
+      "sha256": "f1a699e5bd15cc19460fe2e2dfecbb6a3d8e8fc53e692dcec199da4cb539d713"
+    },
+    {
+      "path": "mods/cnc/maps/nod05/map.ftl",
+      "size": 422,
+      "sha256": "d9d848b0198df5c572826944de5d21257eaf8da0c94c79358ade39ea5c442a1b"
+    },
+    {
+      "path": "mods/cnc/maps/nod06a/map.ftl",
+      "size": 605,
+      "sha256": "252c5c9235d3868d22b5674475e113f57bf37f0cfc59cfbacb6bd3fa98f5db59"
+    },
+    {
+      "path": "mods/cnc/maps/nod06b/map.ftl",
+      "size": 605,
+      "sha256": "252c5c9235d3868d22b5674475e113f57bf37f0cfc59cfbacb6bd3fa98f5db59"
+    },
+    {
+      "path": "mods/cnc/maps/nod06c/map.ftl",
+      "size": 426,
+      "sha256": "e092de663bd6a65e8762324559f4757e2e8f27b5bd487060b575ff6d604db12d"
+    },
+    {
+      "path": "mods/cnc/maps/nod07a/map.ftl",
+      "size": 484,
+      "sha256": "5e7a8c6fe6d89cc88e5fa28a3bf03354e9851464148bb73ef4172e0776cb75ee"
+    },
+    {
+      "path": "mods/cnc/maps/nod07b/map.ftl",
+      "size": 484,
+      "sha256": "5e7a8c6fe6d89cc88e5fa28a3bf03354e9851464148bb73ef4172e0776cb75ee"
+    },
+    {
+      "path": "mods/cnc/maps/nod07c/map.ftl",
+      "size": 513,
+      "sha256": "287eb83df1b63993a0a8778330f3f87428eb54a7a874cfbb054d72a1c3a0103e"
+    },
+    {
+      "path": "mods/cnc/maps/nod08a/map.ftl",
+      "size": 467,
+      "sha256": "b6a7ce885d96b579cf441c0bcdf6fbc3437560a6416631e5de160dd2965f31d9"
+    },
+    {
+      "path": "mods/cnc/maps/nod08b/map.ftl",
+      "size": 467,
+      "sha256": "b6a7ce885d96b579cf441c0bcdf6fbc3437560a6416631e5de160dd2965f31d9"
+    },
+    {
+      "path": "mods/cnc/maps/nod09/map.ftl",
+      "size": 383,
+      "sha256": "b0745c4eb8c61a9c40b1c63bf823ff34218ff9ffa8edf5f16aaacb848d4f6625"
+    },
+    {
+      "path": "mods/cnc/maps/nod10a/map.ftl",
+      "size": 399,
+      "sha256": "9cc10f79c218f605714e3fed6618a33f2d36d32e890a7ce42f32fc752ea6991b"
+    },
+    {
+      "path": "mods/cnc/maps/nod10b/map.ftl",
+      "size": 416,
+      "sha256": "589bf6c1f5919fc6a3c20456067e5cdd2b017fcc5150d7b3b38a6e8dd8882066"
+    },
+    {
+      "path": "mods/cnc/maps/the-tiberium-strain/map.ftl",
+      "size": 499,
+      "sha256": "b497d54c72105cd4627898308caca87f622416f4e68b91dc3360e21310e310f0"
+    },
+    {
+      "path": "mods/cnc/maps/twist-of-fate/map.ftl",
+      "size": 519,
+      "sha256": "4541819692adb47d6767bec9b3168ea8189775a6085eef7bce32ab2e012b8c4a"
+    },
+    {
+      "path": "mods/cnc/missions.yaml",
+      "size": 404,
+      "sha256": "183c766cc7db92ae63c820404d7f6d1131f56f1b3ffd946213b447a333f06fed"
+    },
+    {
+      "path": "mods/cnc/mod.yaml",
+      "size": 6160,
+      "sha256": "66b8e456f8cf3d9ecbfba5748fb5b82317ff6d1a6632dea3395cfbb0d4f63e37"
+    },
+    {
+      "path": "mods/common-content/fluent/chrome.ftl",
+      "size": 2471,
+      "sha256": "675633091bdbb6640d5cd2ac5cbe4869f8dd438433fb610371d2b3516a20c6e5"
+    },
+    {
+      "path": "mods/common-content/fluent/content.ftl",
+      "size": 242,
+      "sha256": "44563eb4fe27c2b86ec1329f217e91e7d387f01c3b926e86900fedffdc60adb7"
+    },
+    {
+      "path": "mods/common/chrome/multiplayer-createserver.yaml",
+      "size": 4566,
+      "sha256": "347be94965ba858f7f1a304ff7ba1e1eb2f3081118428209191bea6df1e3a797"
+    },
+    {
+      "path": "mods/common/fluent/chrome.ftl",
+      "size": 30539,
+      "sha256": "4117874501e09077c574b8656333549881f26163d7b0a5e6730163255cd26420"
+    },
+    {
+      "path": "mods/common/fluent/common.ftl",
+      "size": 34399,
+      "sha256": "7f70eb42fd726fa70ea4476e4e5e66ad73628d1b3506c2f141376337d220b3d7"
+    },
+    {
+      "path": "mods/common/fluent/hotkeys.ftl",
+      "size": 9059,
+      "sha256": "4f5ca1f8bd43db22b5fa5601b64ce430148bad8327f64910a231167968595ee4"
+    },
+    {
+      "path": "mods/common/fluent/rules.ftl",
+      "size": 1774,
+      "sha256": "a735071f85b9b2be70a0d6ff7342099e3d4a6bc1611a67fea9cab0ea00904866"
+    },
+    {
+      "path": "mods/d2k-content/fluent/chrome.ftl",
+      "size": 794,
+      "sha256": "f89b24ea6b8cecdd2fb872d987dc2751d945834eaf84fe0f839dc0d71579cbec"
+    },
+    {
+      "path": "mods/d2k-content/installer/d2k.yaml",
+      "size": 21456,
+      "sha256": "ea314335730e5a90e5aec0a43440b6830dc2743ab5d56467ac0f51e4d73943ef"
+    },
+    {
+      "path": "mods/d2k-content/installer/downloads.yaml",
+      "size": 39102,
+      "sha256": "4c133a582f97cc04d7856420f821a1375529f4e17a379936d1cdae3bcc4a4232"
+    },
+    {
+      "path": "mods/d2k-content/installer/gruntmods.yaml",
+      "size": 19080,
+      "sha256": "7445919178e69690a63afafdbfcc40089d5e2e1cb3d71c4499488bec39158386"
+    },
+    {
+      "path": "mods/d2k-content/mod.yaml",
+      "size": 2534,
+      "sha256": "033ec010c41b2a16e0b2596365930a9827ad01b9a24df539ed0005a14e688ba5"
+    },
+    {
+      "path": "mods/d2k/fluent/campaign.ftl",
+      "size": 541,
+      "sha256": "dd6bebdf871a064f320905d3be2dffbee21c243b468b538e23da804fac0ed484"
+    },
+    {
+      "path": "mods/d2k/fluent/chrome.ftl",
+      "size": 2341,
+      "sha256": "9c2a23d2bddd90f9f0500e7b8510698eb7ddb90a8fd5a064e600c0d29e94ecbe"
+    },
+    {
+      "path": "mods/d2k/fluent/d2k.ftl",
+      "size": 538,
+      "sha256": "90f9beb3bc2bd781687108cd71c44fe6490c9e1b7e832748dbaef365ace5976f"
+    },
+    {
+      "path": "mods/d2k/fluent/hotkeys.ftl",
+      "size": 631,
+      "sha256": "b81f86692f401e6bcff6e0a43ccb983e0992fdde7fde45a7f8f5bf3b20485146"
+    },
+    {
+      "path": "mods/d2k/fluent/lua.ftl",
+      "size": 7356,
+      "sha256": "466da5602e71722829fa8127d316ef7870f436f5737724b4831b5dbb7b00356b"
+    },
+    {
+      "path": "mods/d2k/fluent/rules.ftl",
+      "size": 30308,
+      "sha256": "4c44fd1ec8317c0290b1ee8c2310e0400a7992c6d0b2f1e0b678e0acb6ad1e67"
+    },
+    {
+      "path": "mods/d2k/maps/atreides-01a/map.ftl",
+      "size": 695,
+      "sha256": "9d10b50932c2391d73afa9e1ad1f1e343d14611cce3db756fcd006875090d23f"
+    },
+    {
+      "path": "mods/d2k/maps/atreides-01b/map.ftl",
+      "size": 695,
+      "sha256": "9d10b50932c2391d73afa9e1ad1f1e343d14611cce3db756fcd006875090d23f"
+    },
+    {
+      "path": "mods/d2k/maps/atreides-02a/map.ftl",
+      "size": 605,
+      "sha256": "30711708eea879d6f586406cea055e932d14d01b91b1d546ad2cf5d9cc86ea7a"
+    },
+    {
+      "path": "mods/d2k/maps/atreides-02b/map.ftl",
+      "size": 605,
+      "sha256": "30711708eea879d6f586406cea055e932d14d01b91b1d546ad2cf5d9cc86ea7a"
+    },
+    {
+      "path": "mods/d2k/maps/atreides-03a/map.ftl",
+      "size": 590,
+      "sha256": "705da6871a5aa10f165f0f31a351911a282fc27e3a12c3f2e47bce6184824279"
+    },
+    {
+      "path": "mods/d2k/maps/atreides-03b/map.ftl",
+      "size": 590,
+      "sha256": "705da6871a5aa10f165f0f31a351911a282fc27e3a12c3f2e47bce6184824279"
+    },
+    {
+      "path": "mods/d2k/maps/atreides-04/map.ftl",
+      "size": 509,
+      "sha256": "907c01a781814ec8fe68dd8e194d52fa03f3255835cdd36bdfe027b8e72124e7"
+    },
+    {
+      "path": "mods/d2k/maps/atreides-05/map.ftl",
+      "size": 791,
+      "sha256": "b9f603679436e60027bd66e68377f5c510526b35e35a911bbf50490911e2d828"
+    },
+    {
+      "path": "mods/d2k/maps/harkonnen-01a/map.ftl",
+      "size": 503,
+      "sha256": "8ebd7c19a395e8025bb97550bcc6876886e108079de2f39e18dd910440e73565"
+    },
+    {
+      "path": "mods/d2k/maps/harkonnen-01b/map.ftl",
+      "size": 512,
+      "sha256": "025e1df95e6483fe60b625ae4573663e1c043364094c25ada41e2fc3e9bb9bdd"
+    },
+    {
+      "path": "mods/d2k/maps/harkonnen-02a/map.ftl",
+      "size": 425,
+      "sha256": "0e24a6db4839cae24ad374bebfc8086875efdde47b006d96e6d6bdef02b0f85c"
+    },
+    {
+      "path": "mods/d2k/maps/harkonnen-02b/map.ftl",
+      "size": 425,
+      "sha256": "0e24a6db4839cae24ad374bebfc8086875efdde47b006d96e6d6bdef02b0f85c"
+    },
+    {
+      "path": "mods/d2k/maps/harkonnen-03a/map.ftl",
+      "size": 419,
+      "sha256": "3a5b1c1b60b088e041f82d6ab733a59b8eedf57588d0b8ea7a0244b4da2a809e"
+    },
+    {
+      "path": "mods/d2k/maps/harkonnen-03b/map.ftl",
+      "size": 419,
+      "sha256": "3a5b1c1b60b088e041f82d6ab733a59b8eedf57588d0b8ea7a0244b4da2a809e"
+    },
+    {
+      "path": "mods/d2k/maps/harkonnen-04/map.ftl",
+      "size": 515,
+      "sha256": "02a361af0ae80164c2834ee7e2f3713c9e8936d2e427760519c4bcf05e9be4d7"
+    },
+    {
+      "path": "mods/d2k/maps/harkonnen-05/map.ftl",
+      "size": 389,
+      "sha256": "1975b3b73bf7b446f081fb8f00723b0c9cfad629b0ddc52a3a4c0c342e970cc0"
+    },
+    {
+      "path": "mods/d2k/maps/harkonnen-06a/map.ftl",
+      "size": 554,
+      "sha256": "d15b4dada362fe54f8f8b42ae1401240dfe0444479b61e09680eeeb17962425d"
+    },
+    {
+      "path": "mods/d2k/maps/harkonnen-06b/map.ftl",
+      "size": 554,
+      "sha256": "d15b4dada362fe54f8f8b42ae1401240dfe0444479b61e09680eeeb17962425d"
+    },
+    {
+      "path": "mods/d2k/maps/harkonnen-07/map.ftl",
+      "size": 689,
+      "sha256": "5c34440246a1c426f3143f11713d6b19a155167d56c1b424afabb728df71e8ee"
+    },
+    {
+      "path": "mods/d2k/maps/harkonnen-08/map.ftl",
+      "size": 995,
+      "sha256": "db24b1279289e4f28c0eff7b671e35dfa4e8f8ff242e552c8ec19bcb71b6258e"
+    },
+    {
+      "path": "mods/d2k/maps/harkonnen-09a/map.ftl",
+      "size": 536,
+      "sha256": "dfa8deab7d3e9404f91347879ee8057c707172bdc6110219a968a5cb7e143194"
+    },
+    {
+      "path": "mods/d2k/maps/harkonnen-09b/map.ftl",
+      "size": 536,
+      "sha256": "dfa8deab7d3e9404f91347879ee8057c707172bdc6110219a968a5cb7e143194"
+    },
+    {
+      "path": "mods/d2k/maps/ordos-01a/map.ftl",
+      "size": 536,
+      "sha256": "c866cad2b8e3b8d42db6e39a432fca496fdce4d59c76889679c647ad37878f63"
+    },
+    {
+      "path": "mods/d2k/maps/ordos-01b/map.ftl",
+      "size": 536,
+      "sha256": "c866cad2b8e3b8d42db6e39a432fca496fdce4d59c76889679c647ad37878f63"
+    },
+    {
+      "path": "mods/d2k/maps/ordos-02a/map.ftl",
+      "size": 347,
+      "sha256": "f1edb147ed57c47413123fa63a96248e7c918e54aaaf7234c5616d91375d2c3e"
+    },
+    {
+      "path": "mods/d2k/maps/ordos-02b/map.ftl",
+      "size": 347,
+      "sha256": "f1edb147ed57c47413123fa63a96248e7c918e54aaaf7234c5616d91375d2c3e"
+    },
+    {
+      "path": "mods/d2k/maps/ordos-03a/map.ftl",
+      "size": 458,
+      "sha256": "243fe940ff73fc77d3ac6226cf9235045736d5e8da1cecde5c4e6d26cb74ccf3"
+    },
+    {
+      "path": "mods/d2k/maps/ordos-03b/map.ftl",
+      "size": 410,
+      "sha256": "7ba673bc9f90e5b8d5febbfbf0643593a995f9bfa192fd47cf36850b9f963080"
+    },
+    {
+      "path": "mods/d2k/maps/ordos-04/map.ftl",
+      "size": 593,
+      "sha256": "06b30696dbf1904782b0de7e0446e7106554a95673d0f5f3abae62592555237f"
+    },
+    {
+      "path": "mods/d2k/maps/ordos-05/map.ftl",
+      "size": 590,
+      "sha256": "805480b32318aabc2368386c6393fad30d9cad361a9142324dc0b2849e8d3588"
+    },
+    {
+      "path": "mods/d2k/maps/ordos-06a/map.ftl",
+      "size": 467,
+      "sha256": "15a6eee69b5c97dc3c2699143ac7ffcc9dad1630c57e4ffe0e66bde3814946b3"
+    },
+    {
+      "path": "mods/d2k/missions.yaml",
+      "size": 472,
+      "sha256": "62d595660a3d9c26982cc1fe15f30b82625f4a87b46414a87c0f5106c2db699d"
+    },
+    {
+      "path": "mods/d2k/mod.yaml",
+      "size": 6186,
+      "sha256": "0a2f24f74093077de1231c1b081ccbb8d4a543aa9bf871601c03057277750f48"
+    },
+    {
+      "path": "mods/ra-content/fluent/chrome.ftl",
+      "size": 1151,
+      "sha256": "7e32cfd4536173f5d84c4c058ffa74bdde17bf08687c1caa65252aaa05efa800"
+    },
+    {
+      "path": "mods/ra-content/installer/aftermath.yaml",
+      "size": 3182,
+      "sha256": "13742b575e76010d03b76c9fad532cd765422c010b1798dbd333429618a37d14"
+    },
+    {
+      "path": "mods/ra-content/installer/allies95.yaml",
+      "size": 4697,
+      "sha256": "fe166e19a5609d9ab6257eaf767aaa2b29e23862a5f768d140073e78f06e50bf"
+    },
+    {
+      "path": "mods/ra-content/installer/cnc95.yaml",
+      "size": 295,
+      "sha256": "d4795e438768bc270959043244ab4f96b3b589a199fe43bb9513f4adbfb6492b"
+    },
+    {
+      "path": "mods/ra-content/installer/counterstrike.yaml",
+      "size": 1033,
+      "sha256": "052798a1e39cbeba7e61b32e18883e0b1116457a8a409f0b3e7b8cb0d0fa05a3"
+    },
+    {
+      "path": "mods/ra-content/installer/downloads.yaml",
+      "size": 5530,
+      "sha256": "88772dcc03e602872235483e12c946a20b50ef40d78118b5b08316eb8fb3f46d"
+    },
+    {
+      "path": "mods/ra-content/installer/firstdecade.yaml",
+      "size": 11090,
+      "sha256": "ad676bf90b626d6041eb20559d2ec721f10ffb6683a8a917093b294900a31c3d"
+    },
+    {
+      "path": "mods/ra-content/installer/origin.yaml",
+      "size": 21025,
+      "sha256": "74e01914e06b5bc3e286b67f9e8adee33e5e340d71bc7802b56edc1de1d9767c"
+    },
+    {
+      "path": "mods/ra-content/installer/soviet95.yaml",
+      "size": 5017,
+      "sha256": "05dd1b762a4328e22cf54d11a8409b8b01289a9e8ea08d02d8afbd68693d4b7f"
+    },
+    {
+      "path": "mods/ra-content/installer/steam.yaml",
+      "size": 21258,
+      "sha256": "67ca2c6e5a6efbd440876fdfbb9b569d35bfd269f879f2cebbea521bb66ac266"
+    },
+    {
+      "path": "mods/ra-content/mod.yaml",
+      "size": 10648,
+      "sha256": "b312196eb79184f44849a484133e4ff73277f1fed68caa420e0d65573aeb9441"
+    },
+    {
+      "path": "mods/ra/fluent/campaign.ftl",
+      "size": 1850,
+      "sha256": "d343635d4681cd78719c0f6c56e091080b05e74d4cad00ed9c27158c6beb5b59"
+    },
+    {
+      "path": "mods/ra/fluent/chrome.ftl",
+      "size": 2006,
+      "sha256": "027cfbc3974ddc2121cc4846993d1b528c01086a5948f3cbc6d09b1dc54ff782"
+    },
+    {
+      "path": "mods/ra/fluent/hotkeys.ftl",
+      "size": 614,
+      "sha256": "e665b465a9f3953a35fca421e294708bfaf801b9071a42eb12b3fa2efd6f42d2"
+    },
+    {
+      "path": "mods/ra/fluent/lua.ftl",
+      "size": 20592,
+      "sha256": "2808ee60266d5b67ed8438648155dee5a580955f1e3d3641adc1cb692259a7d0"
+    },
+    {
+      "path": "mods/ra/fluent/ra.ftl",
+      "size": 769,
+      "sha256": "15e1009cd0fd06dfaee50bbd91d164f264d9026549fb6c4a9bbea7fab390ed41"
+    },
+    {
+      "path": "mods/ra/fluent/rules.ftl",
+      "size": 30188,
+      "sha256": "a361845b4757e21e3c9c86bc9748bd996ab064ea3d1e0cbf11e5fac4386d76f5"
+    },
+    {
+      "path": "mods/ra/maps/allies-01/map.ftl",
+      "size": 521,
+      "sha256": "b658bbc713ee155454cf02df0308d82f563e6758fa6d0e6b82a391e24805c1ec"
+    },
+    {
+      "path": "mods/ra/maps/allies-02/map.ftl",
+      "size": 656,
+      "sha256": "f8bacc84b9960fd9f65941b04def7bb1645735ff0993d7d25d46595aff91720a"
+    },
+    {
+      "path": "mods/ra/maps/allies-02/rules.yaml",
+      "size": 1592,
+      "sha256": "b59a4e1301d654f38c9f5c566e527b0656a3ae71a69945e7661518697133ee9e"
+    },
+    {
+      "path": "mods/ra/maps/allies-03a/map.ftl",
+      "size": 543,
+      "sha256": "ed69f9791b844610d694a2d8c4bbd0544df096d90c8c01bfa00ba43dfbb40863"
+    },
+    {
+      "path": "mods/ra/maps/allies-03b/map.ftl",
+      "size": 543,
+      "sha256": "ed69f9791b844610d694a2d8c4bbd0544df096d90c8c01bfa00ba43dfbb40863"
+    },
+    {
+      "path": "mods/ra/maps/allies-04/map.ftl",
+      "size": 607,
+      "sha256": "9fb949c33d5034388b914ddb3ef6d7d25b8ee6984afa51c99a2f575a2291d49a"
+    },
+    {
+      "path": "mods/ra/maps/allies-05a/map.ftl",
+      "size": 775,
+      "sha256": "6836cf63f27de3d3c167b68674b40f338254d6142a21cd0ef8a715a1451757b8"
+    },
+    {
+      "path": "mods/ra/maps/allies-05b/map.ftl",
+      "size": 596,
+      "sha256": "d9f70e2f2ecacfc6c3cb8883ab5ee3477eff03efa5e51486926a587fe61b152f"
+    },
+    {
+      "path": "mods/ra/maps/allies-05c/map.ftl",
+      "size": 596,
+      "sha256": "d9f70e2f2ecacfc6c3cb8883ab5ee3477eff03efa5e51486926a587fe61b152f"
+    },
+    {
+      "path": "mods/ra/maps/allies-06a/map.ftl",
+      "size": 450,
+      "sha256": "198e5f62eb2c52c6d57a658651ff126c524d5f8ce32db5c3d9d02ad1a115ef71"
+    },
+    {
+      "path": "mods/ra/maps/allies-06b/map.ftl",
+      "size": 450,
+      "sha256": "198e5f62eb2c52c6d57a658651ff126c524d5f8ce32db5c3d9d02ad1a115ef71"
+    },
+    {
+      "path": "mods/ra/maps/allies-07/map.ftl",
+      "size": 629,
+      "sha256": "01f6e89c17aad83b80799889e4253c204facba9ca92b2f02e6657dba1f96ad22"
+    },
+    {
+      "path": "mods/ra/maps/allies-08a/map.ftl",
+      "size": 539,
+      "sha256": "56bdae17278dcc0ec6497cb697c30da8dd0fd4c0aacd15cbc9d7876e55f3efad"
+    },
+    {
+      "path": "mods/ra/maps/allies-08b/map.ftl",
+      "size": 539,
+      "sha256": "56bdae17278dcc0ec6497cb697c30da8dd0fd4c0aacd15cbc9d7876e55f3efad"
+    },
+    {
+      "path": "mods/ra/maps/allies-09a/map.ftl",
+      "size": 535,
+      "sha256": "1b4e680bb11128bb81406d427295bf45907e321d0bd3823086b4a63507c89c7f"
+    },
+    {
+      "path": "mods/ra/maps/allies-10a/map.ftl",
+      "size": 452,
+      "sha256": "50ea344eeacc9a9700f1ee8f19995e589069bccebc36d2b04069450d46eb1682"
+    },
+    {
+      "path": "mods/ra/maps/allies-10a/rules.yaml",
+      "size": 1559,
+      "sha256": "bc8f2746779700b8fe18925610c9a699727ddb96cbc551973614db58d2766048"
+    },
+    {
+      "path": "mods/ra/maps/allies-10b/map.ftl",
+      "size": 449,
+      "sha256": "5ca7d85ea57715e7b80f0e8d2913974dbf585df09ac25f0cc42e7ccca2d99465"
+    },
+    {
+      "path": "mods/ra/maps/allies-13/allies13.lua",
+      "size": 12107,
+      "sha256": "c81dd16b123c085bee81255cc74fcb98332aca75ccb24f5d5ea5f1558dff0361"
+    },
+    {
+      "path": "mods/ra/maps/allies-13/map.ftl",
+      "size": 512,
+      "sha256": "2574feb774410b87ca49c0d4abdfd635bcf079c349f608c11b363e4321b6018e"
+    },
+    {
+      "path": "mods/ra/maps/allies-13/rules.yaml",
+      "size": 894,
+      "sha256": "1f33fec4d994b71939d3ccf7d984d6afafbe8173901e6d10cc59b029090c897c"
+    },
+    {
+      "path": "mods/ra/maps/ant-01/map.ftl",
+      "size": 638,
+      "sha256": "3cd2f31628d47e8d45b29fb38a2bb385f38f6064b31ab56ac74da9d409072ea1"
+    },
+    {
+      "path": "mods/ra/maps/ant-03/map.ftl",
+      "size": 530,
+      "sha256": "974ab26fe14a9eb8f58cca5bb1c6ebc9665334a521038ec74af6b38aca579934"
+    },
+    {
+      "path": "mods/ra/maps/bomber-john/map.ftl",
+      "size": 732,
+      "sha256": "971b4232b1eedda0266fe2ca1d8800898d429f7ca77a0eb1d585ee3253e51758"
+    },
+    {
+      "path": "mods/ra/maps/drop-zone-battle-of-tikiaki/map.ftl",
+      "size": 241,
+      "sha256": "0b6361bae9957ad7e595dbe6fbf0f9290a87a4fd5c8dcb2cb9c601f79156ddbb"
+    },
+    {
+      "path": "mods/ra/maps/drop-zone-w/map.ftl",
+      "size": 252,
+      "sha256": "03274f3d3afad805ba5fcb60c1c7b7292597bc503cb34cc22723bfec76917c71"
+    },
+    {
+      "path": "mods/ra/maps/drop-zone/map.ftl",
+      "size": 241,
+      "sha256": "0b6361bae9957ad7e595dbe6fbf0f9290a87a4fd5c8dcb2cb9c601f79156ddbb"
+    },
+    {
+      "path": "mods/ra/maps/evacuation/map.ftl",
+      "size": 614,
+      "sha256": "6d7501ca00528b947dd82342928aeece3e5052c9f900e17bd188bebda671cfad"
+    },
+    {
+      "path": "mods/ra/maps/exodus/map.ftl",
+      "size": 452,
+      "sha256": "c6b3e3361595ca645db0d480177b4ea7b68db6601a8221c6523a14c8022011da"
+    },
+    {
+      "path": "mods/ra/maps/fall-of-greece-1-personal-war/map.ftl",
+      "size": 548,
+      "sha256": "c972ed4a9f8bf97ca752cf948b27039e2691476c85ccb7d2576ba97cec345cdc"
+    },
+    {
+      "path": "mods/ra/maps/fall-of-greece-2-evacuation/map.ftl",
+      "size": 542,
+      "sha256": "c765ec067109b583255101d9dde7beb5c476089a83b487e8767b211c02492699"
+    },
+    {
+      "path": "mods/ra/maps/fort-lonestar/map.ftl",
+      "size": 888,
+      "sha256": "2d669b56987f6141da43c3b4cb0f6cc7567e448b2366aec6b53ccdf0567c49b0"
+    },
+    {
+      "path": "mods/ra/maps/in-the-nick-of-time/map.ftl",
+      "size": 620,
+      "sha256": "23a648f78ec63e964a4c080b268fd7d2ab144c6bc18adc3c521620694d20087f"
+    },
+    {
+      "path": "mods/ra/maps/infiltration/map.ftl",
+      "size": 467,
+      "sha256": "f0859fd50c671f729ccf21355add740b7e0de107f290d07b4ecbe6eb89225883"
+    },
+    {
+      "path": "mods/ra/maps/intervention/map.ftl",
+      "size": 578,
+      "sha256": "7e180039a5ddc80378561a09c533109bcb94bae5eb4f8817479bd7ecb0bff7e9"
+    },
+    {
+      "path": "mods/ra/maps/monster-tank-madness/map.ftl",
+      "size": 710,
+      "sha256": "8947657e5fc9c5e923ef8a447b60036d29e76bc77d7ed6526b6371939712cdb8"
+    },
+    {
+      "path": "mods/ra/maps/mousetrap/map.ftl",
+      "size": 689,
+      "sha256": "467237ed9bd5bc6b3e449052bef961fcbec52857df94754c82098dcfe65399e9"
+    },
+    {
+      "path": "mods/ra/maps/negotiations/map.ftl",
+      "size": 611,
+      "sha256": "211a4ae0a09f7ef728b0feee9f768ab27252368854a14751b981b058f96b1c14"
+    },
+    {
+      "path": "mods/ra/maps/oil-spill/map.ftl",
+      "size": 258,
+      "sha256": "746287fd39aafce52175bc12eb9a9aca04cfd883e7214c20d3e1b747eebc5620"
+    },
+    {
+      "path": "mods/ra/maps/production-disruption/map.ftl",
+      "size": 557,
+      "sha256": "19896f868ef747c2845feddecab225abb66fc6358be177f8c5ef5280fa87544b"
+    },
+    {
+      "path": "mods/ra/maps/proving-grounds/map.ftl",
+      "size": 697,
+      "sha256": "9ffbd02f830d295403bf9d8d132d262625a4ccb4d8c3bfbfc52ec5b917ecb078"
+    },
+    {
+      "path": "mods/ra/maps/sarin-gas-1-crackdown/map.ftl",
+      "size": 626,
+      "sha256": "2aa51592994568d86acaefa787a21751f0b2c973a9fbc985e5f61a25f395364a"
+    },
+    {
+      "path": "mods/ra/maps/sarin-gas-2-down-under/map.ftl",
+      "size": 635,
+      "sha256": "beceba1346ed350ebebe72e73bc6f829036c95b17cdb39b9fa563e434deafcb7"
+    },
+    {
+      "path": "mods/ra/maps/sarin-gas-3-controlled-burn/map.ftl",
+      "size": 575,
+      "sha256": "a862de0cd38bace4429f2bd712e87e785889c0c9b4b71edcdef94c1395b4c192"
+    },
+    {
+      "path": "mods/ra/maps/shock-therapy/map.ftl",
+      "size": 665,
+      "sha256": "5883b12126be16a425183526ba0e057e693880403ff9891118529d2ea86cfe2d"
+    },
+    {
+      "path": "mods/ra/maps/siberian-conflict-1-fresh-tracks/map.ftl",
+      "size": 536,
+      "sha256": "24fd2f32daed375dbea0eb203ecef6927794a92574adad99eeb384316cc2bf60"
+    },
+    {
+      "path": "mods/ra/maps/siberian-conflict-3-wasteland/map.ftl",
+      "size": 470,
+      "sha256": "f7e76707e6044d4e69fd338e5636905bf54c4d0f8b3898a7e5add57f1f80e460"
+    },
+    {
+      "path": "mods/ra/maps/situation-critical/map.ftl",
+      "size": 674,
+      "sha256": "175a096443af22dc977759c787e1503d1d7200cd8d4f85f5274fc7262a07b1e3"
+    },
+    {
+      "path": "mods/ra/maps/soviet-01/map.ftl",
+      "size": 440,
+      "sha256": "8a3c01733f4b049dc090392e82db07cea3b998c18f9f93d0e36d59386381e41f"
+    },
+    {
+      "path": "mods/ra/maps/soviet-02a/map.ftl",
+      "size": 410,
+      "sha256": "78208b77ae7acc52571cbe752317674656015dd8f0c29ddbc010b826859cb6bb"
+    },
+    {
+      "path": "mods/ra/maps/soviet-02b/map.ftl",
+      "size": 410,
+      "sha256": "78208b77ae7acc52571cbe752317674656015dd8f0c29ddbc010b826859cb6bb"
+    },
+    {
+      "path": "mods/ra/maps/soviet-03/map.ftl",
+      "size": 407,
+      "sha256": "1fee53dc5786e3728074c8e24f7654d7d3a52b2a0ab28defd96bc7a18c4cdf27"
+    },
+    {
+      "path": "mods/ra/maps/soviet-04a/map.ftl",
+      "size": 467,
+      "sha256": "6eb25711ffbf2f2b859196d6587b81bbf8c6f399ca5917b1cd849962ef66a08b"
+    },
+    {
+      "path": "mods/ra/maps/soviet-04b/map.ftl",
+      "size": 467,
+      "sha256": "6eb25711ffbf2f2b859196d6587b81bbf8c6f399ca5917b1cd849962ef66a08b"
+    },
+    {
+      "path": "mods/ra/maps/soviet-05/map.ftl",
+      "size": 470,
+      "sha256": "4ddb87caced69fa01e392d90fac2d14c4db8ef6ccb3889fafddd62c3a1a15bbe"
+    },
+    {
+      "path": "mods/ra/maps/soviet-06a/map.ftl",
+      "size": 509,
+      "sha256": "83c722729d19271119542390ac4428bde83729734625b061eff71a7147f76137"
+    },
+    {
+      "path": "mods/ra/maps/soviet-06b/map.ftl",
+      "size": 509,
+      "sha256": "83c722729d19271119542390ac4428bde83729734625b061eff71a7147f76137"
+    },
+    {
+      "path": "mods/ra/maps/soviet-07/map.ftl",
+      "size": 554,
+      "sha256": "8879cbe3ce9b986433642c1fc7c39683fda7e2e06e80bbf4a1b751bd8eb33995"
+    },
+    {
+      "path": "mods/ra/maps/soviet-08a/map.ftl",
+      "size": 521,
+      "sha256": "9f77a431ceccc5ea1b7c76f87cca29735c30afe92060d59b263361ed8547b466"
+    },
+    {
+      "path": "mods/ra/maps/soviet-08b/map.ftl",
+      "size": 521,
+      "sha256": "9f77a431ceccc5ea1b7c76f87cca29735c30afe92060d59b263361ed8547b466"
+    },
+    {
+      "path": "mods/ra/maps/soviet-09/map.ftl",
+      "size": 461,
+      "sha256": "534526a03bf96004f716c736d4afdce4029d6f6b2093b018248beb5a0d15df01"
+    },
+    {
+      "path": "mods/ra/maps/soviet-10/map.ftl",
+      "size": 494,
+      "sha256": "77fb40d9c4ba1ca0cca289074a5faf192c0c6c0dced604876d1bf7307cc6ae22"
+    },
+    {
+      "path": "mods/ra/maps/soviet-11a/map.ftl",
+      "size": 383,
+      "sha256": "db28ceb0b53c897839760229067f04990b981eb8896f705f476206743ba0a997"
+    },
+    {
+      "path": "mods/ra/maps/soviet-11b/map.ftl",
+      "size": 383,
+      "sha256": "db28ceb0b53c897839760229067f04990b981eb8896f705f476206743ba0a997"
+    },
+    {
+      "path": "mods/ra/maps/soviet-13a/map.ftl",
+      "size": 356,
+      "sha256": "6fc934bba5e10de1dd8dc2d0462af2c94834991c6de4098fea3e9ce638de83cb"
+    },
+    {
+      "path": "mods/ra/maps/soviet-13b/map.ftl",
+      "size": 356,
+      "sha256": "6fc934bba5e10de1dd8dc2d0462af2c94834991c6de4098fea3e9ce638de83cb"
+    },
+    {
+      "path": "mods/ra/maps/soviet-soldier-volkov-n-chitzkoi/map.ftl",
+      "size": 659,
+      "sha256": "9f30913253525f6cc0db01525e253a61dee4de9547df874d3016c7a519cd83a4"
+    },
+    {
+      "path": "mods/ra/maps/survival01/map.ftl",
+      "size": 450,
+      "sha256": "3b3d02a7dc397164ebb369322ad16fba95fef4d0de4dade8c27ba8a21dfd2eac"
+    },
+    {
+      "path": "mods/ra/maps/survival02/map.ftl",
+      "size": 394,
+      "sha256": "7c85a10a37a9a50ca264633a60a0522695b148b5941ee2dd2fe76d0aef655acf"
+    },
+    {
+      "path": "mods/ra/maps/top-o-the-world/map.ftl",
+      "size": 848,
+      "sha256": "60baa025fe1e54ca3052b8880b74976c61d7f254920ed98f19a8a5d6805560f0"
+    },
+    {
+      "path": "mods/ra/missions.yaml",
+      "size": 1059,
+      "sha256": "14a4096309a9d8cababb39e6de92b9d6e851a3dff85325e1ee984ff48bd256f4"
+    },
+    {
+      "path": "mods/ra/mod.yaml",
+      "size": 7191,
+      "sha256": "784c2c1a1f9afbbc7bbffbc834e72160b5204b89109cf8043dfa39e566cbf383"
+    }
+  ]
+}
