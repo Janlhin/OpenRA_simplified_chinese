@@ -2,6 +2,7 @@
 _zhcn-backup/
 
 # 发布产物
+dist/
 *.zip
 
 # 系统垃圾文件
