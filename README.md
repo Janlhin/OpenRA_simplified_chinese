@@ -166,6 +166,8 @@ python tools/build_release.py --verify # 打包自校验（含包内死链）
 - [x] 🧯 安装器可回滚、可校验、卸载能挑对备份
 - [ ] 📸 补一组界面截图，放到 README 顶部
 - [ ] 🖋️ 可选主题字体（霞鹜文楷），做成独立附件
+- [ ] 🧨 **入口全面改用 `.ps1`**：退役 `setup.cmd`，替代方案二选一（`.lnk` 双击垫片 / 单文件 exe）
+- [ ] 📜 **约定落地**：不再新增 `.cmd` / `.bat`，CI 已加守卫；存量只剩 `setup.cmd` 一个转发器
 - [ ] 🐧 Linux / macOS 的一页式手动安装文档
 - [ ] 📝 术语表统一校对（借 `docs/archive/rasc-ref` 的对齐结果）
 

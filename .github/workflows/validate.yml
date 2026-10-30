@@ -45,5 +45,15 @@ jobs:
           fi
           echo "files/ 内无字体 ✓"
 
+      - name: 入口脚本只允许 src/setup.cmd（其余一律 .ps1）
+        run: |
+          extra=$(git ls-files '*.bat' '*.cmd' | grep -v '^src/setup.cmd$' || true)
+          if [ -n "$extra" ]; then
+            echo "::error::不允许新增 .bat / .cmd；Windows 侧一律 .ps1（存量例外只有 src/setup.cmd）"
+            echo "$extra"
+            exit 1
+          fi
+          echo "bat/cmd 守卫通过 ✓"
+
       - name: 发布包自校验（白名单 / bin 映射 / 字体哈希 / 载荷哈希）
         run: python tools/build_release.py --verify

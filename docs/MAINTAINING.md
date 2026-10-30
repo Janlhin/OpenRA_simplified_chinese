@@ -189,6 +189,28 @@ python tools/check_font_coverage.py
 [![validate](https://github.com/Janlhin/OpenRA_simplified_chinese/actions/workflows/validate.yml/badge.svg)](https://github.com/Janlhin/OpenRA_simplified_chinese/actions/workflows/validate.yml)
 ```
 
+## 脚本与入口约定
+
+**Windows 侧一律 `.ps1`，不再新增 `.bat` / `.cmd`。** 存量只有一个例外：`src/setup.cmd`，
+它只做参数转发（纯 ASCII + CRLF，≤50 行），不含任何业务逻辑。
+
+为什么不是现在就删：
+
+- 双击 `.ps1` 的默认动词是 `Edit`（用记事本打开），**不是运行**；
+- 右键「使用 PowerShell 运行」依赖注册表关联，且 `AllSigned` 策略下不会被覆盖；
+- 企业机器上执行策略常被 `MachinePolicy` 封死，反而是 `.cmd` 能起来——但那条路也只剩下转发。
+
+退役条件（三条都满足才动）：
+
+1. 有**不依赖执行策略**的双击入口，候选：① `.lnk` 快捷方式指向
+   `powershell.exe -NoProfile -ExecutionPolicy Bypass -File ...`；② 单文件 `.exe`
+   （Inno / ps2exe，未签名会触发 SmartScreen 提示）；
+2. 在"没有 PowerShell / 策略封死"的机器上验证过降级路径（当前是安装说明里的手动安装）；
+3. 回归清单跑完：装 → 校验 → 卸，**仓库布局与包布局各一遍**。
+
+在那之前，新功能只写在 `src/install.ps1` 里，`setup.cmd` 只允许改转发行。
+CI 有一条守卫：除 `src/setup.cmd` 外，仓库里出现任何 `.bat` / `.cmd` 直接失败。
+
 ## CI
 
 `.github/workflows/validate.yml` 在 `push` / `pull_request` 时跑八步（Linux runner）：

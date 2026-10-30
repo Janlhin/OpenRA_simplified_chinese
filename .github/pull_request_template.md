@@ -15,6 +15,7 @@
 - [ ] 已更新 `README.md` / `CHANGELOG.md` 里的条数与文件数（如有变化）
 - [ ] 没有把字体、游戏素材放进 `files/`
 - [ ] 没有修改键名、也没删掉 `##` 注释与 SPDX 头
+- [ ] 没有新增 `.bat` / `.cmd`（Windows 脚本一律 `.ps1`，存量只有 `src/setup.cmd`）
 
 ## 术语说明
 
