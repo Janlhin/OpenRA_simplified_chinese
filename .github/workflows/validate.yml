@@ -16,10 +16,13 @@ jobs:
         with:
           python-version: '3.x'
 
+      - name: 安装字体工具（字符覆盖检查用）
+        run: pip install fonttools
+
       - name: 载荷与 manifest.json 是否逐字节一致
         run: python tools/verify_manifest.py
 
-      - name: Fluent 文件规范（BOM / 换行 / 缩进 / 花括号）
+      - name: Fluent 文件规范（BOM / 换行 / 缩进 / 花括号 / 字面转义）
         run: python tools/lint_ftl.py files/mods
 
       - name: 地图文案结构自检
@@ -28,10 +31,16 @@ jobs:
       - name: Markdown 相对链接与锚点（docs/ 引用根目录文件须用 ../）
         run: python tools/check_links.py .
 
-      - name: 确认补丁包不包含字体
+      - name: 载荷里的每个字符，随包字体都画得出来
+        run: python tools/check_font_coverage.py
+
+      - name: 载荷里不得出现字体（字体只放 fonts/）
         run: |
           if find files -iname '*.tt[fc]' -o -iname '*.otf' | grep -q .; then
-            echo "::error::载荷里出现了字体文件,补丁不应分发字体"
+            echo "::error::files/ 里出现了字体文件；字体属于 fonts/，不参与覆盖与地图 UID"
             exit 1
           fi
-          echo "未发现字体文件 ✓"
+          echo "files/ 内无字体 ✓"
+
+      - name: 发布包自校验（白名单 / bin 映射 / 字体哈希 / 载荷哈希）
+        run: python tools/build_release.py --verify

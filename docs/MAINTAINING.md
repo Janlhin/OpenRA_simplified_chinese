@@ -126,8 +126,9 @@ git add -A && git commit -m "..." && git push
 `build_release.py` 默认走**白名单**，只打玩家需要的文件：
 
 ```
-setup.cmd / README.md / 安装说明.txt / 安装说明.md / LICENSE / files/**
+setup.cmd / README.md / 安装说明.txt / 安装说明.md / LICENSE / LICENSE-OFL.txt
 bin/install.ps1   bin/manifest.json      ← 仓库里在根目录，打包时按 PACKAGE_LAYOUT 收进 bin/
+fonts/NotoSansSC-Regular.ttf  fonts/NotoSansSC-Bold.ttf / files/**
 ```
 
 `tools/`、`docs/`、`.github/`、`CONTRIBUTING.md`、`CHANGELOG.md`、`.gitattributes`
@@ -138,6 +139,29 @@ bin/install.ps1   bin/manifest.json      ← 仓库里在根目录，打包时�
 得到字节一致的 zip。`--verify` 会在解压出的包上做**包内自校验**（不再依赖 `tools/`）：
 入口文件是否齐全、包内 `manifest.json` 是否与仓库一致、208 个载荷的 size/sha256 是否对得上、
 `files/` 里有没有多余文件。
+
+### 随包字体怎么来的
+
+`fonts/` 里两个 TTF 是 **Noto Sans SC 全量字形**，由上游可变字体固化而来（不是子集化，
+字形一个都不删）：
+
+```bash
+# 上游只发可变字体
+curl -LO "https://raw.githubusercontent.com/google/fonts/main/ofl/notosanssc/NotoSansSC%5Bwght%5D.ttf"
+curl -Lo LICENSE-OFL.txt "https://raw.githubusercontent.com/google/fonts/main/ofl/notosanssc/OFL.txt"
+
+pip install fonttools
+python -m fontTools.varLib.instancer "NotoSansSC[wght].ttf" wght=400 --update-name-table -o fonts/NotoSansSC-Regular.ttf
+python -m fontTools.varLib.instancer "NotoSansSC[wght].ttf" wght=700 --update-name-table -o fonts/NotoSansSC-Bold.ttf
+
+# 换字体后必须重算 manifest 的 font.bundled（size + sha256），再跑：
+python tools/check_font_coverage.py
+```
+
+- 字体**不进 `files/`**：`files/` 是覆盖树，还要逐字节进哈希清单；CI 有守卫专门拦这件事。
+- 载荷里 6 个 `mod.yaml` 的字体引用按上游顺序写死：上游 `FreeSans` 位 → Regular，
+  上游 `FreeSansBold` 位 → Bold。改字体名时这两处要一起改，否则运行时会找不到文件。
+- 换了字体或改了字号，先在 4 个 UI 缩放档位目测一遍行高（Noto 与 SimHei 的 ascender 不同）。
 
 > 改白名单时记得同步 `RELEASE_FILES` / `RELEASE_DIRS` / `PACKAGE_LAYOUT`，以及 README 的
 > 「包里有什么」表格。`PACKAGE_LAYOUT` 负责「仓库在根目录、包里收进 `bin\`」这种映射，

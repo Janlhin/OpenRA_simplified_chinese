@@ -1,5 +1,5 @@
 ﻿==============================================================
- OpenRA 简体中文汉化补丁  1.4.2
+ OpenRA 简体中文汉化补丁  1.5.0
  适配引擎：playtest-20261026（红警 / 泰伯利亚黎明 / 沙丘 2000）
 ==============================================================
 
@@ -21,7 +21,7 @@
   3. 按提示启动游戏：RedAlert.exe / TiberianDawn.exe / Dune2000.exe
 
   安装器会自动：找到 OpenRA 目录 → 备份将被覆盖的文件 → 覆盖 208 个文本
-  → 从系统复制一个中文字体 → 逐文件校验 SHA-256
+  → 部署包内自带的两个中文字体 → 逐文件校验 SHA-256
   备份在 <游戏目录>\_zhcn-backup\<时间戳>\，还原就靠它
 
 想还原英文
@@ -50,13 +50,12 @@
     把 <游戏目录>\mods 整个文件夹复制一份到别处（约 100 MB）。
 
   第 2 步：先放字体（顺序很重要）
-    把  C:\Windows\Fonts\simhei.ttf
-    复制成  <游戏目录>\mods\common\simhei.ttf
+    把本包 fonts\ 里的两个文件复制到 <游戏目录>\mods\common\：
+        fonts\NotoSansSC-Regular.ttf  ->  mods\common\NotoSansSC-Regular.ttf
+        fonts\NotoSansSC-Bold.ttf     ->  mods\common\NotoSansSC-Bold.ttf
 
-    如果 C:\Windows\Fonts 里没有 simhei.ttf（英文版 / 精简版 Windows 常见），
-    就任选一个中文字体复制过去，文件名保持原样（例如 msyh.ttc），
-    再把 mods 下 6 个 mod.yaml 里的 common|SimHei.ttf 改成 common|msyh.ttc。
-    系统里一个中文字体都没有时，请先安装任意中文字体再继续。
+    这两个文件就是补丁自带的中文字体（Noto Sans SC，SIL OFL 1.1）。
+    缺了它们，mod.yaml 指向的字体文件不存在，游戏启动会直接报错。
 
   第 3 步：覆盖文本
     把本包 files\mods\ 里的所有内容，按同名路径覆盖到 <游戏目录>\mods\
@@ -66,17 +65,17 @@
   第 4 步：启动游戏
 
   为什么顺序不能错：
-    · 先覆盖文本、后放字体 → mod.yaml 已指向 simhei.ttf 但文件不存在，
-      引擎启动时读不到字体，游戏会**直接报错退出**（不是变方块）
+    · 先覆盖文本、后放字体 → mod.yaml 已指向 NotoSansSC-Regular/Bold.ttf
+      但文件不存在，引擎启动时读不到字体，游戏会**直接报错退出**（不是变方块）
     · 只放字体、不覆盖文本 → 能进游戏，但界面仍是英文（字体没用上）
 
   自检（建议做）：
-      dir "<游戏目录>\mods\common\simhei.ttf"
+      dir "<游戏目录>\mods\common\NotoSansSC-*.ttf"
       dir "<游戏目录>\mods\common\fluent\ingame-debug.ftl"
     两个都存在 = 文件到位
 
   还原：把第 1 步备份的 mods 文件夹覆盖回去，再删掉
-        <游戏目录>\mods\common\simhei.ttf
+        <游戏目录>\mods\common\NotoSansSC-Regular.ttf 与 NotoSansSC-Bold.ttf
 
 --------------------------------------------------------------
  让 AI 助手帮你装
@@ -90,7 +89,8 @@
     2) 把整个 <游戏目录>\mods 备份到 <本包目录>\_manual-backup\<时间戳>\。
     3) 把本包 files\mods\ 下的所有内容覆盖到 <游戏目录>\mods\
        （保持子目录结构）。
-    4) 复制 C:\Windows\Fonts\simhei.ttf 到 <游戏目录>\mods\common\simhei.ttf。
+    4) 把本包 fonts\ 里的 NotoSansSC-Regular.ttf 与 NotoSansSC-Bold.ttf
+       复制到 <游戏目录>\mods\common\。
     5) 不要修改任何 map.yaml；也不要改 mod.yaml 里的字体名（包里已改好）。
     6) 完成后报告：208 个文件是否都到位、simhei.ttf 是否存在、
        mods\ra\mod.yaml 的 Version 是否仍为 playtest-20261026。
@@ -105,11 +105,11 @@ A: 文本没覆盖成功。确认 files\mods 覆盖到的是 <游戏目录>\mods
    而不是 <游戏目录>\mods\mods（多套一层是最常见的错）。
 
 Q: 中文全是方块？
-A: 字体没生效：mods\common\simhei.ttf 不存在，或 mod.yaml 里的字体名与实际
-   文件名不一致。手动装的话回到第 2 步。
+A: 字体没生效：mods\common\ 下没有 NotoSansSC-Regular.ttf / -Bold.ttf，
+   或 mod.yaml 里的字体名与实际文件名不一致。手动装的话回到第 2 步。
 
 Q: 游戏启动就报错 / 闪退？
-A: 多半是“覆盖了文本但没放字体”。照第 2 步放好 simhei.ttf 再启动。
+A: 多半是“覆盖了文本但没放字体”。照第 2 步放好两个 NotoSansSC 字体再启动。
 
 Q: 界面出现 label-xxx 这样的原始键名？
 A: 补丁版本与游戏版本不匹配（游戏升级过）。卸载本补丁，去下载页找对应
@@ -129,8 +129,10 @@ A: 安装器是未签名的 PowerShell 脚本，部分杀软会提示。不放�
   setup.cmd        唯一入口（双击出菜单）
   bin\             脚本与清单：install.ps1（全部逻辑）、manifest.json（哈希清单）
   files\mods\      208 个文本文件（以 .ftl 为主）
+  fonts\           NotoSansSC-Regular.ttf / -Bold.ttf（补丁自带的中文字体）
   README.md        每个文件是干什么的、能不能删
   LICENSE          GPL-3.0（译文派生自 OpenRA 的 GPL 授权文本）
+  LICENSE-OFL.txt  字体的 SIL OFL 1.1 许可
   安装说明.txt     本文件（同一份内容的 Markdown 版：安装说明.md）
 
   别单独挪动 bin\ 里的文件：setup.cmd 按相对路径找它。
@@ -140,6 +142,7 @@ A: 安装器是未签名的 PowerShell 脚本，部分杀软会提示。不放�
  许可与来源
 --------------------------------------------------------------
   本补丁以 GPL-3.0-or-later 发布，译文派生自 OpenRA 项目（GPL-3.0）。
+  随包字体为 Noto Sans SC，按 SIL Open Font License 1.1 分发（见 LICENSE-OFL.txt）。
   非官方社区作品，与 OpenRA 项目无隶属关系。
   项目地址：https://github.com/Janlhin/OpenRA_simplified_chinese
 --------------------------------------------------------------

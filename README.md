@@ -115,18 +115,23 @@ setup.cmd -FontPath "D:\NotoSansSC-Regular.ttf"   :: 指定中文字体
 > 未打补丁的玩家**地图哈希不一致**（无法同局游戏），旧录像也会因为找不到对应地图而无法播放。
 > 好消息是 `.ftl` 不参与 UID 计算，所以本补丁的译文不会影响联机兼容性。
 
-## 中文字体：为什么安装时才复制
+## 中文字体：随包自带
 
 OpenRA 的 `Fonts:` 配置默认指向 `common|FreeSans.ttf`，该字体**没有中文字形**，
-不换字体的话所有中文都会变成方块。本补丁的 `mod.yaml` 已把字体指向 `common|SimHei.ttf`，
-安装脚本会把**你本机的**中文字体复制成那个文件：
+不换字体的话所有中文都会变成方块。本补丁把 `mod.yaml` 指向两个随包字体：
 
-- 好处：不必随包分发字体，避免字体授权问题；安装后完全不依赖网络。
-- 如果本机字体不是 `simhei.ttf`，脚本会把 `mod.yaml` 里的引用同步改成实际文件名。
-- 想换更好看的字体（例如[思源黑体](https://github.com/notofonts/noto-cjk)）：
-  `setup.cmd -FontPath "D:\NotoSansSC-Regular.ttf"`。
-- **本机一个中文字体都没有**（英文版 / 精简版 Windows 可能如此）时，安装会中止并提示，
-  必须先装一个中文字体——这也是手动安装最容易踩的坑，详见 [安装说明.md](安装说明.md)。
+| 文件 | 用途 |
+|---|---|
+| `fonts\NotoSansSC-Regular.ttf` | 正文（`Tiny` / `Small` / `Regular`） |
+| `fonts\NotoSansSC-Bold.ttf` | 标题与强调（`*Bold` / `Title`） |
+
+- 安装时把这两个文件复制到 `<游戏目录>\mods\common\`，**不依赖本机有没有中文字体**，
+  英文版 / 精简版 Windows 也能直接显示中文。
+- 字体是 **Noto Sans SC 全量字形**（SIL OFL 1.1，可随包分发），用 `fonttools` 从可变字体
+  固化成 Regular / Bold 两个静态实例；许可全文见 `LICENSE-OFL.txt`。
+- 想换成别的字体：`setup.cmd -FontPath "D:\你的字体.ttf"`，安装器会把两个引用都改成它。
+- 包内 `fonts\` 缺失时（比如有人只拷了 `files\`），安装器会回退到系统字体；
+  系统也没有中文字体时**直接中止**，不会装出一个启动就报错的半成品。
 
 ## 卸载与还原
 
@@ -147,17 +152,18 @@ OpenRA 的 `Fonts:` 配置默认指向 `common|FreeSans.ttf`，该字体**没有
 
 ## 包里有什么
 
-发布包解压后只有 6 项，各管一件事：
+发布包解压后只有 8 项，各管一件事：
 
 | 路径 | 作用 | 谁读它 | 能删吗 |
 |---|---|---|---|
 | `setup.cmd` | **唯一入口**。双击出中文菜单（安装 / 还原 / 校验 / 预演）；带参数时原样透传 | 玩家 | 删了就只能手动安装 |
 | `bin\install.ps1` | 全部逻辑：探测游戏目录、版本校验、SHA-256 校验、备份、UAC 提权、还原、字体部署 | `setup.cmd` 调用 | **不能删** |
-| `bin\manifest.json` | 补丁的身份证：版本、适配引擎、208 个载荷的 `{path, size, sha256}` | `install.ps1`、CI | **不能删**（安装器靠它校验与判版本） |
+| `bin\manifest.json` | 补丁的身份证：版本、适配引擎、208 个载荷的 `{path, size, sha256}`、字体清单 | `install.ps1`、CI | **不能删**（安装器靠它校验与判版本） |
 | `files\mods\` | 208 个文本载荷，路径与游戏 `mods\` 一一对应（覆盖树） | `install.ps1` | **不能删** |
+| `fonts\` | 随包中文字体：`NotoSansSC-Regular.ttf` / `-Bold.ttf`（各约 10 MB） | `install.ps1` | **不能删**（删了会回退系统字体，没有就装不了） |
 | `README.md` | 本文件：文件作用、快速开始、手动安装、常见问题 | 玩家 | 可以，但建议留着 |
 | `安装说明.txt` / `安装说明.md` | 同一份安装说明的两个版本（记事本 / Markdown） | 玩家 | 可以 |
-| `LICENSE` | GPL-3.0-or-later 全文 | 法律 | **不能删**（合规） |
+| `LICENSE` / `LICENSE-OFL.txt` | 补丁的 GPL-3.0 与字体的 SIL OFL 1.1 | 法律 | **不能删**（合规） |
 
 `bin\` 里是两个互相依赖的文件，别单独挪动：`setup.cmd` 按相对路径找它们。
 

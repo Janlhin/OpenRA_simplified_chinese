@@ -1,5 +1,31 @@
 # 更新日志
 
+## 1.5.0 — 2026-10-30（本地构建，未发布）
+
+**字体改为随包自带**，不再依赖本机装没装中文字体。
+
+- 随包带 **Noto Sans SC 全量字形**（Regular / Bold 两个静态实例，各约 10 MB）。
+  上游只发可变字体 `NotoSansSC[wght].ttf`，用 `fonttools varLib.instancer` 固定成
+  `wght=400` / `wght=700` —— 只固定字重，**字形一个都不删**（不是子集化）。
+  许可 SIL OFL 1.1，附 `LICENSE-OFL.txt`。
+- 载荷里 6 个 `mod.yaml` 的字体引用，从"两处都写 `SimHei.ttf`"改为按上游
+  `FreeSans` / `FreeSansBold` 的位置分别指向 `NotoSansSC-Regular.ttf` / `-Bold.ttf`。
+  **这是本补丁第一次有真粗体**。其余 202 个载荷文件逐字节未变。
+- 安装器字体逻辑改为三级：`-FontPath` > 包内 `fonts\` > 系统字体；
+  **包内与系统都没有时直接中止**，修掉 1.4.x "只警告两句、装完游戏打不开"的缺陷。
+  卸载时把两个字重一起删掉，`-Verify` 也会检查它们。
+- 新增 `tools/check_font_coverage.py` 与 CI 一步：扫描载荷里出现的每个字符，
+  断言随包字体都画得出来（当前 1579 个字符，两个字重全覆盖）。
+- `build_release.py` 白名单加入 `fonts/**`、`LICENSE-OFL.txt`；`--verify` 增加字体哈希校验。
+- 包体积 270 KB → **12.4 MB**（218 个文件）。字体本身占 21 MB，zip 后约 12 MB。
+
+**校验**：`build_release.py --verify` 通过（字体 size+sha256、208 个载荷）；
+在 `playtest-20261026` 的英文基线上安装 → `-Verify` → `-Uninstall` 后**逐字节还原**
+（2595 文件，0 差异）；6 个模组 `--check-yaml` 退出码 0。
+
+**未验证**：字体在小字号下的观感与行高对齐（Noto 的 ascender 与 SimHei 不同），
+需要在 4 个 UI 缩放档位人眼确认——只能由维护者在本机看。
+
 ## 1.4.2 — 2026-10-30（本地构建，未发布）
 
 只改「包的样子」，**译文与载荷一个字都没动**（208 个载荷文件与 1.4.1 逐字节相同）。

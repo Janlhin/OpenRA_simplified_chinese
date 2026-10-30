@@ -195,35 +195,35 @@ ChromeMetrics:
 
 Fonts:
 	Tiny:
-		Font: common|SimHei.ttf
+		Font: common|NotoSansSC-Regular.ttf
 		Size: 10
 		Ascender: 8
 	TinyBold:
-		Font: common|SimHei.ttf
+		Font: common|NotoSansSC-Bold.ttf
 		Size: 10
 		Ascender: 8
 	Small:
-		Font: common|SimHei.ttf
+		Font: common|NotoSansSC-Regular.ttf
 		Size: 12
 		Ascender: 9
 	Regular:
-		Font: common|SimHei.ttf
+		Font: common|NotoSansSC-Regular.ttf
 		Size: 14
 		Ascender: 11
 	Bold:
-		Font: common|SimHei.ttf
+		Font: common|NotoSansSC-Bold.ttf
 		Size: 14
 		Ascender: 11
 	MediumBold:
-		Font: common|SimHei.ttf
+		Font: common|NotoSansSC-Bold.ttf
 		Size: 18
 		Ascender: 14
 	BigBold:
-		Font: common|SimHei.ttf
+		Font: common|NotoSansSC-Bold.ttf
 		Size: 24
 		Ascender: 18
 	Title:
-		Font: common|SimHei.ttf
+		Font: common|NotoSansSC-Bold.ttf
 		Size: 32
 		Ascender: 24
 

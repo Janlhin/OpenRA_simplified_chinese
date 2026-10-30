@@ -25,7 +25,7 @@
         ├─ 逐文件校验 SHA-256          ← 与 manifest.json 比对，不一致就中止
         ├─ 备份被覆盖的文件            ← <OpenRA 目录>\_zhcn-backup\<时间戳>\
         ├─ 覆盖 files/ 到 mods/        ← 汉化生效
-        └─ 复制本机中文字体            ← 落到 mods/common/，并同步改写 mod.yaml 的字体引用
+        └─ 部署随包字体              ← fonts/ 里的 Regular+Bold → mods/common/
 ```
 
 四个关键设计：**只覆盖文本**、**安装前先校验哈希**、**覆盖前先备份**、**不分发字体**（安装时从你本机复制）。
@@ -36,7 +36,9 @@
 
 ```
 OpenRA_simplified_chinese/
-├─ README.md / CONTRIBUTING.md / CHANGELOG.md / LICENSE
+├─ README.md / CONTRIBUTING.md / CHANGELOG.md
+├─ LICENSE / LICENSE-OFL.txt          补丁的 GPL 与字体的 SIL OFL
+├─ fonts/                             NotoSansSC-Regular/Bold.ttf（随包中文字体）
 ├─ setup.cmd                          玩家唯一入口（纯 ASCII + CRLF，双击出菜单）
 ├─ install.ps1                        全部逻辑
 ├─ manifest.json
@@ -73,6 +75,8 @@ OpenRA_simplified_chinese/
 | `CONTRIBUTING.md` | 贡献者文档：改译文流程、翻译规范、术语表、会被拒绝的改动 | 贡献者 |
 | `CHANGELOG.md` | 版本历史 | 所有人 |
 | `LICENSE` | GPL-3.0-or-later 全文 | 法律 |
+| `LICENSE-OFL.txt` | 随包字体 Noto Sans SC 的 SIL OFL 1.1 全文（OFL 要求随附） | 法律 |
+| `fonts/` | 随包中文字体，两个字重（Regular / Bold），各约 10 MB；**不进 `files/`**，安装时复制到 `mods/common/` | `install.ps1` |
 | `.gitattributes` | 行尾规则。**`files/** -text` 是关键**：载荷必须逐字节保真，否则别的平台检出时改写换行会让 `manifest.json` 的哈希集体失效。`*.bat` / `*.cmd` / `*.ps1` / `*.txt` 声明 CRLF | git |
 | `.gitignore` | 挡掉 `*.zip`（发布产物）、`_zhcn-backup/`（安装时生成的备份）、`Thumbs.db` / `.DS_Store`、`.vscode/` / `.idea/` | git |
 
@@ -191,7 +195,8 @@ CI 里还有一条内联守卫：`files/` 中若出现 `.ttf` / `.ttc` / `.otf` 
 | `audit_coverage.py` | 覆盖率审计：对比原版与汉化目录，列出还没翻的地方及原因 |
 | `check_yaml_fluent_refs.py` | yaml 里 `[FluentReference]` 引用的消息键能否解析；可传英文原版做**差分** |
 | `validate_ftl.py` | 与英文原文**逐键**比对（占位符、复数选择器是否一致） |
-| `check_font_glyphs.py` | 字体字形覆盖检查——看会不会出现方块字 |
+| `check_font_glyphs.py` | 字体字形覆盖检查——看会不会出现方块字（针对系统字体） |
+| `check_font_coverage.py` | 扫描 `files/` 里的每个字符，断言随包字体都画得出来（CI 必跑） |
 
 调用示例见 [MAINTAINING.md](MAINTAINING.md#校验工具-cli-备忘)。
 

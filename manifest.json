@@ -1,7 +1,7 @@
 {
   "name": "OpenRA_simplified_chinese",
   "displayName": "OpenRA 简体中文汉化补丁",
-  "version": "1.4.2",
+  "version": "1.5.0",
   "releaseDate": "2026-10-30",
   "engineVersion": "playtest-20261026",
   "license": "GPL-3.0-or-later",
@@ -13,15 +13,28 @@
     "payloadFiles": 208
   },
   "font": {
-    "required": true,
-    "deployTo": "mods/common/SimHei.ttf",
-    "candidates": [
+    "bundled": [
+      {
+        "path": "fonts/NotoSansSC-Regular.ttf",
+        "deployTo": "mods/common/NotoSansSC-Regular.ttf",
+        "size": 10595876,
+        "sha256": "3ee4c70117ea2a94369dec831e43445d4f73cd0bb419fc7c558ff933e4c2a5b1"
+      },
+      {
+        "path": "fonts/NotoSansSC-Bold.ttf",
+        "deployTo": "mods/common/NotoSansSC-Bold.ttf",
+        "size": 10585400,
+        "sha256": "f9ec901913a6b47200a63096a1044fd38298ee89d6930af1acb2851601120e32"
+      }
+    ],
+    "fallbackCandidates": [
       "simhei.ttf",
       "Deng.ttf",
       "msyh.ttc",
       "simsun.ttc"
     ],
-    "note": "不随包分发字体,安装时从本机 Windows 字体目录复制"
+    "license": "SIL Open Font License 1.1，见 LICENSE-OFL.txt",
+    "note": "字体随包分发（Noto Sans SC 全量字形，已固化为 Regular/Bold 两个静态实例）；安装时优先部署包内字体，包内缺失才回退系统字体"
   },
   "files": [
     {
@@ -66,8 +79,8 @@
     },
     {
       "path": "mods/cnc-content/mod.yaml",
-      "size": 8264,
-      "sha256": "90395273abe67ac11a9f93eb19191f62a3c5fd0782e9d733d5fc718d8cad794b"
+      "size": 8324,
+      "sha256": "c81fb891be77fec18565c8b39183037ec5486141c5b4e5cc7e42c6bb7ab4087f"
     },
     {
       "path": "mods/cnc/chrome/multiplayer-createserver.yaml",
@@ -301,8 +314,8 @@
     },
     {
       "path": "mods/cnc/mod.yaml",
-      "size": 6227,
-      "sha256": "3b749efd5d724a6c5c9934febd317695603af5d023b4c7134b6750932798b742"
+      "size": 6308,
+      "sha256": "cdbb3cd9bf9fb74eced3cdae3a1f1c51644ae0e1447da45d607e296ffc92bd9d"
     },
     {
       "path": "mods/common-content/fluent/chrome.ftl",
@@ -366,8 +379,8 @@
     },
     {
       "path": "mods/d2k-content/mod.yaml",
-      "size": 2534,
-      "sha256": "588d48c83794d470b8f98c5e8d219a0e8efa9182d3798bb4f8a927d1764b08d2"
+      "size": 2594,
+      "sha256": "1957e6a70eae7ccca27177ea0a12fe301cda266685a1fbf4ecbd19aee6ab988f"
     },
     {
       "path": "mods/d2k/fluent/campaign.ftl",
@@ -616,8 +629,8 @@
     },
     {
       "path": "mods/d2k/mod.yaml",
-      "size": 6256,
-      "sha256": "845076dd225f19f7e3cf0bf6a59541800cfd5c3c49ae4613f4c83444b3aa3e3a"
+      "size": 6328,
+      "sha256": "00f03c9bd67365eca0d1a5bebab2127df1aef03364ff05a76976fd08025c757c"
     },
     {
       "path": "mods/ra-content/fluent/chrome.ftl",
@@ -671,8 +684,8 @@
     },
     {
       "path": "mods/ra-content/mod.yaml",
-      "size": 10648,
-      "sha256": "1844f6abb27e022df5656ce4d7dcc1d33e64cb4e293c4747eb6af5977cb3b0a9"
+      "size": 10708,
+      "sha256": "1900229bc1ce8b7ebc64a22a89416fb0daab2269da28caae06d8a7ebda7c53e0"
     },
     {
       "path": "mods/ra/fluent/campaign.ftl",
@@ -1061,8 +1074,8 @@
     },
     {
       "path": "mods/ra/mod.yaml",
-      "size": 7258,
-      "sha256": "c68cf8fad37c01092d1d0ca200cf3aad5143a15ce9ac8a173126670671089bdd"
+      "size": 7330,
+      "sha256": "f15717c865f90e018ed738eda3ae525ea0594901b45c9260c6d57d62ac321d45"
     }
   ]
 }

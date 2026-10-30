@@ -12,8 +12,8 @@
     OpenRA 安装目录。省略时自动从注册表与常见路径探测。
 
 .PARAMETER FontPath
-    指定中文字体文件(.ttf / .ttc)。省略时按 simhei.ttf -> Deng.ttf -> msyh.ttc -> simsun.ttc 顺序
-    从 %WINDIR%\Fonts 查找。
+    指定中文字体文件(.ttf / .ttc),优先级最高。省略时优先用包内 fonts\NotoSansSC-*.ttf,
+    包内没有才回退到 %WINDIR%\Fonts 的 simhei.ttf -> Deng.ttf -> msyh.ttc -> simsun.ttc。
 
 .PARAMETER Uninstall
     从最近一次备份还原(卸载汉化)。
@@ -73,7 +73,8 @@ $PayloadDir   = Join-Path $Root 'files'
 $ManifestPath = Join-Path $ScriptDir 'manifest.json'
 if (-not (Test-Path $ManifestPath)) { $ManifestPath = Join-Path $Root 'manifest.json' }
 $BackupName   = '_zhcn-backup'
-$DefaultFontName = 'SimHei.ttf'
+# 载荷 mod.yaml 里写的字体名;用系统字体兜底时要逐一把它们换成实际文件名
+$DefaultFontNames = @('NotoSansSC-Regular.ttf', 'NotoSansSC-Bold.ttf')
 
 # ---------------------------------------------------------------- 输出helpers
 function Say([string]$Text, [string]$Color = 'Gray') { Write-Host $Text -ForegroundColor $Color }
@@ -300,16 +301,59 @@ function Invoke-Install {
         Copy-Item -LiteralPath $src -Destination $dst -Force
     }
 
-    # --- 字体
+    # --- 字体（优先级:-FontPath > 包内 fonts\ > 系统字体;都没有就中止）
     $fontState = '未处理'
     if ($SkipFont) {
         Warn '按要求跳过字体部署。若界面出现方块,请自行给 mods\*\mod.yaml 的 Fonts 段配置中文字体。'
     } else {
-        $fontSrc = Find-CjkFont $FontPath
-        if (-not $fontSrc) {
-            Warn '本机 %WINDIR%\Fonts 下没找到可用的中文字体(simhei/Deng/msyh/simsun)'
-            Warn '请用 -FontPath 指定一个 .ttf,例如思源黑体。否则界面中文会显示为方块。'
+        $bundled = @()
+        if ($manifest -and $manifest.font -and $manifest.font.bundled) { $bundled = @($manifest.font.bundled) }
+
+        $custom = $null
+        if ($FontPath) {
+            $custom = Find-CjkFont $FontPath
+            if (-not $custom) { Fail "指定的字体不存在:$FontPath"; exit 1 }
+        }
+
+        $useBundled = (-not $custom) -and ($bundled.Count -gt 0)
+        if ($useBundled) {
+            foreach ($b in $bundled) {
+                if (-not (Test-Path (Join-Path $Root $b.path))) { $useBundled = $false }
+            }
+        }
+
+        if ($useBundled) {
+            # 译文里的 mod.yaml 已经指向这些文件名,铺过去即可,无需改写引用
+            foreach ($b in $bundled) {
+                $name = Split-Path -Leaf ($b.deployTo -replace '/', '\')
+                if ($DryRun) {
+                    Say ("    [预览] 部署包内字体 {0} -> mods\common\{1}" -f $b.path, $name) 'DarkGray'
+                    continue
+                }
+                $src = Join-Path $Root $b.path
+                $dst = Join-Path $Target ('mods\common\' + $name)
+                New-Item -ItemType Directory -Path (Split-Path -Parent $dst) -Force | Out-Null
+                if (Test-Path $dst) {
+                    $bak = Join-Path $backupPath ('mods\common\' + $name)
+                    New-Item -ItemType Directory -Path (Split-Path -Parent $bak) -Force | Out-Null
+                    Copy-Item -LiteralPath $dst -Destination $bak -Force
+                    Save-BackupEntry $backupPath ('mods/common/' + $name) 'replaced'
+                } else {
+                    Save-BackupEntry $backupPath ('mods/common/' + $name) 'added'
+                }
+                Copy-Item -LiteralPath $src -Destination $dst -Force
+            }
+            $fontState = "包内 Noto Sans SC($($bundled.Count) 个文件)"
+            if (-not $DryRun) { Ok "已部署包内中文字体:mods\common\($($bundled.Count) 个文件)" }
         } else {
+            $fontSrc = $custom
+            if (-not $fontSrc) { $fontSrc = Find-CjkFont $null }
+            if (-not $fontSrc) {
+                Fail '本机 %WINDIR%\Fonts 下没有可用的中文字体,包内也没有 fonts\。'
+                Fail '请先装一个中文字体,或用 -FontPath 指定一个 .ttf,然后重试。'
+                Warn '已中止:补丁的 mod.yaml 指向中文字体,缺字体会让游戏启动时直接报错退出。'
+                exit 1
+            }
             $fontName = Split-Path -Leaf $fontSrc
             $fontDst  = Join-Path $Target ('mods\common\' + $fontName)
             if ($DryRun) {
@@ -327,20 +371,22 @@ function Invoke-Install {
                 $fontState = "$fontName (来自 $fontSrc)"
                 Ok "已部署中文字体:mods\common\$fontName"
 
-                # 注意:必须用大小写敏感比较(-cne)。PowerShell 的 -ne 默认忽略大小写,
-                # 会让 simhei.ttf 与 SimHei.ttf 被当成同一个名字,从而漏掉引用同步。
-                if ($fontName -cne $DefaultFontName) {
-                    $n = 0
-                    foreach ($modYaml in Get-ChildItem -Path (Join-Path $Target 'mods') -Filter 'mod.yaml' -Recurse -File) {
-                        $text = [IO.File]::ReadAllText($modYaml.FullName, [Text.Encoding]::UTF8)
-                        if ($text.Contains("common|$DefaultFontName")) {
-                            $new = $text.Replace("common|$DefaultFontName", "common|$fontName")
-                            [IO.File]::WriteAllText($modYaml.FullName, $new, (New-Object Text.UTF8Encoding $false))
-                            $n++
-                        }
+                # 载荷里的 mod.yaml 指向包内字体名,换成这一个系统字体后要同步引用。
+                # 必须用大小写敏感比较(-cne):PowerShell 的 -ne 忽略大小写,
+                # 会把 simhei.ttf 与 SimHei.ttf 当同一个名字。
+                $n = 0
+                foreach ($modYaml in Get-ChildItem -Path (Join-Path $Target 'mods') -Filter 'mod.yaml' -Recurse -File) {
+                    $text = [IO.File]::ReadAllText($modYaml.FullName, [Text.Encoding]::UTF8)
+                    $newText = $text
+                    foreach ($dn in $DefaultFontNames) {
+                        if ($newText.Contains("common|$dn")) { $newText = $newText.Replace("common|$dn", "common|$fontName") }
                     }
-                    if ($n -gt 0) { Info "已把 $n 个 mod.yaml 的字体引用同步为实际字体名 $fontName" }
+                    if ($newText -cne $text) {
+                        [IO.File]::WriteAllText($modYaml.FullName, $newText, (New-Object Text.UTF8Encoding $false))
+                        $n++
+                    }
                 }
+                if ($n -gt 0) { Info "已把 $n 个 mod.yaml 的字体引用同步为 $fontName" }
             }
         }
     }
@@ -461,14 +507,19 @@ function Invoke-Verify {
         }
     }
 
-    # 字体残留检查(原版 OpenRA 不带中文字体)
-    $fontRemain = $false
-    $fontName = 'SimHei.ttf'
-    if ($manifest.font -and $manifest.font.deployTo) {
-        $fontName = Split-Path -Leaf ($manifest.font.deployTo -replace '/', '\')
+    # 字体残留检查(原版 OpenRA 不带中文字体):包内两个字重 + 旧的单字体都查
+    $fontNames = @()
+    if ($manifest.font -and $manifest.font.bundled) {
+        foreach ($b in @($manifest.font.bundled)) { $fontNames += (Split-Path -Leaf ($b.deployTo -replace '/', '\')) }
     }
-    $fontPath = Join-Path $Target ('mods\common\' + $fontName)
-    if (Test-Path $fontPath) { $fontRemain = $true }
+    foreach ($n in $DefaultFontNames) { if ($fontNames -notcontains $n) { $fontNames += $n } }
+    $fontNames += 'SimHei.ttf'   # 1.4.x 及更早装过的单字体
+
+    $leftFonts = @()
+    foreach ($n in $fontNames) {
+        if (Test-Path (Join-Path $Target ('mods\common\' + $n))) { $leftFonts += $n }
+    }
+    $fontRemain = ($leftFonts.Count -gt 0)
 
     # 备份目录存在性提示
     $backupRoot = Join-Path $Target $BackupName
@@ -478,7 +529,7 @@ function Invoke-Verify {
     if ($remain -eq 0) {
         Ok "未检测到汉化文件残留 (已比对 $($manifest.files.Count) 个载荷,其中 $clean 个为英文/已删除状态)"
         if ($fontRemain) {
-            Warn "但发现字体 $fontName 仍存在于 mods\common\,如已不需要可手动删除"
+            Warn ("但发现字体 {0} 仍存在于 mods\common\,如已不需要可手动删除" -f ($leftFonts -join ', '))
         } else {
             Ok "中文字体已不在 mods\common\ (若曾部署)"
         }
@@ -489,7 +540,7 @@ function Invoke-Verify {
     } else {
         Fail "检测到 $remain 个汉化文件仍在安装目录中,卸载未完成!"
         foreach ($r in $report) { Say ('    ' + $r) 'Red' }
-        if ($fontRemain) { Warn "字体 $fontName 也仍残留于 mods\common\" }
+        if ($fontRemain) { Warn ("字体 {0} 也仍残留于 mods\common\" -f ($leftFonts -join ', ')) }
         Say ''
         Say '  建议:重新运行 setup.cmd 选 2(或 install.ps1 -Uninstall)完成还原。' 'Yellow'
         exit 1

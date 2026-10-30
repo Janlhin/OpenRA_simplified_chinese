@@ -4,9 +4,10 @@
 默认**只打玩家需要的文件**（白名单），研发资产（tools/、docs/、.github/、
 CONTRIBUTING 等）留在仓库里，不进包。玩家解压后看到的布局：
 
-    setup.cmd / README.md / 安装说明.txt / 安装说明.md / LICENSE
+    setup.cmd / README.md / 安装说明.txt / 安装说明.md / LICENSE / LICENSE-OFL.txt
     bin/install.ps1 / bin/manifest.json      ← 脚本与清单收进 bin/
     files/**                                 ← 208 个文本载荷
+    fonts/**                                 ← Noto Sans SC 两个字重
 
 `--dev` 打全量快照（除 .git/、dist/、*.zip），给内部复现问题用。
 
@@ -32,8 +33,8 @@ import zipfile
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # 发布包白名单：改这里等于改「玩家拿到什么」
-RELEASE_FILES = ('setup.cmd', 'README.md', '安装说明.txt', '安装说明.md', 'LICENSE')
-RELEASE_DIRS = ('files',)
+RELEASE_FILES = ('setup.cmd', 'README.md', '安装说明.txt', '安装说明.md', 'LICENSE', 'LICENSE-OFL.txt')
+RELEASE_DIRS = ('files', 'fonts')
 
 # 仓库路径 -> 包内路径（脚本与清单统一收进 bin\，顶层只留入口与说明）
 PACKAGE_LAYOUT = {
@@ -123,6 +124,18 @@ def verify_package(vroot, root, manifest):
             if rel not in listed:
                 problems.append('多余载荷：%s' % rel)
 
+    # 随包字体：路径、大小、哈希都要与 manifest 的 font.bundled 对得上
+    for font in (manifest.get('font') or {}).get('bundled', []):
+        rel = font['path']
+        path = os.path.join(vroot, rel.replace('/', os.sep))
+        if not os.path.exists(path):
+            problems.append('字体缺失：%s' % rel)
+            continue
+        if os.path.getsize(path) != font['size']:
+            problems.append('字体大小不符：%s' % rel)
+        if sha256(path) != font['sha256']:
+            problems.append('字体哈希不符：%s' % rel)
+
     return problems
 
 
@@ -182,6 +195,7 @@ def main():
                 print('  ...共 %d 个问题' % len(problems))
             return 1
         print('  [通过] 入口文件齐全，bin/manifest.json 与仓库一致')
+        print('  [通过] 随包字体 %d 个，size+sha256 与 manifest 一致' % len((manifest.get('font') or {}).get('bundled', [])))
         print('  [通过] %d 个载荷 size+sha256 全部一致，无多余文件' % len(manifest['files']))
         return 0
     finally:
