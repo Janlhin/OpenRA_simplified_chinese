@@ -126,7 +126,8 @@ git add -A && git commit -m "..." && git push
 `build_release.py` 默认走**白名单**，只打玩家需要的文件：
 
 ```
-setup.cmd / install.ps1 / manifest.json / INSTALL.txt / LICENSE / files/**
+setup.cmd / README.md / 安装说明.txt / 安装说明.md / LICENSE / files/**
+bin/install.ps1   bin/manifest.json      ← 仓库里在根目录，打包时按 PACKAGE_LAYOUT 收进 bin/
 ```
 
 `tools/`、`docs/`、`.github/`、`CONTRIBUTING.md`、`CHANGELOG.md`、`.gitattributes`
@@ -138,7 +139,10 @@ setup.cmd / install.ps1 / manifest.json / INSTALL.txt / LICENSE / files/**
 入口文件是否齐全、包内 `manifest.json` 是否与仓库一致、208 个载荷的 size/sha256 是否对得上、
 `files/` 里有没有多余文件。
 
-> 改白名单时记得同步 `RELEASE_FILES` / `RELEASE_DIRS`，以及 README 的「包里有什么」表格。
+> 改白名单时记得同步 `RELEASE_FILES` / `RELEASE_DIRS` / `PACKAGE_LAYOUT`，以及 README 的
+> 「包里有什么」表格。`PACKAGE_LAYOUT` 负责「仓库在根目录、包里收进 `bin\`」这种映射，
+> 新增需要挪位的文件时改它，不要手工改 `install.ps1` 里的相对路径假设——
+> 脚本会自己向上找 `files\`，仓库里直接跑和包内跑都能用。
 
 想做成 `.exe` 安装包，可用 [Inno Setup](https://jrsoftware.org/isinfo.php) 打包 `files/`，
 并在 `[Run]` 中调用 `install.ps1 -Target "{app}" -Yes`。

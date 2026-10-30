@@ -20,13 +20,13 @@ if not exist "%PS%" set "PS=powershell.exe"
 
 if "%~1"=="" goto MENU
 
-"%PS%" -NoProfile -ExecutionPolicy Bypass -File "%~dp0install.ps1" %*
+"%PS%" -NoProfile -ExecutionPolicy Bypass -File "%~dp0bin\install.ps1" %*
 set "RC=%ERRORLEVEL%"
 if not "%RC%"=="0" goto FAILED
 exit /b 0
 
 :MENU
-"%PS%" -NoProfile -ExecutionPolicy Bypass -File "%~dp0install.ps1" -Menu
+"%PS%" -NoProfile -ExecutionPolicy Bypass -File "%~dp0bin\install.ps1" -Menu
 set "RC=%ERRORLEVEL%"
 if not "%RC%"=="0" goto FAILED
 exit /b 0

@@ -41,7 +41,7 @@ setup.cmd -FontPath "D:\NotoSansSC-Regular.ttf"   :: 指定中文字体
 
 ### 安装参数
 
-`setup.cmd` 会把参数原样透传给 `install.ps1`，两者等价：
+`setup.cmd` 会把参数原样透传给 `bin\install.ps1`，两者等价：
 
 | 参数 | 说明 |
 |---|---|
@@ -73,11 +73,11 @@ setup.cmd -FontPath "D:\NotoSansSC-Regular.ttf"   :: 指定中文字体
 自检两条：`<游戏目录>\mods\common\simhei.ttf` 与
 `<游戏目录>\mods\common\fluent\ingame-debug.ftl` 都存在。
 
-完整步骤（含还原、常见问题）见 **[INSTALL.txt](INSTALL.txt)**。
+完整步骤（含还原、常见问题）见 **[安装说明.md](安装说明.md)**。
 
 ## 让 AI 助手帮你装
 
-把 [INSTALL.txt](INSTALL.txt) 里「让 AI 助手帮你装」那段整段复制给能在你电脑上执行命令的助手。
+把 [安装说明.md](安装说明.md) 里「让 AI 助手帮你装」那段整段复制给能在你电脑上执行命令的助手。
 那段提示词要求它：先校验 `mods\ra\mod.yaml` 的 `Version` 是否为 `playtest-20261026`、先备份整个
 `mods`、按结构覆盖 `files\mods`、复制字体、**不碰 `map.yaml` 与 `mod.yaml`**，最后报告 208 个
 文件是否到位。`Program Files` 需要管理员权限，它可能会要你点一次 UAC。
@@ -126,7 +126,7 @@ OpenRA 的 `Fonts:` 配置默认指向 `common|FreeSans.ttf`，该字体**没有
 - 想换更好看的字体（例如[思源黑体](https://github.com/notofonts/noto-cjk)）：
   `setup.cmd -FontPath "D:\NotoSansSC-Regular.ttf"`。
 - **本机一个中文字体都没有**（英文版 / 精简版 Windows 可能如此）时，安装会中止并提示，
-  必须先装一个中文字体——这也是手动安装最容易踩的坑，详见 [INSTALL.txt](INSTALL.txt)。
+  必须先装一个中文字体——这也是手动安装最容易踩的坑，详见 [安装说明.md](安装说明.md)。
 
 ## 卸载与还原
 
@@ -147,16 +147,22 @@ OpenRA 的 `Fonts:` 配置默认指向 `common|FreeSans.ttf`，该字体**没有
 
 ## 包里有什么
 
-| 文件 | 作用 |
-|---|---|
-| `setup.cmd` | 唯一入口，双击出菜单 |
-| `install.ps1` | 全部逻辑：探测 / 备份 / 哈希校验 / UAC 提权 / 还原 |
-| `manifest.json` | 版本、引擎版本、208 个载荷的 SHA-256 |
-| `INSTALL.txt` | 给玩家的说明：三步装、手动装、AI 装、常见问题 |
-| `LICENSE` | GPL-3.0 |
-| `files\mods\` | 208 个文本载荷 |
+发布包解压后只有 6 项，各管一件事：
 
-研发资产（`tools/`、`docs/`、`.github/`、`CONTRIBUTING.md` 等）只留在仓库里，**不进发布包**。
+| 路径 | 作用 | 谁读它 | 能删吗 |
+|---|---|---|---|
+| `setup.cmd` | **唯一入口**。双击出中文菜单（安装 / 还原 / 校验 / 预演）；带参数时原样透传 | 玩家 | 删了就只能手动安装 |
+| `bin\install.ps1` | 全部逻辑：探测游戏目录、版本校验、SHA-256 校验、备份、UAC 提权、还原、字体部署 | `setup.cmd` 调用 | **不能删** |
+| `bin\manifest.json` | 补丁的身份证：版本、适配引擎、208 个载荷的 `{path, size, sha256}` | `install.ps1`、CI | **不能删**（安装器靠它校验与判版本） |
+| `files\mods\` | 208 个文本载荷，路径与游戏 `mods\` 一一对应（覆盖树） | `install.ps1` | **不能删** |
+| `README.md` | 本文件：文件作用、快速开始、手动安装、常见问题 | 玩家 | 可以，但建议留着 |
+| `安装说明.txt` / `安装说明.md` | 同一份安装说明的两个版本（记事本 / Markdown） | 玩家 | 可以 |
+| `LICENSE` | GPL-3.0-or-later 全文 | 法律 | **不能删**（合规） |
+
+`bin\` 里是两个互相依赖的文件，别单独挪动：`setup.cmd` 按相对路径找它们。
+
+研发资产（`tools/`、`docs/`、`.github/`、`CONTRIBUTING.md`、`CHANGELOG.md` 等）
+只留在仓库里，**不进发布包**。
 
 ## 引擎升级后请注意
 

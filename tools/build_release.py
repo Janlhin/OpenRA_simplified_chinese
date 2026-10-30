@@ -2,17 +2,19 @@
 """构建发布包：`<仓库名>-<版本>.zip`。
 
 默认**只打玩家需要的文件**（白名单），研发资产（tools/、docs/、.github/、
-CONTRIBUTING 等）留在仓库里，不进包 —— C 端解压后应该只看到一个入口、一份说明：
+CONTRIBUTING 等）留在仓库里，不进包。玩家解压后看到的布局：
 
-    setup.cmd / install.ps1 / manifest.json / INSTALL.txt / LICENSE / files/**
+    setup.cmd / README.md / 安装说明.txt / 安装说明.md / LICENSE
+    bin/install.ps1 / bin/manifest.json      ← 脚本与清单收进 bin/
+    files/**                                 ← 208 个文本载荷
 
 `--dev` 打全量快照（除 .git/、dist/、*.zip），给内部复现问题用。
 
 包是**确定性**的：zip 内时间戳取自 manifest.json 的 releaseDate，
 同一份仓库内容每次产出字节一致的 zip。
 
-`--verify` 把包解压到临时目录后**在包内自带校验**（不再依赖 tools/，因为发布包
-不含 tools/）：入口文件是否齐全、manifest 是否与仓库一致、208 个载荷的
+`--verify` 把包解压到临时目录后**在包内自带校验**（不依赖 tools/，因为发布包
+不含 tools/）：入口文件是否齐全、bin/manifest.json 是否与仓库一致、208 个载荷的
 size/sha256 是否对得上、files/ 里有没有多余文件。
 
 用法:
@@ -30,8 +32,14 @@ import zipfile
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # 发布包白名单：改这里等于改「玩家拿到什么」
-RELEASE_FILES = ('setup.cmd', 'install.ps1', 'manifest.json', 'INSTALL.txt', 'LICENSE')
+RELEASE_FILES = ('setup.cmd', 'README.md', '安装说明.txt', '安装说明.md', 'LICENSE')
 RELEASE_DIRS = ('files',)
+
+# 仓库路径 -> 包内路径（脚本与清单统一收进 bin\，顶层只留入口与说明）
+PACKAGE_LAYOUT = {
+    'install.ps1': 'bin/install.ps1',
+    'manifest.json': 'bin/manifest.json',
+}
 
 
 def sha256(path):
@@ -67,10 +75,10 @@ def collect(root, dev=False):
                 out.append(os.path.relpath(os.path.join(dp, f), root).replace(os.sep, '/'))
         return sorted(out)
 
-    missing = [f for f in RELEASE_FILES if not os.path.exists(os.path.join(root, f))]
+    missing = [f for f in list(RELEASE_FILES) + list(PACKAGE_LAYOUT) if not os.path.exists(os.path.join(root, f))]
     if missing:
         raise SystemExit('白名单里的文件在仓库中不存在：%s' % ', '.join(missing))
-    out = list(RELEASE_FILES)
+    out = list(RELEASE_FILES) + list(PACKAGE_LAYOUT)
     for d in RELEASE_DIRS:
         if not os.path.isdir(os.path.join(root, d)):
             raise SystemExit('白名单目录不存在：%s' % d)
@@ -78,15 +86,20 @@ def collect(root, dev=False):
     return sorted(out)
 
 
+def package_path(rel):
+    return PACKAGE_LAYOUT.get(rel, rel)
+
+
 def verify_package(vroot, root, manifest):
     """在解压出的包上做自校验，返回问题列表（空 = 通过）。"""
     problems = []
 
-    for name in RELEASE_FILES:
+    required = [package_path(f) for f in list(RELEASE_FILES) + list(PACKAGE_LAYOUT)]
+    for name in required:
         if not os.path.exists(os.path.join(vroot, name.replace('/', os.sep))):
             problems.append('缺少入口文件：%s' % name)
 
-    pkg_manifest = os.path.join(vroot, 'manifest.json')
+    pkg_manifest = os.path.join(vroot, package_path('manifest.json').replace('/', os.sep))
     if os.path.exists(pkg_manifest):
         if sha256(pkg_manifest) != sha256(os.path.join(root, 'manifest.json')):
             problems.append('包内 manifest.json 与仓库不一致（请重新构建）')
@@ -135,11 +148,12 @@ def main():
 
     files = collect(root, dev=args.dev)
     with zipfile.ZipFile(out, 'w', zipfile.ZIP_DEFLATED) as z:
-        for arc in files:
-            zi = zipfile.ZipInfo(top + '/' + arc, date_time=dt)
+        for rel in files:
+            arc = top + '/' + (rel if args.dev else package_path(rel))
+            zi = zipfile.ZipInfo(arc, date_time=dt)
             zi.compress_type = zipfile.ZIP_DEFLATED
             zi.external_attr = 0o644 << 16
-            with open(os.path.join(root, arc.replace('/', os.sep)), 'rb') as fh:
+            with open(os.path.join(root, rel.replace('/', os.sep)), 'rb') as fh:
                 z.writestr(zi, fh.read())
 
     size = os.path.getsize(out)
@@ -167,7 +181,7 @@ def main():
             if len(problems) > 20:
                 print('  ...共 %d 个问题' % len(problems))
             return 1
-        print('  [通过] 入口文件齐全，manifest 与仓库一致')
+        print('  [通过] 入口文件齐全，bin/manifest.json 与仓库一致')
         print('  [通过] %d 个载荷 size+sha256 全部一致，无多余文件' % len(manifest['files']))
         return 0
     finally:

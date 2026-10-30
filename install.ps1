@@ -60,9 +60,18 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
-$Root         = $PSScriptRoot
+
+# 发布包里脚本放在 bin\ 下,载荷与说明在上一层;仓库里脚本就在根目录。
+# 因此不能只看 $PSScriptRoot,要向上找一级含有 files\ 的目录。
+$ScriptDir    = $PSScriptRoot
+$Root         = $ScriptDir
+if (-not (Test-Path (Join-Path $Root 'files'))) {
+    $parent = Split-Path -Parent $ScriptDir
+    if ($parent -and (Test-Path (Join-Path $parent 'files'))) { $Root = $parent }
+}
 $PayloadDir   = Join-Path $Root 'files'
-$ManifestPath = Join-Path $Root 'manifest.json'
+$ManifestPath = Join-Path $ScriptDir 'manifest.json'
+if (-not (Test-Path $ManifestPath)) { $ManifestPath = Join-Path $Root 'manifest.json' }
 $BackupName   = '_zhcn-backup'
 $DefaultFontName = 'SimHei.ttf'
 

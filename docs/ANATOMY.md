@@ -40,7 +40,7 @@ OpenRA_simplified_chinese/
 ├─ setup.cmd                          玩家唯一入口（纯 ASCII + CRLF，双击出菜单）
 ├─ install.ps1                        全部逻辑
 ├─ manifest.json
-├─ INSTALL.txt                        玩家说明：三步装 / 手动装 / AI 装 / FAQ
+├─ 安装说明.txt / 安装说明.md          玩家说明：三步装 / 手动装 / AI 装 / FAQ
 ├─ files/                             载荷：覆盖树的根
 │   └─ mods/{common,ra,cnc,d2k,common-content,ra-content,cnc-content,d2k-content}/
 ├─ tools/                             10 个 Python 脚本（纯标准库）
@@ -68,7 +68,7 @@ OpenRA_simplified_chinese/
 | `setup.cmd` | **玩家唯一入口**。纯 ASCII + CRLF（避免代码页乱码）：不带参数时调 `install.ps1 -Menu` 出中文菜单，带参数时原样透传给 `install.ps1`（`setup.cmd -Uninstall` 等价于原来的 `uninstall.bat`） | 玩家 |
 | `install.ps1` | **安装/卸载/校验的全部逻辑**：目录探测、版本校验、SHA-256 校验、备份、UAC 提权、字体复制、`-DryRun`、还原、校验。Windows PowerShell 5.1 语法，UTF-8 **带 BOM**（否则 PS 5.1 会把中文读成乱码） | `setup.cmd` |
 | `manifest.json` | **补丁的身份证**：`version`、`engineVersion`、`repository`、`font`、`stats`，以及 208 条 `{path, size, sha256}` | `install.ps1`、CI、`tools/verify_manifest.py` |
-| `INSTALL.txt` | 给玩家的纯文本说明（UTF-8 带 BOM + CRLF，记事本直接看）：三步装、手动安装、让 AI 助手安装、常见问题 | 玩家 |
+| `安装说明.txt` / `安装说明.md` | 给玩家的说明，同一份内容的两个版本：`.txt` 是纯文本（UTF-8 带 BOM + CRLF，记事本直接看），`.md` 有标题层级与表格 | 玩家 |
 | `README.md` | 玩家文档（同一份内容的 Markdown 版） | 玩家 |
 | `CONTRIBUTING.md` | 贡献者文档：改译文流程、翻译规范、术语表、会被拒绝的改动 | 贡献者 |
 | `CHANGELOG.md` | 版本历史 | 所有人 |
@@ -182,7 +182,7 @@ CI 里还有一条内联守卫：`files/` 中若出现 `.ttf` / `.ttc` / `.otf` 
 | 脚本 | 作用 |
 |---|---|
 | `build_manifest.py` | diff 英文原版与汉化目录，**重建 `files/` 与全部哈希**。它会清空并重拷 `files/`，运行前确认没有未提交的手工改动 |
-| `build_release.py` | 把仓库打成**确定性**发布包 zip（时间戳取自 `manifest.json` 的 `releaseDate`）。默认走白名单（`setup.cmd` / `install.ps1` / `manifest.json` / `INSTALL.txt` / `LICENSE` / `files/**`），`--dev` 打全量；`--verify` 在包内做自校验（入口齐全、载荷 size/sha256、无多余文件） |
+| `build_release.py` | 把仓库打成**确定性**发布包 zip（时间戳取自 `manifest.json` 的 `releaseDate`）。默认走白名单（`setup.cmd` / `README.md` / `安装说明.txt` / `安装说明.md` / `LICENSE` / `install.ps1` / `manifest.json` / `files/**`），并按 `PACKAGE_LAYOUT` 把 `install.ps1`、`manifest.json` 映射进包内 `bin\`；`--dev` 打全量；`--verify` 在包内做自校验（入口齐全、`bin/manifest.json` 与仓库一致、载荷 size/sha256、无多余文件） |
 
 ### 开发审计（需要游戏本体或字体，CI 不跑）
 
