@@ -104,11 +104,15 @@ python tools/build_manifest.py --original "…" --patched "stage/patched" --vers
 日常更新（**改了载荷就必须先重算哈希**，否则 CI 会挡下）：
 
 ```bash
-python tools/verify_manifest.py            # 或 tools/build_manifest.py 全量重建
+python tools/build_manifest.py --original "…" --patched "…"   # 重建载荷与哈希
+python tools/build_readme_inventory.py     # README 附录 A 的 208 行清单跟着重生成
 python tools/lint_ftl.py files/mods
 python tools/struct_check_maps.py files/mods
 git add -A && git commit -m "..." && git push
 ```
+
+> README 的「附录 A 全部文件清单」**不要手改**——它由 `build_readme_inventory.py` 从
+> `manifest.json` 渲染，CI 用 `--check` 断言两者一致；改了载荷忘了重跑，CI 会直接挡下。
 
 ## 发新版本
 

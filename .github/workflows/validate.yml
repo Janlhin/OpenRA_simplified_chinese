@@ -31,6 +31,9 @@ jobs:
       - name: Markdown 相对链接与锚点（docs/ 引用根目录文件须用 ../）
         run: python tools/check_links.py .
 
+      - name: README 附录的文件清单与 manifest.json 一致
+        run: python tools/build_readme_inventory.py --check
+
       - name: 载荷里的每个字符，随包字体都画得出来
         run: python tools/check_font_coverage.py
 

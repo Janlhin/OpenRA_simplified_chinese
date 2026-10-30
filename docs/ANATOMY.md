@@ -197,6 +197,7 @@ CI 里还有一条内联守卫：`files/` 中若出现 `.ttf` / `.ttc` / `.otf` 
 | `validate_ftl.py` | 与英文原文**逐键**比对（占位符、复数选择器是否一致） |
 | `check_font_glyphs.py` | 字体字形覆盖检查——看会不会出现方块字（针对系统字体） |
 | `check_font_coverage.py` | 扫描 `files/` 里的每个字符，断言随包字体都画得出来（CI 必跑） |
+| `build_readme_inventory.py` | 把 208 条载荷渲染成 README 的「附录 A 全部文件清单」；`--check` 断言 README 与 `manifest.json` 一致（CI 必跑） |
 
 调用示例见 [MAINTAINING.md](MAINTAINING.md#校验工具-cli-备忘)。
 
