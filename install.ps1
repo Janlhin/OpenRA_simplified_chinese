@@ -36,6 +36,10 @@
 .PARAMETER Verify
     校验「汉化是否已卸载干净」:逐文件比对载荷哈希,列出仍残留的文件。
 
+.PARAMETER Backup
+    指定用哪一份备份还原(省略则自动挑选)。值可以是备份目录的路径或名字,例如
+    -Backup "20261030-180424"。
+
 .PARAMETER Menu
     显示中文交互菜单(安装 / 还原 / 校验 / 预演),由 setup.cmd 双击进入。
     菜单里的每一项都通过子进程重新调用本脚本,互不影响。
@@ -56,6 +60,7 @@ param(
     [switch]$SkipFont,
     [switch]$NoVerify,
     [switch]$Verify,
+    [string]$Backup,
     [switch]$Menu
 )
 
@@ -211,6 +216,82 @@ function Save-BackupEntry([string]$BackupPath, [string]$RelPath, [string]$State)
     [IO.File]::WriteAllText($jsonPath, ($obj | ConvertTo-Json -Depth 5), (New-Object Text.UTF8Encoding $false))
 }
 
+# ---------------------------------------------------------------- 备份挑选
+function Test-PostPatchBackup([string]$Dir, $Data) {
+    # 在已打过补丁的目录上再装一次，备份里存下来的就是**译文**——拿它还原等于什么都没做。
+    # 判据：抽样比对备份内容与载荷，若过半完全相同，说明这份"备份"是覆盖后的产物。
+    # 只要有任何一个文件"装之前就已经是译文"(state=same),这棵树当时必然已经打过补丁,
+    # 这份备份里就不可能存着完整的英文原件 —— 拿它还原只会原地打转。
+    $sameCount = @($Data.entries | Where-Object { $_.state -eq 'same' }).Count
+    if ($sameCount -gt 0) { return $true }
+
+    $cand = @($Data.entries | Where-Object { $_.state -eq 'replaced' })
+    if ($cand.Count -eq 0) {
+        # 没有任何"被覆盖前"的文件:要么全是新增(首次安装,有效),要么全是 same
+        # (重复安装,一份纯译文,拿来还原等于没还原)。
+        $hasAdded = @($Data.entries | Where-Object { $_.state -eq 'added' }).Count -gt 0
+        return (-not $hasAdded)
+    }
+    $checked = 0
+    $same = 0
+    foreach ($e in ($cand | Select-Object -First 12)) {
+        $rel = $e.path.Replace('/', '\')
+        $bak = Join-Path $Dir $rel
+        $src = Join-Path $PayloadDir $rel
+        if (-not (Test-Path -LiteralPath $bak)) { continue }
+        if (-not (Test-Path -LiteralPath $src)) { continue }
+        $checked++
+        try {
+            $hb = (Get-FileHash -LiteralPath $bak -Algorithm SHA256).Hash
+            $hs = (Get-FileHash -LiteralPath $src -Algorithm SHA256).Hash
+            if ($hb -eq $hs) { $same++ }
+        } catch { }
+    }
+    if ($checked -eq 0) { return $false }
+    return ($same * 2 -ge $checked)
+}
+
+function Select-Backup([string]$Root) {
+    # 从新到旧挑第一份"真正的安装前快照"：
+    #   1) 跳过已还原过的（名字带 .已还原），否则会对同一份反复还原；
+    #   2) 跳过重复安装产生的（内容其实是译文）。
+    $dirs = @(Get-ChildItem -Path $Root -Directory | Sort-Object Name -Descending)
+    $usable = @($dirs | Where-Object { $_.Name -notlike '*已还原*' })
+    $skipped = @()
+    foreach ($d in $usable) {
+        $json = Join-Path $d.FullName 'backup.json'
+        if (-not (Test-Path $json)) { continue }
+        $data = Get-Content $json -Raw -Encoding UTF8 | ConvertFrom-Json
+        if (Test-PostPatchBackup $d.FullName $data) { $skipped += $d.Name; continue }
+        return [pscustomobject]@{ Path = $d.FullName; Skipped = $skipped }
+    }
+    # 全都不可用:宁可明确失败,也不要挑一份"看起来最新"的译文快照假装还原成功
+    return [pscustomobject]@{ Path = $null; Skipped = $skipped }
+}
+
+function Remove-OrphanFonts($Data, [string]$Dir) {
+    # 备份早于当前字体方案时，mods\common\ 下会留下补丁自己塞进去的字体文件。
+    # 只删我们确定的几个名字，不动用户自己的字体。
+    $known = @('NotoSansSC-Regular.ttf', 'NotoSansSC-Bold.ttf', 'simhei.ttf', 'SimHei.ttf')
+    $referenced = @{}
+    foreach ($e in $Data.entries) { $referenced[($e.path.Replace('/', '\')).ToLower()] = $true }
+    $n = 0
+    foreach ($name in $known) {
+        $rel = 'mods\common\' + $name
+        if ($referenced.ContainsKey($rel.ToLower())) { continue }
+        $p = Join-Path $Dir $rel
+        if (-not (Test-Path -LiteralPath $p)) { continue }
+        try {
+            Remove-Item -LiteralPath $p -Force -ErrorAction Stop
+            $n++
+            Info "顺带删除补丁遗留字体:mods\common\$name"
+        } catch {
+            try { [IO.File]::Delete($p); $n++ } catch { }
+        }
+    }
+    return $n
+}
+
 # ---------------------------------------------------------------- 安装
 function Invoke-Install {
     $manifest = Get-Manifest
@@ -275,7 +356,7 @@ function Invoke-Install {
     # --- 备份 + 覆盖
     $backupPath = New-Backup $Target
     if (-not $DryRun) { Info "备份目录:$backupPath" }
-    $copied = 0; $added = 0
+    $copied = 0; $added = 0; $same = 0
     foreach ($rel in $relList) {
         $src = Join-Path $PayloadDir $rel
         $dst = Join-Path $Target   $rel
@@ -289,16 +370,31 @@ function Invoke-Install {
         $dstDir = Split-Path -Parent $dst
         if (-not (Test-Path $dstDir)) { New-Item -ItemType Directory -Path $dstDir -Force | Out-Null }
         if ($exists) {
-            $bak = Join-Path $backupPath $rel
-            New-Item -ItemType Directory -Path (Split-Path -Parent $bak) -Force | Out-Null
-            Copy-Item -LiteralPath $dst -Destination $bak -Force
-            Save-BackupEntry $backupPath $rel 'replaced'
-            $copied++
+            # 已经是这份译文(重复安装)时,不要把译文当成"原件"存进备份 —— 那会让备份失去意义,
+            # 卸载时还原出一份中文,看起来就是"卸载没效果"。
+            $already = $false
+            try {
+                $already = ((Get-FileHash -LiteralPath $dst -Algorithm SHA256).Hash -eq
+                            (Get-FileHash -LiteralPath $src -Algorithm SHA256).Hash)
+            } catch { }
+            if ($already) {
+                Save-BackupEntry $backupPath $rel 'same'
+                $same++
+            } else {
+                $bak = Join-Path $backupPath $rel
+                New-Item -ItemType Directory -Path (Split-Path -Parent $bak) -Force | Out-Null
+                Copy-Item -LiteralPath $dst -Destination $bak -Force
+                Save-BackupEntry $backupPath $rel 'replaced'
+                $copied++
+            }
         } else {
             Save-BackupEntry $backupPath $rel 'added'
             $added++
         }
         Copy-Item -LiteralPath $src -Destination $dst -Force
+    }
+    if ($same -gt 0) {
+        Warn "有 $same 个文件已经是本补丁的译文(重复安装)。它们没有英文原件可备份,还原时会自动跳过。"
     }
 
     # --- 字体（优先级:-FontPath > 包内 fonts\ > 系统字体;都没有就中止）
@@ -396,7 +492,7 @@ function Invoke-Install {
     if ($DryRun) {
         Warn '这是预演(DryRun),没有写任何文件。去掉 -DryRun 即为实际安装。'
     } else {
-        Ok "覆盖 $copied 个文件,新增 $added 个文件"
+        Ok "覆盖 $copied 个文件,新增 $added 个文件,已是译文 $same 个"
         if ($fontState -ne '未处理') { Ok "字体:$fontState" }
         Info "备份与还原清单:$backupPath"
         Say ''
@@ -423,18 +519,39 @@ function Invoke-Uninstall {
         Info '说明:汉化补丁必须由 install 脚本安装过,才能用本脚本还原。'
         exit 1
     }
-    $latest = Get-ChildItem -Path $backupRoot -Directory | Sort-Object Name -Descending | Select-Object -First 1
-    $jsonPath = Join-Path $latest.FullName 'backup.json'
-    if (-not (Test-Path $jsonPath)) { Fail "备份清单缺失:$jsonPath"; exit 1 }
-    $data = Get-Content $jsonPath -Raw -Encoding UTF8 | ConvertFrom-Json
-
-    Info "使用备份:$($latest.FullName)"
+    $latest = $null
+    $data = $null
+    if ($Backup) {
+        $bp = $Backup
+        if (-not (Test-Path -LiteralPath $bp)) { $bp = Join-Path $backupRoot $Backup }
+        if (-not (Test-Path -LiteralPath $bp)) { Fail "指定的备份不存在:$Backup"; exit 1 }
+        $latest = Get-Item -LiteralPath $bp
+        $jsonPath = Join-Path $latest.FullName 'backup.json'
+        if (-not (Test-Path $jsonPath)) { Fail "备份清单缺失:$jsonPath"; exit 1 }
+        $data = Get-Content $jsonPath -Raw -Encoding UTF8 | ConvertFrom-Json
+        Info "使用指定备份:$($latest.FullName)"
+    } else {
+        $pick = Select-Backup $backupRoot
+        foreach ($s in $pick.Skipped) {
+            Warn "跳过备份 ${s}：里面存的是本补丁的译文（在已汉化的目录上又装了一次），拿它还原不会有任何变化。"
+        }
+        if (-not $pick.Path) {
+            Fail "没有可用的备份：$backupRoot 下的备份要么已经还原过，要么是重复安装时留下的译文快照。"
+            Info '如果界面仍是中文，说明英文原件已经不在备份里了：可用 -Verify 看还有哪些文件没还原，'
+            Info '或者用同版本的 OpenRA 安装包重新覆盖一遍 mods 目录。'
+            exit 1
+        }
+        $latest = Get-Item -LiteralPath $pick.Path
+        $jsonPath = Join-Path $latest.FullName 'backup.json'
+        $data = Get-Content $jsonPath -Raw -Encoding UTF8 | ConvertFrom-Json
+        Info "使用备份:$($latest.FullName)"
+    }
     Info "备份时间:$($data.created)"
     if (-not (Test-Writable $Target)) {
         if ($DryRun) { Warn '目录不可写,但当前为 DryRun,继续' } else { Restart-Elevated; exit 0 }
     }
 
-    $restored = 0; $removed = 0; $missing = 0; $stuck = 0
+    $restored = 0; $removed = 0; $missing = 0; $stuck = 0; $skippedSame = 0
     foreach ($e in $data.entries) {
         $rel = $e.path.Replace('/', '\')
         $dst = Join-Path $Target $rel
@@ -450,6 +567,8 @@ function Invoke-Uninstall {
                     }
                 }
             }
+        } elseif ($e.state -eq 'same') {
+            $skippedSame++
         } else {
             $bak = Join-Path $latest.FullName $rel
             if (Test-Path $bak) {
@@ -459,14 +578,21 @@ function Invoke-Uninstall {
         }
     }
 
+    $orphan = 0
+    if (-not $DryRun) { $orphan = Remove-OrphanFonts $data $Target }
+
     Title '还原结果'
     if ($DryRun) {
         Warn '这是预演(DryRun),没有写任何文件。'
     } else {
-        Ok "还原 $restored 个文件,删除 $removed 个新增文件"
+        Ok "还原 $restored 个文件,删除 $removed 个新增文件,清理字体 $orphan 个"
+        if ($skippedSame -gt 0) { Info "$skippedSame 个文件在备份里标为「已是译文」,无需还原(重复安装产生)" }
         if ($missing -gt 0) { Warn "$missing 个文件在备份里找不到,未处理" }
         if ($stuck -gt 0)   { Warn "$stuck 个新增文件被占用未能删除,请手动清理" }
+        # 已还原的不再参与下次挑选;名字撞车时加序号,避免出现 .已还原.已还原.已还原
         $done = $latest.FullName + '.已还原'
+        $i = 2
+        while (Test-Path -LiteralPath $done) { $done = $latest.FullName + '.已还原-' + $i; $i++ }
         Move-Item -LiteralPath $latest.FullName -Destination $done -Force
         Info "本次备份已标记为已还原:$done"
     }
