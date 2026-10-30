@@ -12,12 +12,17 @@
 注意:
   - 只收集 mods/ 下的文本文件;字体(.ttf/.ttc/.otf)一律排除,补丁不分发字体。
   - 所有 .ftl 会加上 SPDX 许可头后写入 files/。
+  - manifest.json 的 stats 三项也在这里**按固定口径重算**,不再手填(口径见 docs/MAINTAINING.md):
+      fluentMessages = 非地图 .ftl 的顶层消息条数(不含术语 `-term` 与属性)
+      installerTitles = `*-content/installer/*.yaml` 的顶层节点条数
+      mapBriefings   = 含 `briefing` 消息的 `maps/*/map.ftl` 个数
 """
 import argparse
 import datetime
 import hashlib
 import json
 import os
+import re
 import shutil
 import sys
 
@@ -26,6 +31,27 @@ SPDX_HEADER = (
     "## 中文译文:OpenRA_simplified_chinese 项目贡献;原始英文文案版权归 OpenRA 项目 (GPL-3.0) 所有。\n"
 )
 FONT_EXT = ('.ttf', '.ttc', '.otf')
+FLUENT_KEY = re.compile(r'^(-?[A-Za-z][A-Za-z0-9_-]*)\s*=', re.M)
+INSTALLER_NODE = re.compile(r'^[A-Za-z0-9_]+:\s', re.M)
+
+
+def compute_stats(payload, entries):
+    """按固定口径统计载荷规模(见模块文档)。"""
+    msgs = briefs = titles = 0
+    for entry in entries:
+        rel = entry['path']
+        path = os.path.join(payload, rel.replace('/', os.sep))
+        with open(path, encoding='utf-8') as fh:
+            text = fh.read()
+        if rel.endswith('/map.ftl'):
+            if re.search(r'^briefing\s*=', text, re.M):
+                briefs += 1
+        elif rel.endswith('.ftl'):
+            msgs += sum(1 for m in FLUENT_KEY.finditer(text) if not m.group(1).startswith('-'))
+        elif '/installer/' in rel and rel.endswith('.yaml'):
+            titles += len(INSTALLER_NODE.findall(text))
+    return {'fluentMessages': msgs, 'installerTitles': titles, 'mapBriefings': briefs}
+
 
 
 def walk_mods(root):
@@ -102,12 +128,18 @@ def main():
                         'sha256': hashlib.sha256(data).hexdigest()})
 
     manifest['files'] = entries
-    manifest.setdefault('stats', {})
-    manifest['stats']['payloadFiles'] = len(entries)
+    stats = compute_stats(payload, entries)
+    manifest['stats'] = {
+        'fluentMessages': stats['fluentMessages'],
+        'installerTitles': stats['installerTitles'],
+        'mapBriefings': stats['mapBriefings'],
+        'payloadFiles': len(entries),
+    }
     with open(manifest_path, 'w', encoding='utf-8', newline='\n') as fh:
         json.dump(manifest, fh, ensure_ascii=False, indent=2)
         fh.write('\n')
     print(f'载荷 {len(entries)} 个文件已重建,manifest.json 已更新(版本 {manifest["version"]})')
+    print('统计: %s' % manifest['stats'])
     print('别忘了同步 README/CHANGELOG 里的数字,并跑一遍 tools/verify_manifest.py')
     return 0
 
