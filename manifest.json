@@ -81,8 +81,8 @@
     },
     {
       "path": "mods/cnc/fluent/chrome.ftl",
-      "size": 32599,
-      "sha256": "39902e7219ece2d2f32e123ca262a8bc567344edcd953c5e6bdbd892c239691e"
+      "size": 32627,
+      "sha256": "1f4e40af7641d5e846f06e46c65b6eb54dd4290af09274cb14446965052d0f2d"
     },
     {
       "path": "mods/cnc/fluent/cnc.ftl",
@@ -321,8 +321,8 @@
     },
     {
       "path": "mods/common/fluent/chrome.ftl",
-      "size": 31541,
-      "sha256": "cd092471a24b1cb348f845878a030ca103532602d864e077a546767209e8e114"
+      "size": 31569,
+      "sha256": "58388bbc1cd17c2e338fedf3a5db0bd359f64441ccf66c3d8fd6a49c548972a8"
     },
     {
       "path": "mods/common/fluent/common.ftl",
@@ -441,33 +441,33 @@
     },
     {
       "path": "mods/d2k/maps/atreides-06a/map.ftl",
-      "size": 520,
-      "sha256": "e3a36937b50b4cfd19dfe62bb7a760d71112d6e9ee691401a6f0e11f38ce6f19"
+      "size": 530,
+      "sha256": "fc52851a1149723d3e7a7b7460af5cb588a22168223a3a42887ca07ce4c4c52d"
     },
     {
       "path": "mods/d2k/maps/atreides-06b/map.ftl",
-      "size": 520,
-      "sha256": "e3a36937b50b4cfd19dfe62bb7a760d71112d6e9ee691401a6f0e11f38ce6f19"
+      "size": 530,
+      "sha256": "fc52851a1149723d3e7a7b7460af5cb588a22168223a3a42887ca07ce4c4c52d"
     },
     {
       "path": "mods/d2k/maps/atreides-07/map.ftl",
-      "size": 524,
-      "sha256": "cf9878967047f5410880e1bfe7aa0c88640fffc128eaab01748fb9653178de59"
+      "size": 534,
+      "sha256": "607e3c4332947c3277a0fe71ebcd46dd64a7a0c6a0e27436ce8bd9999c942a83"
     },
     {
       "path": "mods/d2k/maps/atreides-08/map.ftl",
-      "size": 587,
-      "sha256": "f1d7dca505ee89cf5d0f16cb7e9273b5172c52eae5a2686e7ad2b71c771c8f95"
+      "size": 603,
+      "sha256": "4016e9ee236e99900e9a007b05999a796b20fe987054f9c26d61ab881cdf8454"
     },
     {
       "path": "mods/d2k/maps/atreides-09a/map.ftl",
-      "size": 560,
-      "sha256": "3ce25fcc72212f0f376384abb9ffde03a2484acfcc65baba5624995f45c0207b"
+      "size": 570,
+      "sha256": "79cee21656e99a604d45d471e8e43aee4eb9af9d79fc2d2930d1b883dd08e0be"
     },
     {
       "path": "mods/d2k/maps/atreides-09b/map.ftl",
-      "size": 560,
-      "sha256": "3ce25fcc72212f0f376384abb9ffde03a2484acfcc65baba5624995f45c0207b"
+      "size": 570,
+      "sha256": "79cee21656e99a604d45d471e8e43aee4eb9af9d79fc2d2930d1b883dd08e0be"
     },
     {
       "path": "mods/d2k/maps/harkonnen-01a/map.ftl",
@@ -586,28 +586,28 @@
     },
     {
       "path": "mods/d2k/maps/ordos-06b/map.ftl",
-      "size": 445,
-      "sha256": "f541eee859a38d9a4979596d41ed32f22cd2c02f53e82389bb650a47df2b14cc"
+      "size": 455,
+      "sha256": "c0a30d2a9355f45ac902313f9ec301b2f7149aeecbed9a03758e5bcd4666f165"
     },
     {
       "path": "mods/d2k/maps/ordos-07/map.ftl",
-      "size": 543,
-      "sha256": "3b0fc6b73b4817da0674a3c53dbb456c3772b8655643b621dd18627552bb9d30"
+      "size": 556,
+      "sha256": "d3a6e3dabd3312178a4977f6daa6787e36b48a0d270277d2074be6e445db2b3b"
     },
     {
       "path": "mods/d2k/maps/ordos-08/map.ftl",
-      "size": 644,
-      "sha256": "45439bed1dc6fd8dbf3618539890143c06e7d74f92049e3f7f8a430c5be79667"
+      "size": 660,
+      "sha256": "2eab285246f2d598fbb36847b335dd93b8e2c4e4345cf5f919e93fab30a62769"
     },
     {
       "path": "mods/d2k/maps/ordos-09a/map.ftl",
-      "size": 385,
-      "sha256": "033f66aaf477b4004b900cb5960501359e80e3d969922a3dfdbd15d8ab6c3625"
+      "size": 395,
+      "sha256": "aee81b5ab101cb068d548528d11fc379591c770861d6ef2e46909e9c45250623"
     },
     {
       "path": "mods/d2k/maps/ordos-09b/map.ftl",
-      "size": 385,
-      "sha256": "033f66aaf477b4004b900cb5960501359e80e3d969922a3dfdbd15d8ab6c3625"
+      "size": 395,
+      "sha256": "aee81b5ab101cb068d548528d11fc379591c770861d6ef2e46909e9c45250623"
     },
     {
       "path": "mods/d2k/missions.yaml",

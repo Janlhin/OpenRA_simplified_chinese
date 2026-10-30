@@ -695,10 +695,18 @@ label-forum-profile-description = 关联论坛账号，向其他玩家表明身�
 label-forum-profile-checking-fingerprint = 正在从 OpenRA 论坛查询账号信息……
 label-forum-profile-connection-error = 无法连接到 OpenRA 论坛。
 
-label-forum-profile-result-unlinked = 密码仅用于向你的 OpenRA 论坛账号\n添加认证密钥，不会被保存。
-label-forum-profile-result-linked = 认证密钥可在 OpenRA 论坛的\n用户控制面板中管理与吊销。
-label-forum-profile-result-auth-failure = 认证失败。请检查用户名\n和密码后重试。
-label-forum-profile-result-login-attempts = 登录尝试次数已超出上限，\n请稍后再试。
+label-forum-profile-result-unlinked =
+    密码仅用于向你的 OpenRA 论坛账号
+    添加认证密钥，不会被保存。
+label-forum-profile-result-linked =
+    认证密钥可在 OpenRA 论坛的
+    用户控制面板中管理与吊销。
+label-forum-profile-result-auth-failure =
+    认证失败。请检查用户名
+    和密码后重试。
+label-forum-profile-result-login-attempts =
+    登录尝试次数已超出上限，
+    请稍后再试。
 label-forum-profile-result-banned = 你已被 OpenRA 论坛封禁。
 label-forum-profile-result-connection-failed = 无法连接到 OpenRA 论坛。
 label-forum-profile-result-error = 发生错误，请重试。

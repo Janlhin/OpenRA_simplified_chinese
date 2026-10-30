@@ -167,6 +167,7 @@ def blocks(lines):
 
 
 def set_value(path, key, value):
+    value = value.replace('\\n', '\n')   # 译表里用 \n 表示换行,不能原样写进 .ftl
     lines = open(path, encoding='utf-8').read().split('\n')
     bl = blocks(lines)
     msg, _, attr = key.partition('.')
@@ -183,8 +184,14 @@ def set_value(path, key, value):
             return 'missing-attr'
     else:
         parts = value.split('\n')
-        new_block = ['%s = %s' % (msg, parts[0].rstrip())]
-        new_block += [('    ' + p).rstrip() if p.strip() else '    ' for p in parts[1:]]
+        # 跟随英文原块的形状:原本把首段写在 `键 =` 后面就继续写在后面,原本首行为空则整体缩进
+        inline = bool(lines[start].split('=', 1)[1].strip()) if '=' in lines[start] else False
+        if len(parts) > 1 and not inline:
+            new_block = ['%s =' % msg]
+            new_block += [('    ' + p).rstrip() if p.strip() else '    ' for p in parts]
+        else:
+            new_block = ['%s = %s' % (msg, parts[0].rstrip())]
+            new_block += [('    ' + p).rstrip() if p.strip() else '    ' for p in parts[1:]]
         keep = [l for l in lines[start + 1:end] if ATTR_RE.match(l)]
         lines[start:end] = new_block[:1] + keep + new_block[1:]
     open(path, 'w', encoding='utf-8', newline='\n').write('\n'.join(lines))

@@ -5,7 +5,9 @@
   - 不带 UTF-8 BOM、以换行结尾、无 CRLF;
   - 缩进只用空格,不用制表符;
   - 顶层非空行必须是 `键 = ...` 或注释(`##` / `#`),不允许出现"掉到第 0 列的值行";
-  - 每条消息的花括号配对平衡。
+  - 每条消息的花括号配对平衡;
+  - 值里不出现字面转义序列(`\\n` / `\\t` / `\\r`)——Fluent 不认反斜杠转义,
+    这类字符几乎总是"译文表里的 \\n 没被换成真换行",会把 `\\n` 直接显示在界面上。
 
 用法: python tools/lint_ftl.py [根目录]     # 默认 files/mods
 退出码 0 表示通过。
@@ -16,6 +18,7 @@ import sys
 
 # 消息 `key = ...` 与术语 `-term = ...` 都是顶层定义,术语以单个 `-` 开头
 KEYLINE = re.compile(r'^(-?[A-Za-z][A-Za-z0-9_-]*)\s*=(.*)$')
+LITERAL_ESCAPE = re.compile(r'\\[ntr]')
 
 
 def check(path):
@@ -36,6 +39,8 @@ def check(path):
         if line.startswith('\t'):
             problems.append(f'第 {lineno} 行用制表符缩进')
             continue
+        if LITERAL_ESCAPE.search(line) and not line.lstrip().startswith('#'):
+            problems.append(f'第 {lineno} 行含字面转义序列(应换成真换行):{line.strip()[:40]!r}')
         if line.strip() == '' or line.startswith(' '):
             braces += line.count('{') - line.count('}')
             continue
