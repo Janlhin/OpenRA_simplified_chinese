@@ -26,8 +26,8 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # 这是发布包里那份 README 的源文件:打包时改名成 README.md(见 tools/build_release.py
 # 的 PACKAGE_LAYOUT)。仓库首页是另一份,两份的读者不同,不要互相复制。
-PACKAGE_README = os.path.join(ROOT, 'PACKAGE-README.md')
-MANIFEST = os.path.join(ROOT, 'manifest.json')
+PACKAGE_README = os.path.join(ROOT, 'src', 'PACKAGE-README.md')
+MANIFEST = os.path.join(ROOT, 'src', 'manifest.json')
 
 BEGIN = '<!-- INVENTORY:BEGIN 由 tools/build_readme_inventory.py 生成,勿手改 -->'
 END = '<!-- INVENTORY:END -->'

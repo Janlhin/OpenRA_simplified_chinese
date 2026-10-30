@@ -4,8 +4,10 @@
 默认**只打玩家需要的文件**（白名单），研发资产（tools/、docs/、.github/、
 CONTRIBUTING 等）留在仓库里，不进包。玩家解压后看到的布局：
 
-    setup.cmd / README.md / 安装说明.txt / 安装说明.md / LICENSE / LICENSE-OFL.txt
-    bin/install.ps1 / bin/manifest.json      ← 脚本与清单收进 bin/
+    LICENSE / LICENSE-OFL.txt               ← 原样落到包根
+    setup.cmd                               ← 来自 src/
+    bin/install.ps1 / bin/manifest.json     ← 来自 src/，收进 bin/
+    README.md / 安装说明.txt / 安装说明.md    ← 来自 src/（README 由 PACKAGE-README 改名）
     files/**                                 ← 208 个文本载荷
     fonts/**                                 ← Noto Sans SC 两个字重
 
@@ -34,7 +36,7 @@ import zipfile
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # 发布包白名单：改这里等于改「玩家拿到什么」
-RELEASE_FILES = ('setup.cmd', '安装说明.txt', '安装说明.md', 'LICENSE', 'LICENSE-OFL.txt')
+RELEASE_FILES = ('LICENSE', 'LICENSE-OFL.txt')
 RELEASE_DIRS = ('files', 'fonts')
 
 # 仓库路径 -> 包内路径（脚本与清单统一收进 bin\，顶层只留入口与说明）
@@ -42,9 +44,12 @@ RELEASE_DIRS = ('files', 'fonts')
 # PACKAGE-README.md 是**包内**那份 README 的源文件：它的链接只指向 zip 里确实存在的
 # 文件，与仓库首页（README.md，面向读源码的人）分开维护。包里它就叫 README.md。
 PACKAGE_LAYOUT = {
-    'install.ps1': 'bin/install.ps1',
-    'manifest.json': 'bin/manifest.json',
-    'PACKAGE-README.md': 'README.md',
+    'src/setup.cmd': 'setup.cmd',
+    'src/install.ps1': 'bin/install.ps1',
+    'src/manifest.json': 'bin/manifest.json',
+    'src/PACKAGE-README.md': 'README.md',
+    'src/安装说明.txt': '安装说明.txt',
+    'src/安装说明.md': '安装说明.md',
 }
 
 
@@ -89,7 +94,7 @@ def collect(root, dev=False):
         if not os.path.isdir(os.path.join(root, d)):
             raise SystemExit('白名单目录不存在：%s' % d)
         out += walk_dir(root, d)
-    return sorted(out)
+    return sorted(set(out))
 
 
 def package_path(rel):
@@ -131,9 +136,9 @@ def verify_package(vroot, root, manifest):
         if not os.path.exists(os.path.join(vroot, name.replace('/', os.sep))):
             problems.append('缺少入口文件：%s' % name)
 
-    pkg_manifest = os.path.join(vroot, package_path('manifest.json').replace('/', os.sep))
+    pkg_manifest = os.path.join(vroot, package_path('src/manifest.json').replace('/', os.sep))
     if os.path.exists(pkg_manifest):
-        if sha256(pkg_manifest) != sha256(os.path.join(root, 'manifest.json')):
+        if sha256(pkg_manifest) != sha256(os.path.join(root, 'src', 'manifest.json')):
             problems.append('包内 manifest.json 与仓库不一致（请重新构建）')
 
     listed = set()
@@ -181,7 +186,7 @@ def main():
     args = ap.parse_args()
 
     root = os.path.abspath(args.repo)
-    with open(os.path.join(root, 'manifest.json'), encoding='utf-8') as fh:
+    with open(os.path.join(root, 'src', 'manifest.json'), encoding='utf-8') as fh:
         manifest = json.load(fh)
     version = manifest['version']
     top = manifest['name']

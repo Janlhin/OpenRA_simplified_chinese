@@ -10,7 +10,7 @@
         --old-payload   "files/mods"               # 本仓库旧版载荷(带 SPDX 头的译文)
         --new-english   "新版安装目录/mods"        # 新引擎的英文原版
         --out           "../stage/patched/mods"    # 输出:待人工补译的译文树
-        [--font-from "common|FreeSans.ttf" --font-to "common|SimHei.ttf"]
+        [--font-from "common|FreeSans.ttf" --font-to "common|NotoSansSC-Regular.ttf"]
         [--translations new.tsv] [--fix fix.tsv]
 
     new.tsv : 文件 <TAB> 键[.属性] <TAB> 译文        (译文内用 \\n 表示换行)

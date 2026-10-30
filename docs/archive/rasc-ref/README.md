@@ -50,7 +50,7 @@ git clone https://gitee.com/CastleJing/OpenRA_tdsc   # 泰伯利亚黎明（约 
 | `inventory.py` | 清点仓库内容，生成「每个文件干什么用」的素材 |
 | `set_repo_meta.py` | 用本机 git 凭据设置仓库 description / homepage / topics |
 | `create_release.py`、`verify_release.py` | 创建 GitHub Release 并上传附件；独立复核附件能否匿名下载且逐字节一致 |
-| `build_release.py` | 与本仓库正式工具 [`../build_release.py`](../build_release.py) 相同，此处保留副本 |
+| `build_release.py` | 与本仓库正式工具 [`../build_release.py`](../../../tools/build_release.py) 相同，此处保留副本 |
 
 > 全部只依赖 Python 标准库。`set_repo_meta.py` / `create_release.py` / `verify_release.py`
 > 会用 `git credential fill` 取本机凭据，token 只在内存中使用、不落盘也不回显。

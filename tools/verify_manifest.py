@@ -24,7 +24,7 @@ def main():
     else:
         root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-    manifest_path = os.path.join(root, 'manifest.json')
+    manifest_path = os.path.join(root, 'src', 'manifest.json')
     payload = os.path.join(root, 'files')
     if not os.path.exists(manifest_path):
         print(f'[错误] 找不到 {manifest_path}')

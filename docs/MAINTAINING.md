@@ -5,7 +5,7 @@
 | 文档 | 读者 | 回答的问题 |
 |---|---|---|
 | [README.md](../README.md) | 玩家 | 怎么装、怎么卸、覆盖了什么 |
-| [CONTRIBUTING.md](../CONTRIBUTING.md) | 贡献者 | 想改一句译文，该怎么动手 |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | 贡献者 | 想改一句译文，该怎么动手 |
 | [ANATOMY.md](ANATOMY.md) | 参考 | 每个文件是什么、`.ftl` 何时被加载 |
 | **本文档** | 维护者 | 怎么重建载荷、怎么发布、CI 与验证 |
 
@@ -18,7 +18,7 @@
 本文档不重复。
 
 与汉化组译名对齐相关的一次性脚本、比对报告与提取数据，在
-[`../tools/rasc-ref/`](../tools/rasc-ref/README.md)（参考仓库需自行从 Gitee 克隆）。
+[`archive/rasc-ref/`](archive/rasc-ref/README.md)（参考仓库需自行从 Gitee 克隆）。
 
 维护时必须守住的三条硬约束：
 
@@ -40,11 +40,12 @@ python tools/build_manifest.py --original "C:\Program Files\OpenRA (playtest)" \
 
 注意事项：
 
-- `.ttf` / `.ttc` / `.otf` 会被显式排除——**补丁一律不分发字体**（授权原因）。
+- `.ttf` / `.ttc` / `.otf` 会被显式排除——**字体不算载荷**：它们放在 `fonts/`，由 `install.ps1`
+  单独部署，不参与 `files/` 的逐字节哈希，也不影响地图 UID。
 - 所有 `.ftl` 写入时会自动加上 SPDX 许可头。
 - 该脚本会**清空并重拷 `files/`**，运行前请确认工作区没有未提交的手工改动。
-- 只想改一两个文件时，也可以直接改 `manifest.json` 里对应条目的 `size` / `sha256`。
-- `manifest.json` 的 `stats` 三项由脚本**按固定口径重算**，不要再手填：
+- 只想改一两个文件时，也可以直接改 `src/manifest.json` 里对应条目的 `size` / `sha256`。
+- `src/manifest.json` 的 `stats` 三项由脚本**按固定口径重算**，不要再手填：
   `fluentMessages` = 非地图 `.ftl` 的顶层消息数（不含 `-term` 与属性）；
   `installerTitles` = `*-content/installer/*.yaml` 的顶层节点数；
   `mapBriefings` = 含 `briefing` 的 `maps/*/map.ftl` 个数。
@@ -70,7 +71,7 @@ python tools/port_translations.py \
     --old-payload "上一版/files/mods" \
     --new-english "C:/Program Files/OpenRA (playtest)/mods" \
     --out "stage/patched/mods" \
-    --font-from "common|FreeSans.ttf,common|FreeSansBold.ttf" --font-to "common|SimHei.ttf"
+    --font-from "common|FreeSans.ttf,common|FreeSansBold.ttf" --font-to "common|NotoSansSC-Regular.ttf"
 
 # 3) 按报告补译,再用译表回灌
 python tools/port_translations.py ... --translations new.tsv --fix fix.tsv
@@ -97,7 +98,7 @@ python tools/build_manifest.py --original "…" --patched "stage/patched" --vers
 ## 仓库与发布
 
 - **远端**：<https://github.com/Janlhin/OpenRA_simplified_chinese>（`origin`，默认分支 `main`）
-- `manifest.json` 的 `repository` 字段已填。
+- `src/manifest.json` 的 `repository` 字段已填。
 - `LICENSE` 的版权行是 `Copyright (C) 2026 OpenRA_simplified_chinese contributors`，
   若想挂到个人名下可自行改。
 
@@ -105,19 +106,19 @@ python tools/build_manifest.py --original "…" --patched "stage/patched" --vers
 
 ```bash
 python tools/build_manifest.py --original "…" --patched "…"   # 重建载荷与哈希
-python tools/build_readme_inventory.py     # README 附录 A 的 208 行清单跟着重生成
+python tools/build_readme_inventory.py     # 包内 README 附录 A 的 208 行清单跟着重生成
 python tools/lint_ftl.py files/mods
 python tools/struct_check_maps.py files/mods
 git add -A && git commit -m "..." && git push
 ```
 
-> 包内 README（`PACKAGE-README.md`，包里叫 `README.md`）的「附录 A 全部文件清单」**不要手改**——
-> 它由 `build_readme_inventory.py` 从 `manifest.json` 渲染，CI 用 `--check` 断言两者一致；
+> 包内 README（源文件 `src/PACKAGE-README.md`，包里叫 `README.md`）的「附录 A 全部文件清单」
+> **不要手改**——它由 `build_readme_inventory.py` 从 `src/manifest.json` 渲染，CI 用 `--check` 断言两者一致；
 > 改了载荷忘了重跑，CI 会直接挡下。
 
 ## 发新版本
 
-1. 改版本号：`manifest.json` 的 `version` / `releaseDate`（或用
+1. 改版本号：`src/manifest.json` 的 `version` / `releaseDate`（或用
    `build_manifest.py --version x.y.z --date YYYY-MM-DD` 连带重算），并在 `CHANGELOG.md` 顶部加一节。
 2. 若动过 `files/`，按上节重建载荷与哈希。
 3. 构建发布包：`python tools/build_release.py --verify`
@@ -131,12 +132,13 @@ git add -A && git commit -m "..." && git push
 `build_release.py` 默认走**白名单**，只打玩家需要的文件：
 
 ```
-setup.cmd / README.md / 安装说明.txt / 安装说明.md / LICENSE / LICENSE-OFL.txt
-bin/install.ps1   bin/manifest.json      ← 仓库里在根目录，打包时按 PACKAGE_LAYOUT 收进 bin/
-fonts/NotoSansSC-Regular.ttf  fonts/NotoSansSC-Bold.ttf / files/**
+src/setup.cmd  src/安装说明.txt  src/安装说明.md  LICENSE  LICENSE-OFL.txt   ← 原样落到包根
+src/install.ps1   src/manifest.json          ← 按 PACKAGE_LAYOUT 收进 bin/
+src/PACKAGE-README.md                        ← 改名成包内的 README.md
+fonts/NotoSansSC-Regular.ttf  fonts/NotoSansSC-Bold.ttf  files/**
 ```
 
-`tools/`、`docs/`、`.github/`、`CONTRIBUTING.md`、`CHANGELOG.md`、`.gitattributes`
+`tools/`、`docs/`（含 CONTRIBUTING / CHANGELOG）、`.github/`、`.gitattributes`
 都留在仓库里，不进包——C 端解压后应该只看到一个入口、一份说明和 `files/`。
 要打全量快照（复现问题、存档给协作者）用 `--dev`，输出 `*-dev.zip`。
 
@@ -166,7 +168,7 @@ python tools/check_font_coverage.py
 - 字体**不进 `files/`**：`files/` 是覆盖树，还要逐字节进哈希清单；CI 有守卫专门拦这件事。
 - 载荷里 6 个 `mod.yaml` 的字体引用按上游顺序写死：上游 `FreeSans` 位 → Regular，
   上游 `FreeSansBold` 位 → Bold。改字体名时这两处要一起改，否则运行时会找不到文件。
-- 换了字体或改了字号，先在 4 个 UI 缩放档位目测一遍行高（Noto 与 SimHei 的 ascender 不同）。
+- 换了字体或改了字号，先在 4 个 UI 缩放档位目测一遍行高（Noto 与原 FreeSans 的 ascender 不同）。
 
 > 改白名单时记得同步 `RELEASE_FILES` / `RELEASE_DIRS` / `PACKAGE_LAYOUT`，以及 README 的
 > 「包里有什么」表格。`PACKAGE_LAYOUT` 负责「仓库在根目录、包里收进 `bin\`」这种映射，

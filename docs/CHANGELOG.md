@@ -1,5 +1,40 @@
 # 更新日志
 
+## 1.5.3 — 2026-10-30（本地构建，未发布）
+
+**仓库结构整理 + 过期表述修正，载荷与译文一个字未改。**
+
+起因是清点仓库时发现两件事：根目录把"打包源、玩家文档、项目文档、许可"全平铺在一起（13 个文件），
+以及 1.5.0 改为随包字体后，有 6 处文档仍在说"不分发字体 / 从系统复制 simhei"。
+
+结构：
+
+- 新增 `src/`：`setup.cmd`、`install.ps1`、`manifest.json`、`PACKAGE-README.md`、
+  `安装说明.txt/.md` 全部归位，**要打进包的东西集中在一处**；打包时按 `PACKAGE_LAYOUT`
+  映射回包根与 `bin/`。
+- `CONTRIBUTING.md`、`CHANGELOG.md` 移入 `docs/`；`tools/rasc-ref/` 归档到
+  `docs/archive/rasc-ref/`（23 个文件 / 379 KB，代码零引用，保留作为译名对齐的证据链）。
+- 根目录从 13 项降到 5 个文件（`README.md`、`LICENSE`、`LICENSE-OFL.txt`、`.gitattributes`、`.gitignore`）。
+
+文案（都是 1.5.0 之后的遗留错）：
+
+- `ANATOMY` / `MAINTAINING` / `CONTRIBUTING` / `build_manifest.py` 里"不分发字体"改为
+  "字体在 `fonts/`，由安装器单独部署，不进载荷"；`mod.yaml` 的字体示例从 `SimHei.ttf`
+  改为 `NotoSansSC-Regular/Bold.ttf`。
+- `install.ps1` 的说明文字仍写引擎版本 `playtest-20260222` → 改为 `playtest-20261026`。
+- issue 模板里的安装方式 `install.bat` → `setup.cmd`。
+
+工具：
+
+- `build_release` / `build_manifest` / `verify_manifest` / `build_readme_inventory` 的路径常量
+  全部改到 `src/`；`build_release` 的 `collect()` 去重（同一文件同时出现在白名单与映射表时
+  之前会写两遍）。
+- `check_links` 跳过 `src/PACKAGE-README.md`、`src/安装说明.md`：它们的链接是**包内相对路径**，
+  在仓库里解析必然是假死链；包内链接由 `build_release --verify` 的 `check_package_links()` 单独校验。
+
+**验证**：`build_release --verify` 通过（218 文件 / 12.4 MB）；仓库布局与包布局**各跑一遍**
+安装→卸载，`ra/fluent/rules.ftl` 中文行 689 → 0、字体删净；其余 CI 五步全过。
+
 ## 1.5.2 — 2026-10-30（本地构建，未发布）
 
 **修复：卸载可能"看起来没效果"** —— 载荷与译文未变，只改还原逻辑。
@@ -214,7 +249,7 @@ setup.cmd / install.ps1 / manifest.json / INSTALL.txt / LICENSE / files/**
 **统计口径**
 
 `manifest.json` 的 `stats` 改由 `tools/build_manifest.py` 自动重算（口径写在脚本与
-[MAINTAINING](docs/MAINTAINING.md) 里），不再手填。因此本版数字与旧版**不可直接比较**：
+[MAINTAINING](MAINTAINING.md) 里），不再手填。因此本版数字与旧版**不可直接比较**：
 
 | 项 | 1.3.1（手填） | 1.4.0（自动重算） |
 |---|---|---|

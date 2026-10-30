@@ -10,7 +10,7 @@
                                    [--date 2026-10-01] [--dry-run]
 
 注意:
-  - 只收集 mods/ 下的文本文件;字体(.ttf/.ttc/.otf)一律排除,补丁不分发字体。
+  - 只收集 mods/ 下的文本文件;字体不进载荷——它们在 fonts/,由安装器单独部署。
   - 所有 .ftl 会加上 SPDX 许可头后写入 files/。
   - manifest.json 的 stats 三项也在这里**按固定口径重算**,不再手填(口径见 docs/MAINTAINING.md):
       fluentMessages = 非地图 .ftl 的顶层消息条数(不含术语 `-term` 与属性)
@@ -81,7 +81,7 @@ def main():
 
     repo = os.path.abspath(args.repo)
     payload = os.path.join(repo, 'files')
-    manifest_path = os.path.join(repo, 'manifest.json')
+    manifest_path = os.path.join(repo, 'src', 'manifest.json')
 
     with open(manifest_path, encoding='utf-8') as fh:
         manifest = json.load(fh)

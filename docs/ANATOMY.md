@@ -5,7 +5,7 @@
 | 文档 | 读者 | 回答的问题 |
 |---|---|---|
 | [README.md](../README.md) | 玩家 | 怎么装、怎么卸、覆盖了什么 |
-| [CONTRIBUTING.md](../CONTRIBUTING.md) | 贡献者 | 想改一句译文，该怎么动手 |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | 贡献者 | 想改一句译文，该怎么动手 |
 | **本文档** | 好奇的人 / 新维护者 | 每个文件是什么、起什么作用 |
 | [MAINTAINING.md](MAINTAINING.md) | 维护者 | 怎么重建载荷、怎么发布、CI 与验证 |
 
@@ -28,28 +28,36 @@
         └─ 部署随包字体              ← fonts/ 里的 Regular+Bold → mods/common/
 ```
 
-四个关键设计：**只覆盖文本**、**安装前先校验哈希**、**覆盖前先备份**、**不分发字体**（安装时从你本机复制）。
+四个关键设计：**只覆盖文本**、**安装前先校验哈希**、**覆盖前先备份**、**随包自带字体**
+（Noto Sans SC 两个字重，SIL OFL 1.1，不依赖本机有没有中文字体）。
 
 ---
 
 ## 目录总览
 
+仓库根只放"项目的门面"，其余按用途归拢——**进发布包的东西全在 `src/` 与 `files/`、`fonts/`**，
+仓库自己的说明与历史在 `docs/`，工具在 `tools/`：
+
 ```
 OpenRA_simplified_chinese/
-├─ README.md / CONTRIBUTING.md / CHANGELOG.md
+├─ README.md                          仓库首页（给读源码的人，不是包内那份）
 ├─ LICENSE / LICENSE-OFL.txt          补丁的 GPL 与字体的 SIL OFL
-├─ fonts/                             NotoSansSC-Regular/Bold.ttf（随包中文字体）
-├─ setup.cmd                          玩家唯一入口（纯 ASCII + CRLF，双击出菜单）
-├─ install.ps1                        全部逻辑
-├─ manifest.json
-├─ 安装说明.txt / 安装说明.md          玩家说明：三步装 / 手动装 / AI 装 / FAQ
+├─ src/                               打包源
+│   ├─ setup.cmd                      玩家唯一入口（纯 ASCII + CRLF，双击出菜单）
+│   ├─ install.ps1                    全部逻辑
+│   ├─ manifest.json                  版本、适配引擎、208 条哈希、字体清单
+│   ├─ PACKAGE-README.md              包内 README 的源文件（打包时改名 README.md）
+│   └─ 安装说明.txt / 安装说明.md      玩家说明：三步装 / 手动装 / AI 装 / FAQ
 ├─ files/                             载荷：覆盖树的根
 │   └─ mods/{common,ra,cnc,d2k,common-content,ra-content,cnc-content,d2k-content}/
-├─ tools/                             10 个 Python 脚本（纯标准库）
-│   └─ rasc-ref/                      汉化组译名对齐工作的脚本与产物（参考仓库需自行克隆）
-├─ docs/
+├─ fonts/                             NotoSansSC-Regular/Bold.ttf（随包中文字体）
+├─ tools/                             13 个 Python 脚本（纯标准库）
+├─ docs/                              仓库自己的文档，不进发布包
 │   ├─ ANATOMY.md                     本文档
-│   └─ MAINTAINING.md                 维护者操作手册
+│   ├─ MAINTAINING.md                 维护者操作手册
+│   ├─ CONTRIBUTING.md                贡献者文档
+│   ├─ CHANGELOG.md                   版本历史
+│   └─ archive/rasc-ref/              译名对齐工作的历史脚本与产物（已归档，代码不引用）
 ├─ .github/
 │   ├─ workflows/validate.yml         CI
 │   ├─ ISSUE_TEMPLATE/bug_report.md
@@ -58,27 +66,40 @@ OpenRA_simplified_chinese/
 └─ .gitignore
 ```
 
-仓库共约 257 个文件（不含 `.git/`），其中 **`files/` 载荷 208 个**——载荷数是唯一需要精确盯住的
+仓库共 264 个文件（不含 `.git/`），其中 **`files/` 载荷 208 个**——载荷数是唯一需要精确盯住的
 数字（它直接决定 `manifest.json` 的校验条目），其余是脚本、文档与仓库元文件。
 
 ---
 
-## 根目录的 10 个文件
+## 根目录的 5 个文件
 
 | 文件 | 作用 | 谁读取 |
 |---|---|---|
-| `setup.cmd` | **玩家唯一入口**。纯 ASCII + CRLF（避免代码页乱码）：不带参数时调 `install.ps1 -Menu` 出中文菜单，带参数时原样透传给 `install.ps1`（`setup.cmd -Uninstall` 等价于原来的 `uninstall.bat`） | 玩家 |
-| `install.ps1` | **安装/卸载/校验的全部逻辑**：目录探测、版本校验、SHA-256 校验、备份、UAC 提权、字体复制、`-DryRun`、还原、校验。Windows PowerShell 5.1 语法，UTF-8 **带 BOM**（否则 PS 5.1 会把中文读成乱码） | `setup.cmd` |
-| `manifest.json` | **补丁的身份证**：`version`、`engineVersion`、`repository`、`font`、`stats`，以及 208 条 `{path, size, sha256}` | `install.ps1`、CI、`tools/verify_manifest.py` |
-| `安装说明.txt` / `安装说明.md` | 给玩家的说明，同一份内容的两个版本：`.txt` 是纯文本（UTF-8 带 BOM + CRLF，记事本直接看），`.md` 有标题层级与表格 | 玩家 |
-| `README.md` | 玩家文档（同一份内容的 Markdown 版） | 玩家 |
-| `CONTRIBUTING.md` | 贡献者文档：改译文流程、翻译规范、术语表、会被拒绝的改动 | 贡献者 |
-| `CHANGELOG.md` | 版本历史 | 所有人 |
+| `README.md` | 仓库首页：项目简介、仓库布局、本地校验命令、文档索引。**与包内 README 是两份**——包内那份在 `src/PACKAGE-README.md` | 读源码的人 / GitHub |
 | `LICENSE` | GPL-3.0-or-later 全文 | 法律 |
 | `LICENSE-OFL.txt` | 随包字体 Noto Sans SC 的 SIL OFL 1.1 全文（OFL 要求随附） | 法律 |
-| `fonts/` | 随包中文字体，两个字重（Regular / Bold），各约 10 MB；**不进 `files/`**，安装时复制到 `mods/common/` | `install.ps1` |
-| `.gitattributes` | 行尾规则。**`files/** -text` 是关键**：载荷必须逐字节保真，否则别的平台检出时改写换行会让 `manifest.json` 的哈希集体失效。`*.bat` / `*.cmd` / `*.ps1` / `*.txt` 声明 CRLF | git |
-| `.gitignore` | 挡掉 `*.zip`（发布产物）、`_zhcn-backup/`（安装时生成的备份）、`Thumbs.db` / `.DS_Store`、`.vscode/` / `.idea/` | git |
+| `.gitattributes` | 行尾规则。**`files/** -text` 是关键**：载荷必须逐字节保真，否则别的平台检出时改写换行会让 `manifest.json` 的哈希集体失效。`*.cmd` / `*.ps1` / `*.txt` 声明 CRLF | git |
+| `.gitignore` | 忽略 `_zhcn-backup/`、`dist/`、编辑器与系统垃圾文件 | git |
+
+## `src/`：会被打进发布包的那部分
+
+| 文件 | 作用 | 包内位置 |
+|---|---|---|
+| `setup.cmd` | **玩家唯一入口**。纯 ASCII + CRLF（避免代码页乱码）：不带参数时调 `install.ps1 -Menu` 出中文菜单，带参数时原样透传 | `setup.cmd` |
+| `install.ps1` | **安装/卸载/校验的全部逻辑**：目录探测、版本校验、SHA-256 校验、备份与挑选、UAC 提权、字体部署、`-DryRun`、还原、校验。脚本为 UTF-8 **带 BOM** + CRLF | `bin\install.ps1` |
+| `manifest.json` | **补丁的身份证**：`version`、`engineVersion`、`repository`、`font`、`stats`，以及 208 条 `{path,size,sha256}` | `bin\manifest.json` |
+| `PACKAGE-README.md` | 包内 README 的源文件：逐文件说明 + 附录 A（由 `tools/build_readme_inventory.py` 生成）。**链接只指向包内文件**，不要写仓库路径 | `README.md` |
+| `安装说明.txt` / `安装说明.md` | 给玩家的说明，同一份内容的两个版本：`.txt` 纯文本（UTF-8 带 BOM + CRLF，记事本直接看），`.md` 有标题层级与表格 | 同名 |
+
+## `docs/`：仓库自己的文档（不进发布包）
+
+| 文件 | 作用 |
+|---|---|
+| `ANATOMY.md` | 本文档：每个文件是什么、载荷怎么构成 |
+| `MAINTAINING.md` | 维护手册：校验工具、引擎升级迁移、发版流程 |
+| `CONTRIBUTING.md` | 贡献者文档：改译文流程、翻译规范、术语表 |
+| `CHANGELOG.md` | 版本历史 |
+| `archive/rasc-ref/` | 汉化组译名对齐工作的历史脚本与产物（**已归档**，无代码引用，参考仓库需自行从 Gitee 克隆） |
 
 ## `.github/`
 
@@ -147,7 +168,7 @@ FluentMessages: ra|fluent/lua.ftl, ra|fluent/campaign.ftl, map.ftl
 
 | 文件 | 改了什么 |
 |---|---|
-| `mods/<mod>/mod.yaml` ×6 | `Fonts:` 段 → `common|SimHei.ttf`（`common/` 没有 mod.yaml，它不直接渲染界面） |
+| `mods/<mod>/mod.yaml` ×6 | `Fonts:` 段 → `common|NotoSansSC-Regular.ttf` / `-Bold.ttf`（按上游 Regular/Bold 槽位；`common/` 没有 mod.yaml，它不直接渲染界面） |
 | `mods/<mod>/missions.yaml` ×3 | 战役浏览器里的分组名（16 个，如「盟军战役」） |
 | `mods/<mod>/chrome/multiplayer-createserver.yaml` ×2 | 建服对话框的默认服务器名 |
 | `mods/*-content/installer/*.yaml` ×19 | 内容下载源标题（20 条，如 `C&C The Ultimate Collection`） |
@@ -201,7 +222,7 @@ CI 里还有一条内联守卫：`files/` 中若出现 `.ttf` / `.ttc` / `.otf` 
 
 调用示例见 [MAINTAINING.md](MAINTAINING.md#校验工具-cli-备忘)。
 
-> 另有一个子目录 [`../tools/rasc-ref/`](../tools/rasc-ref/README.md)：把 `ra` / `cnc` 的单位建筑名
+> 另有一个子目录 [`archive/rasc-ref/`](archive/rasc-ref/README.md)：把 `ra` / `cnc` 的单位建筑名
 > 对齐到汉化组 RASC / TDSC 译法时用到的一次性脚本、比对报告与提取数据。**参考仓库本身不入库**
 > （体积大且属他人作品），克隆命令在该目录的 README 里。
 
@@ -218,7 +239,7 @@ CI 里还有一条内联守卫：`files/` 中若出现 `.ttf` / `.ttc` / `.otf` 
 
 沙丘 2000 没有公开的汉化组仓库（TDSC / D2KSC 只是「计划名」），维持本项目既有译法。
 其余术语（香料 / 索拉里斯 / 门塔特 / 泰伯利亚 / 特种兵 / 光明方尖碑 …）见
-[CONTRIBUTING.md](../CONTRIBUTING.md#翻译规范) 的术语表。
+[CONTRIBUTING.md](CONTRIBUTING.md#翻译规范) 的术语表。
 
 ---
 

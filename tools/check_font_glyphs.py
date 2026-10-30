@@ -2,7 +2,7 @@
 
 Usage:
     python check_font_glyphs.py <font.ttf> <characters>
-    python check_font_glyphs.py SimHei.ttf 安装游戏内容快速退出
+    python check_font_glyphs.py fonts/NotoSansSC-Regular.ttf 安装游戏内容快速退出
 
 Parses the 'cmap' table directly (format 4 and 12), no dependencies.
 Exits 1 when any requested character is missing.

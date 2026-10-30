@@ -4,7 +4,7 @@
     OpenRA 简体中文汉化补丁 - 安装 / 卸载脚本
 
 .DESCRIPTION
-    把 files\ 下的译文覆盖到目标 OpenRA 安装目录(playtest-20260222),
+    把 files\ 下的译文覆盖到目标 OpenRA 安装目录(playtest-20261026),
     并从本机 Windows 字体目录复制一个中文字体,使界面不再出现方块。
     所有被覆盖的文件都会备份到 <目标>\_zhcn-backup\<时间戳>\。
 
@@ -66,7 +66,8 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-# 发布包里脚本放在 bin\ 下,载荷与说明在上一层;仓库里脚本就在根目录。
+# 发布包里脚本放在 bin\ 下,载荷(files\)与字体(fonts\)在上一层;
+# 仓库里脚本放在 src\ 下,上一层同样是仓库根(files\ 与 fonts\ 都在那里)。
 # 因此不能只看 $PSScriptRoot,要向上找一级含有 files\ 的目录。
 $ScriptDir    = $PSScriptRoot
 $Root         = $ScriptDir

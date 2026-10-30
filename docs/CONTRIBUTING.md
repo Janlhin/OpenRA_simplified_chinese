@@ -1,11 +1,11 @@
 # 参与贡献
 
 感谢愿意帮忙。这个仓库只做一件事:**把 OpenRA 的界面与剧情文案翻成中文**。
-它只包含文本文件,不分发游戏素材,也不分发字体。
+它只包含文本文件与两个随包字体(Noto Sans SC,SIL OFL 1.1),不含任何游戏素材。
 
-> 只是来玩这个汉化的?看 [README.md](README.md) 就够了。
-> 想知道仓库里每个文件干什么用,看 [docs/ANATOMY.md](docs/ANATOMY.md);
-> 想了解载荷怎么生成、发布流程与 CI,看 [docs/MAINTAINING.md](docs/MAINTAINING.md)。
+> 只是来玩这个汉化的?看 [README.md](../README.md) 就够了。
+> 想知道仓库里每个文件干什么用,看 [ANATOMY.md](ANATOMY.md);
+> 想了解载荷怎么生成、发布流程与 CI,看 [MAINTAINING.md](MAINTAINING.md)。
 
 ## 环境准备
 
@@ -92,4 +92,4 @@ OpenRA 升级会带来新键、删改旧键。Fluent **不会**在缺键时回�
 | `tools/port_translations.py` | 维护者:引擎升级时把旧译文迁到新版英文目录,并产出"待翻译 / 英文变更 / 占位符不一致"报告 |
 | `tools/build_release.py` | 维护者:构建发布包 zip(默认白名单只打玩家文件,`--dev` 打全量;`--verify` 在包内自校验) |
 
-脚本的调用示例、CI 的五步检查、以及端到端验证记录,都在 [docs/MAINTAINING.md](docs/MAINTAINING.md)。
+脚本的调用示例、CI 的五步检查、以及端到端验证记录,都在 [MAINTAINING.md](MAINTAINING.md)。
