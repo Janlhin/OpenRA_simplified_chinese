@@ -112,7 +112,8 @@ git add -A && git commit -m "..." && git push
 
 ## 发新版本
 
-1. 改版本号：`manifest.json` 的 `version` / `releaseDate`，并在 `CHANGELOG.md` 顶部加一节。
+1. 改版本号：`manifest.json` 的 `version` / `releaseDate`（或用
+   `build_manifest.py --version x.y.z --date YYYY-MM-DD` 连带重算），并在 `CHANGELOG.md` 顶部加一节。
 2. 若动过 `files/`，按上节重建载荷与哈希。
 3. 构建发布包：`python tools/build_release.py --verify`
    （产出 `dist/OpenRA_simplified_chinese-x.y.z.zip`，并打印 SHA-256——写进 Release 说明）
@@ -120,8 +121,24 @@ git add -A && git commit -m "..." && git push
 5. 在 GitHub 上以该 tag 创建 Release，把 `dist/*.zip` 作为附件上传；说明直接抄
    `CHANGELOG.md` 对应版本那一节。
 
-`build_release.py` 打出的包是**确定性**的（zip 时间戳取自 `manifest.json` 的 `releaseDate`），
-同一份仓库内容重复构建得到字节一致的 zip；`--verify` 会把包解压到临时目录并重跑四项校验。
+### 发布包里放什么
+
+`build_release.py` 默认走**白名单**，只打玩家需要的文件：
+
+```
+setup.cmd / install.ps1 / manifest.json / 安装说明.txt / LICENSE / files/**
+```
+
+`tools/`、`docs/`、`.github/`、`CONTRIBUTING.md`、`CHANGELOG.md`、`.gitattributes`
+都留在仓库里，不进包——C 端解压后应该只看到一个入口、一份说明和 `files/`。
+要打全量快照（复现问题、存档给协作者）用 `--dev`，输出 `*-dev.zip`。
+
+包是**确定性**的（zip 时间戳取自 `manifest.json` 的 `releaseDate`），同一份仓库内容重复构建
+得到字节一致的 zip。`--verify` 会在解压出的包上做**包内自校验**（不再依赖 `tools/`）：
+入口文件是否齐全、包内 `manifest.json` 是否与仓库一致、208 个载荷的 size/sha256 是否对得上、
+`files/` 里有没有多余文件。
+
+> 改白名单时记得同步 `RELEASE_FILES` / `RELEASE_DIRS`，以及 README 的「包里有什么」表格。
 
 想做成 `.exe` 安装包，可用 [Inno Setup](https://jrsoftware.org/isinfo.php) 打包 `files/`，
 并在 `[Run]` 中调用 `install.ps1 -Target "{app}" -Yes`。
@@ -157,7 +174,7 @@ git add -A && git commit -m "..." && git push
 
 | 验证项 | 结果 |
 |---|---|
-| `install.bat` 安装（208 文件 + 字体） | 通过，SHA-256 载荷校验通过 |
+| `setup.cmd`（菜单 1）安装（208 文件 + 字体） | 通过，SHA-256 载荷校验通过 |
 | `OpenRA.Utility.exe <mod> --check-yaml`（6 个模组） | 全部通过（退出码 0） |
 | `OpenRA.Utility.exe <mod> --check-yaml mods/<mod>/maps/<地图>/map.yaml`（162 张地图） | 全部通过 |
 | `--extract-chrome-strings` 界面键缺失检测 | 无缺失（无 `Adding` 行） |

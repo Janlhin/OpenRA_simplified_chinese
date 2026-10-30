@@ -89,6 +89,6 @@ OpenRA 升级会带来新键、删改旧键。Fluent **不会**在缺键时回�
 | `tools/check_font_glyphs.py` | 检查某个字体是否覆盖所需汉字 |
 | `tools/build_manifest.py` | 维护者:diff 原版与汉化目录,重建 `files/` 与 `manifest.json`(顺带重算 `stats`) |
 | `tools/port_translations.py` | 维护者:引擎升级时把旧译文迁到新版英文目录,并产出"待翻译 / 英文变更 / 占位符不一致"报告 |
-| `tools/build_release.py` | 维护者:构建发布包 zip(确定性,`--verify` 会解压自校验) |
+| `tools/build_release.py` | 维护者:构建发布包 zip(默认白名单只打玩家文件,`--dev` 打全量;`--verify` 在包内自校验) |
 
 脚本的调用示例、CI 的五步检查、以及端到端验证记录,都在 [docs/MAINTAINING.md](docs/MAINTAINING.md)。
