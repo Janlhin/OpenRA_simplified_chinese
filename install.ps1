@@ -175,6 +175,7 @@ function Restart-Elevated {
     if ($Yes)       { $argv += '-Yes' }
     if ($SkipFont)  { $argv += '-SkipFont' }
     if ($NoVerify)  { $argv += '-NoVerify' }
+    if ($Backup)    { $argv += @('-Backup', (Quote $Backup)) }
     Warn '当前用户对该目录没有写权限,将弹出 UAC 提权窗口重新执行'
     Start-Process -FilePath 'powershell.exe' -Verb RunAs -ArgumentList $argv
 }
