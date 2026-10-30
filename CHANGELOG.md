@@ -12,9 +12,12 @@
   `install.ps1`，所以 `setup.cmd -Uninstall` 与原来的 `uninstall.bat` 等价。
 - `install.ps1` 新增 `-Menu`；`-Uninstall` / `-DryRun` 结束时补 `exit 0`，避免菜单里返回码漂移。
 
-**新增 `安装说明.txt`（给玩家的纯文本，UTF-8 + BOM + CRLF，记事本直接看）**
+**新增 `INSTALL.txt`（给玩家的纯文本，UTF-8 + BOM + CRLF，记事本直接看）**
 
 含四段：三步装好 / **手动安装** / **让 AI 助手帮你装** / 常见问题。
+
+文件名刻意用 ASCII：`安装说明.txt` 在资源管理器 / 7-Zip 里没问题，但老的命令行 `unzip`
+不认 zip 的 UTF-8 名称标志，解出来会是 `իëÞúà޻¦µÄ.txt` 这样的乱码。
 
 手动安装强调了一个容易踩的坑：补丁的 `mod.yaml` 已经指向 `common|SimHei.ttf`，所以必须
 **先放字体、再覆盖文本**——顺序反了不是"变方块"，而是引擎启动时读不到字体文件、**直接报错退出**。
@@ -24,7 +27,7 @@
 `build_release.py` 改为**白名单**打包，发布包只含：
 
 ```
-setup.cmd / install.ps1 / manifest.json / 安装说明.txt / LICENSE / files/**
+setup.cmd / install.ps1 / manifest.json / INSTALL.txt / LICENSE / files/**
 ```
 
 `tools/`、`docs/`、`.github/`、`CONTRIBUTING.md`、`CHANGELOG.md`、`.gitattributes` 不再进包

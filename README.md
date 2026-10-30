@@ -73,11 +73,11 @@ setup.cmd -FontPath "D:\NotoSansSC-Regular.ttf"   :: 指定中文字体
 自检两条：`<游戏目录>\mods\common\simhei.ttf` 与
 `<游戏目录>\mods\common\fluent\ingame-debug.ftl` 都存在。
 
-完整步骤（含还原、常见问题）见 **[安装说明.txt](安装说明.txt)**。
+完整步骤（含还原、常见问题）见 **[INSTALL.txt](INSTALL.txt)**。
 
 ## 让 AI 助手帮你装
 
-把 [安装说明.txt](安装说明.txt) 里「让 AI 助手帮你装」那段整段复制给能在你电脑上执行命令的助手。
+把 [INSTALL.txt](INSTALL.txt) 里「让 AI 助手帮你装」那段整段复制给能在你电脑上执行命令的助手。
 那段提示词要求它：先校验 `mods\ra\mod.yaml` 的 `Version` 是否为 `playtest-20261026`、先备份整个
 `mods`、按结构覆盖 `files\mods`、复制字体、**不碰 `map.yaml` 与 `mod.yaml`**，最后报告 208 个
 文件是否到位。`Program Files` 需要管理员权限，它可能会要你点一次 UAC。
@@ -126,7 +126,7 @@ OpenRA 的 `Fonts:` 配置默认指向 `common|FreeSans.ttf`，该字体**没有
 - 想换更好看的字体（例如[思源黑体](https://github.com/notofonts/noto-cjk)）：
   `setup.cmd -FontPath "D:\NotoSansSC-Regular.ttf"`。
 - **本机一个中文字体都没有**（英文版 / 精简版 Windows 可能如此）时，安装会中止并提示，
-  必须先装一个中文字体——这也是手动安装最容易踩的坑，详见 [安装说明.txt](安装说明.txt)。
+  必须先装一个中文字体——这也是手动安装最容易踩的坑，详见 [INSTALL.txt](INSTALL.txt)。
 
 ## 卸载与还原
 
@@ -152,7 +152,7 @@ OpenRA 的 `Fonts:` 配置默认指向 `common|FreeSans.ttf`，该字体**没有
 | `setup.cmd` | 唯一入口，双击出菜单 |
 | `install.ps1` | 全部逻辑：探测 / 备份 / 哈希校验 / UAC 提权 / 还原 |
 | `manifest.json` | 版本、引擎版本、208 个载荷的 SHA-256 |
-| `安装说明.txt` | 给玩家的说明：三步装、手动装、AI 装、常见问题 |
+| `INSTALL.txt` | 给玩家的说明：三步装、手动装、AI 装、常见问题 |
 | `LICENSE` | GPL-3.0 |
 | `files\mods\` | 208 个文本载荷 |
 

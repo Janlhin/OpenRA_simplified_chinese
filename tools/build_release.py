@@ -4,7 +4,7 @@
 默认**只打玩家需要的文件**（白名单），研发资产（tools/、docs/、.github/、
 CONTRIBUTING 等）留在仓库里，不进包 —— C 端解压后应该只看到一个入口、一份说明：
 
-    setup.cmd / install.ps1 / manifest.json / 安装说明.txt / LICENSE / files/**
+    setup.cmd / install.ps1 / manifest.json / INSTALL.txt / LICENSE / files/**
 
 `--dev` 打全量快照（除 .git/、dist/、*.zip），给内部复现问题用。
 
@@ -30,7 +30,7 @@ import zipfile
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # 发布包白名单：改这里等于改「玩家拿到什么」
-RELEASE_FILES = ('setup.cmd', 'install.ps1', 'manifest.json', '安装说明.txt', 'LICENSE')
+RELEASE_FILES = ('setup.cmd', 'install.ps1', 'manifest.json', 'INSTALL.txt', 'LICENSE')
 RELEASE_DIRS = ('files',)
 
 

@@ -126,7 +126,7 @@ git add -A && git commit -m "..." && git push
 `build_release.py` 默认走**白名单**，只打玩家需要的文件：
 
 ```
-setup.cmd / install.ps1 / manifest.json / 安装说明.txt / LICENSE / files/**
+setup.cmd / install.ps1 / manifest.json / INSTALL.txt / LICENSE / files/**
 ```
 
 `tools/`、`docs/`、`.github/`、`CONTRIBUTING.md`、`CHANGELOG.md`、`.gitattributes`
