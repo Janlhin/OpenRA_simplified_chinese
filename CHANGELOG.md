@@ -1,5 +1,74 @@
 # 更新日志
 
+## 1.4.0 — 2026-10-30
+
+适配 **OpenRA `playtest-20261026`**。上游这次改动不小：新增 164 条文案、改写 18 处英文原文、
+删掉整个 `ts`（泰伯利亚之日）模组、沙丘 2000 补上了阿特雷德斯与奥多斯两条战役的后半段（11 张新地图）。
+旧版 1.3.1 的载荷是照着 `playtest-20260222` 的目录写的，**直接套到新引擎上不会回退成英文，而是显示原始键名**，
+所以必须重做一版。
+
+**迁移做法**
+
+- 三方合并：`base` = 旧版英文（`playtest-20260222` 源码）、`ours` = 1.3.1 译文、`theirs` = 新版英文。
+  译文按 key 精确迁移，**文件结构一律取新版**——新增、删除、重排的消息都跟着上游走，
+  不会出现「译文带进旧版已删键」的情况。
+- 全新翻译 164 条（见下）；英文原文变了的 18 处逐条复核后改写译文。
+
+**新增译文**
+
+- **作弊面板**（`common/fluent/ingame-debug.ftl`，29 条）：瞬间建造、随处建造、无限电力、
+  显示单位路径 / HPF 叠加层 / 战斗几何、给予 $20,000 等。新引擎把 `Debug` 菜单正式改名为 `Cheats`，
+  相关条目（`menu-game-info.debug`、`checkbox-debug-menu.label`）一并改为「作弊」。
+- **OpenRA 论坛账号关联**（`common` / `cnc` 各 47 条）：关联/解除关联账号、用户名密码输入、
+  认证失败、封禁、登录尝试超限等提示。
+- **存档与载入浏览器**（`Load Game` / `Choose Save` / 存档不兼容 / 创建日期 / 时长 / 玩家数量）。
+- **地图预览可见性**（所有人可见 / 仅地图选择器可见 / 隐藏）与分辨率「预设」。
+- **d2k 新增 11 关战役简报**（`atreides-06a/06b/07/08/09a/09b`、`ordos-06b/07/08/09a/09b`）
+  与 10 条任务目标（`starport-destroyed`、`its-a-trap`、`mercenary-leader` 等）。
+- 快捷键 3 条（快速存档、隐藏界面、隐藏额外界面）、`ra` 的 `meta-mine`（地雷）、
+  作弊通知（`notification-cheat-enabled/disabled`）。
+
+**跟随英文原文修正的旧译文**
+
+- d2k 单位说明的强弱项：`Artillery` → `Rocket Artillery`（火炮 → 火箭炮）、
+  `Vehicles` → `Tanks`（车辆 → 坦克）、破坏者新增「对车辆强 / 摧毁建筑与车辆」。
+- d2k 百科「视野」项：三轮摩托、突袭三轮摩托 `Small → Large`（小 → 大），变节者 `Large → Medium`（大 → 中）。
+- 重型工厂升级描述里上游删掉了「维修台」，译文同步删除。
+- 出生点标签新增占位符：`label-available-spawn` / `label-disabled-spawn` 现为
+  「可用的出生点 { $spawn }」「已禁用的出生点 { $spawn }」（旧译文缺占位符会被引擎判为不匹配）。
+- 开发者命令说明由「对所选单位的拥有者」改为「对本地玩家」。
+- `Save game` → `Save Game`（仅大小写，译文不变）、`cnc` 主菜单标题 `Main Menu` → 「主菜单」。
+
+**引擎侧变动（已确认不影响本补丁）**
+
+- `ts` / `ts-content` 两个包从 playtest 中移除，本补丁原本未覆盖，载荷无需处理。
+- 三个模组的 `FluentMessages` 都新增了 `common|fluent/ingame-debug.ftl`；
+  `cnc` 改用自身的 `cnc|chrome/ingame-debug.yaml`，`ra` 新增 `common|chrome/load-game-browser.yaml`。
+  `mod.yaml` 一律以新版英文为底稿重新生成（再替换字体引用），旧补丁的 `mod.yaml` 不可复用。
+- 字体仍为 `FreeSans.ttf` / `FreeSansBold.ttf`，安装脚本照旧替换为系统中文字体。
+
+**统计口径**
+
+`manifest.json` 的 `stats` 改由 `tools/build_manifest.py` 自动重算（口径写在脚本与
+[MAINTAINING](docs/MAINTAINING.md) 里），不再手填。因此本版数字与旧版**不可直接比较**：
+
+| 项 | 1.3.1（手填） | 1.4.0（自动重算） |
+|---|---|---|
+| Fluent 文案 | 2,504 | **3,036**（非地图 `.ftl` 的顶层消息数） |
+| 安装源名称 | 30 | **20**（`installer/*.yaml` 的顶层节点数） |
+| 战役简报 | 129 | **140** |
+| 载荷文件 | 196 | **208** |
+
+**校验**
+
+- 载荷 208 个文件，`verify_manifest.py` 0 问题；`lint_ftl.py` 174 个 `.ftl` 0 问题；
+  `struct_check_maps.py` 146 个 `map.ftl` 0 问题。
+- 引擎侧：6 个模组 `--check-yaml` 全部退出码 0；`--extract-chrome-strings` 无缺失键；
+  **162 张地图**逐张 `--check-yaml` 全部通过；`check_yaml_fluent_refs.py` 差分 0 个新出现的未解析键；
+  `validate_ftl.py` 174 个文件逐键（占位符、选择器）全部一致。
+- 安装脚本：`-DryRun` 零写入；完整安装 → `-Uninstall` 还原后与英文原版**逐字节一致**
+  （2595 个文件，0 差异）。
+
 ## 1.3.1 — 2026-09-30
 
 把**红警 / 泰伯利亚黎明**的单位与建筑显示名，对齐到 OpenRA 汉化组（CastleJing）的

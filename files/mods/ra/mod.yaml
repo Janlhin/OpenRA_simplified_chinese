@@ -1,6 +1,6 @@
 Metadata:
 	Title: mod-title
-	Version: playtest-20260222
+	Version: playtest-20261026
 	Website: https://www.openra.net
 	WebIcon32: https://www.openra.net/images/icons/ra_32x32.png
 	WindowTitle: mod-windowtitle
@@ -68,7 +68,7 @@ FileSystem: ContentInstallerFileSystem
 
 MapFolders:
 	ra|maps: System
-	~^SupportDir|maps/ra/playtest-20260222: User
+	~^SupportDir|maps/ra/playtest-20261026: User
 
 Rules:
 	ra|rules/misc.yaml
@@ -126,7 +126,7 @@ ChromeLayout:
 	ra|chrome/ingame-observer.yaml
 	ra|chrome/ingame-player.yaml
 	common|chrome/ingame-perf.yaml
-	common|chrome/ingame-debug.yaml
+	ra|chrome/ingame-debug.yaml
 	common|chrome/ingame-debug-hpf.yaml
 	common|chrome/ingame-debuginfo.yaml
 	common|chrome/ingame-infochat.yaml
@@ -156,6 +156,7 @@ ChromeLayout:
 	common|chrome/connection.yaml
 	common|chrome/replaybrowser.yaml
 	common|chrome/gamesave-browser.yaml
+	common|chrome/load-game-browser.yaml
 	ra|chrome/gamesave-loading.yaml
 	common|chrome/dropdowns.yaml
 	common|chrome/musicplayer.yaml
@@ -170,6 +171,7 @@ ChromeLayout:
 FluentMessages:
 	common|fluent/common.ftl
 	common|fluent/chrome.ftl
+	common|fluent/ingame-debug.ftl
 	common|fluent/hotkeys.ftl
 	common|fluent/rules.ftl
 	ra|fluent/ra.ftl
@@ -252,7 +254,7 @@ Fonts:
 		Size: 24
 		Ascender: 18
 	Title:
-		Font: common|SimHei.ttf
+		Font: ra|ZoodRangmah.ttf
 		Size: 48
 		Ascender: 26
 

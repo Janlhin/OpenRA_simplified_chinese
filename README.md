@@ -2,7 +2,7 @@
 
 [![validate](https://github.com/Janlhin/OpenRA_simplified_chinese/actions/workflows/validate.yml/badge.svg)](https://github.com/Janlhin/OpenRA_simplified_chinese/actions/workflows/validate.yml)
 
-给 **[OpenRA](https://www.openra.net/)**（`playtest-20260222`）加上简体中文的轻量补丁。
+给 **[OpenRA](https://www.openra.net/)**（`playtest-20261026`）加上简体中文的轻量补丁。
 
 - 覆盖 **红色警戒 (ra)**、**泰伯利亚黎明 (cnc)**、**沙丘 2000 (d2k)** 三个模组的界面、单位与建筑名称、
   任务目标，以及全部战役简报。
@@ -23,7 +23,7 @@
 3. 双击 **`install.bat`**。
    - 自动探测 OpenRA 安装目录（注册表 + `Program Files\OpenRA*`）。找不到时会提示你用 `-Target` 指定。
    - 目标在 `C:\Program Files` 等受保护位置时，会自动弹出 UAC 提权窗口继续。
-   - 若你的引擎版本不是 `playtest-20260222`，会先警告，再询问是否继续。
+   - 若你的引擎版本不是 `playtest-20261026`，会先警告，再询问是否继续。
 4. 启动游戏（例如 `C:\Program Files\OpenRA (playtest)\RedAlert.exe`），界面即为中文。
 
 ### 命令行安装
@@ -60,23 +60,23 @@ install.bat -FontPath "D:\NotoSansSC-Regular.ttf"   :: 指定中文字体
 | 游戏内指令（攻击移动 / 护卫 / 散开 / 强制移动 / 四种姿态） | 已汉化 |
 | 观战统计、录像播放器、地图编辑器 | 已汉化 |
 | 全部快捷键说明 | 已汉化 |
-| 内容安装向导与「内容管理」（含 30 条安装源名称） | 已汉化 |
+| 内容安装向导与「内容管理」（含 20 条安装源名称） | 已汉化 |
 | 三个阵营的单位、建筑、防御、超级武器名称与说明 | 已汉化 |
 | 战役任务目标与任务内对话（ra / cnc / d2k） | 已汉化 |
-| **战役简报正文（每关开始前的长篇简报，129 份）** | 已汉化 |
+| **战役简报正文（每关开始前的长篇简报，140 份）** | 已汉化 |
 | **战役分组名（「盟军战役 / GDI 战役 / 阿特雷德斯战役」等 16 个）** | 已汉化 |
 | 遭遇战设置、地图生成器、阵营说明 | 已汉化 |
 | 内容安装器的悬停提示、建服对话框的默认服务器名 | 已汉化 |
 | 地图内硬编码文本（3 处倒计时、1 处任务提示） | 已汉化 |
 | 地图元数据里的地图标题（任务列表条目显示的 `Allies 01` 等） | **未汉化，见下方说明** |
 
-统计：**2,504 条 Fluent 文案 + 30 条安装源名称 + 129 份战役简报 + 16 个战役分组名 + 若干地图内文本**，
-共 **196 个载荷文件**、约 581 KB。
+统计：**3,036 条 Fluent 文案 + 20 条安装源名称 + 140 份战役简报 + 16 个战役分组名 + 若干地图内文本**，
+共 **208 个载荷文件**、约 595 KB。
 
 ### 为什么任务列表里的关卡名还是英文
 
 任务列表里的每个条目显示的是**地图元数据**（`mods/<mod>/maps/<地图>/map.yaml` 的 `Title`），
-共 144 处，例如 `Allies 01`、`GDI 06`、`Harkonnen 09a`。这些字段**故意不翻译**：
+共 162 处，例如 `Allies 01`、`GDI 06`、`Harkonnen 09a`。这些字段**故意不翻译**：
 
 > 地图 UID = `SHA1(map.yaml + *.bin + *.lua + map.png)`。改动 `map.yaml` 会让打了补丁的玩家与
 > 未打补丁的玩家**地图哈希不一致**（无法同局游戏），旧录像也会因为找不到对应地图而无法播放。
@@ -104,7 +104,7 @@ OpenRA 的 `Fonts:` 配置默认指向 `common|FreeSans.ttf`，该字体**没有
 ### 卸载后校验
 
 还原之后想确认「到底卸干净没有」，双击 `verify-uninstall.bat`（或 `install.bat -Verify`）。
-它会按 `manifest.json` 里 196 个载荷的 SHA-256 逐文件比对安装目录：
+它会按 `manifest.json` 里 208 个载荷的 SHA-256 逐文件比对安装目录：
 
 **全部不一致 → 已彻底卸载（英文原版）；仍有哈希一致的 → 列出来告诉你哪些没卸掉。**
 
@@ -115,7 +115,7 @@ OpenRA 的 `Fonts:` 配置默认指向 `common|FreeSans.ttf`，该字体**没有
 Fluent **不会**在缺失键时回退英文，而是把键名直接显示出来（例如界面上出现
 `options-game-speed.normal` 这样的字样）。因此：
 
-- 本补丁只适配 `playtest-20260222`。升级到更新的引擎后请**先卸载本补丁**，
+- 本补丁只适配 `playtest-20261026`。升级到更新的引擎后请**先卸载本补丁**，
   否则可能看到上面那种「键名原样显示」。
 - 待补丁发布对应新引擎的版本后再安装；适配方式见
   [CONTRIBUTING.md](CONTRIBUTING.md#较大的改动适配新的引擎版本)。

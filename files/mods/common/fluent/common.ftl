@@ -30,6 +30,7 @@ notification-unknown-map = 服务器上未找到该地图。
 notification-searching-map = 正在资源中心搜索地图...
 notification-admin-change-configuration = 只有房主可以更改设置。
 notification-changed-map = { $player } 将地图更换为 { $map }。
+notification-hidden-map-has-been-previewed = 该生成地图在创建时已被管理员预览过。
 notification-you-were-kicked = 你已被踢出服务器。
 notification-admin-kicked = { $admin } 将 { $player } 踢出了服务器。
 notification-kicked = { $player } 已被踢出服务器。
@@ -151,7 +152,7 @@ menu-game-info =
     .objectives = 任务目标
     .briefing = 任务简报
     .options = 选项
-    .debug = 调试
+    .debug = 作弊
     .chat = 聊天
 
 ## GameInfoObjectivesLogic, GameInfoStatsLogic
@@ -341,8 +342,10 @@ button-retry-search = 重试搜索
 label-created-by = 作者:{ $author }
 
 ## SpawnSelectorTooltipLogic
-label-disabled-spawn = 已禁用的出生点
-label-available-spawn = 可用的出生点
+label-disabled-spawn = 已禁用的出生点 { $spawn }
+label-available-spawn = 可用的出生点 { $spawn }
+label-spawn-name = 出生点 { $spawn }
+label-team-spawn = 队伍 { $team }  出生点 { $spawn }
 
 ## DisplaySettingsLogic
 options-camera =
@@ -555,6 +558,10 @@ options-winstate =
     .victory = 胜利
     .defeat = 失败
 
+options-save-type =
+    .autosave = 自动存档
+    .manual = 手动存档
+
 options-replay-date =
     .today = 今天
     .last-week = 最近 7 天
@@ -675,7 +682,7 @@ label-spectators-count =
        *[other] { $spectators } 名观战者
     }
 
-## ServerlistLogic, GameInfoStatsLogic, ObserverShroudSelectorLogic, SpawnSelectorTooltipLogic, ReplayBrowserLogic
+## ServerlistLogic, GameInfoStatsLogic, ObserverShroudSelectorLogic, ReplayBrowserLogic
 label-team-name = 队伍 { $team }
 label-no-team = 无队伍
 
@@ -706,6 +713,9 @@ notification-saved-screenshot = 已保存截图 { $filename }
 ## ChatCommands
 notification-invalid-command = { $name } 不是有效命令。
 
+## DebugMenuLogic
+tooltip-debug-command = 作弊命令：{ $command }
+
 ## DebugVisualizationCommands
 description-combat-geometry = 切换战斗判定覆盖层。
 description-render-geometry = 切换渲染判定覆盖层。
@@ -714,7 +724,6 @@ description-depth-buffer = 切换深度缓冲覆盖层。
 description-actor-tags-overlay = 切换单位标签覆盖层。
 
 ## DevCommands
-notification-cheats-disabled = 作弊功能已禁用。
 notification-invalid-cash-amount = 资金数量无效。
 description-toggle-visibility = 切换视野判定与雷达地图。
 description-give-cash = 给予默认或指定数量的资金。
@@ -727,10 +736,17 @@ description-fast-charge = 切换支援技能近乎瞬间充能。
 description-dev-cheat-all = 切换全部作弊并给予一些资金。
 description-dev-crash = 让游戏崩溃。
 description-levelup-actor = 为所选单位增加指定数量的等级。
-description-player-experience = 为所选单位的拥有者增加指定经验值。
-description-power-outage = 使所选单位的拥有者断电 5 秒。
+description-player-experience = 为本地玩家增加指定经验值。
+description-power-outage = 使本地玩家断电 5 秒。
+description-grow-resources = 增加地图上的资源。
+description-clear-shroud = 显示整张地图。
+description-reset-shroud = 隐藏整张地图。
+description-heal-selected-actors = 治疗所选单位。
 description-kill-selected-actors = 摧毁所选单位。
 description-dispose-selected-actors = 移除所选单位。
+
+## DevCommands, DebugVisualizationCommands, CustomTerrainDebugOverlay, ActorMapOverlay, CellTriggerOverlay, ExitsDebugOverlayManager, HierarchicalPathFinderOverlay, PathFinderOverlay, TerrainGeometryOverlay
+notification-cheats-disabled = 作弊功能已禁用。
 
 ## HelpCommands
 notification-available-commands = 以下是可用的命令:
@@ -741,8 +757,12 @@ description-help-description = 提供各类命令的有用信息。
 description-pause-description = 暂停或继续游戏。
 description-surrender-description = 自毁全部单位并认输。
 
-## DeveloperMode
+## DeveloperMode, GainsExperience, PowerManager
 notification-cheat-used = 使用了作弊:{ $cheat },由 { $player }{ $suffix }。
+
+## DeveloperMode, DebugVisualizationCommands, CustomTerrainDebugOverlay, ActorMapOverlay, CellTriggerOverlay, ExitsDebugOverlayManager, HierarchicalPathFinderOverlay, PathFinderOverlay, TerrainGeometryOverlay
+notification-cheat-enabled = 作弊已启用：{ $cheat }，由 { $player } 启用。
+notification-cheat-disabled = 作弊已禁用：{ $cheat }，由 { $player } 禁用。
 
 ## CustomTerrainDebugOverlay
 description-custom-terrain-debug-overlay = 切换自定义地形调试覆盖层。

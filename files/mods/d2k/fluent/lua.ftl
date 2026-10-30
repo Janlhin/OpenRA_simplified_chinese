@@ -23,7 +23,7 @@ build-wind-trap = 建造风阱以产生电力。
 build-refinery = 建造精炼厂以收集香料。
 build-silo = 建造香料仓以储存更多香料。
 
-## atreides-01ab, ordos-01a, ordos-03ab
+## atreides-01ab, ordos01a, ordos-03ab
 eliminate-harkonnen-units-reinforcements = 消灭该区域内的所有哈克南部队与增援。
 
 ## atreides-02a, atreides-04, atreides-05, ordos-02ab, ordos-03ab, ordos-04, ordos-06a
@@ -54,7 +54,7 @@ harkonnen-units-approaching = 哈克南部队正在逼近！
 sietch-destroyed = 穴地已被摧毁！
 fremen-sietch-under-attack = 弗雷曼穴地正遭受攻击！
 
-## atreides-05, harkonnen-06ab, harkonnen09ab
+## atreides-05, atreides-06ab harkonnen-06ab, harkonnen09ab
 smugglers-annihilated = 走私者已被彻底消灭！
 
 ## atreides-05
@@ -77,11 +77,29 @@ stay-away-from-starport = 离我们的星港远一点。
 smuggler-leader = 走私者首领。
 were-warned-will-pay = 已经警告过你了。现在你要付出代价。
 destroy-smugglers-mercenaries = 摧毁走私者及其雇佣兵。
+starport-destroyed = 星港已被摧毁。
 capture-harkonnen-barracks-release-hostages = 占领哈克南兵营以解救人质。
 use-engineer-hint = 用工程师回收被摧毁的车辆。
 
+## atreides-06ab
+destroy-smugglers = 消灭走私者。
+
+## atreides-06a
+capture-or-destroy-ordos-starport = 占领或摧毁奥多斯星港。
+ordos-starport-destroyed = 奥多斯星港已被摧毁。
+
+## atreides-06b
+destroy-mercenaries = 消灭雇佣兵。
+destroy-ordos-starport = 摧毁奥多斯星港。
+
+## atreides-07
+its-a-trap = 警告：哈克南并未撤退，这是个陷阱！
+
 ## harkonnen-01ab, harkonnen-03ab
 eliminate-atreides-units-reinforcements = 消灭该区域内的所有阿特雷德斯部队与增援。
+
+## atreides-06b harkonnen-08
+mercenaries-annihilated = 雇佣兵已被彻底消灭！
 
 ## harkonnen-02ab, harkonnen-03ab, harkonnen-04, harkonnen-07, harkonnen-08, harkonnen-09, ordos-05, ordos-06a
 atreides-annihilated = 阿特雷德斯已被彻底消灭！
@@ -109,7 +127,7 @@ destroy-imperial-forces = 摧毁帝国部队。
 ## harkonnen-05, harkonnen-07, harkonnen-09ab
 emperor-annihilated = 皇帝已被消灭！
 
-## harkonnen-05, harkonnen-08
+## harkonnen-05, harkonnen-08, atreides06a
 destroy-ordos = 摧毁奥多斯。
 
 ## harkonnen-06ab
@@ -129,7 +147,6 @@ destroy-atreides-high-tech-factory-imperial-reinforcements = 摧毁阿特雷德�
 
 ## harkonnen-08
 atreides-hostile = 阿特雷德斯现在与我们为敌！
-mercenaries-annihilated = 雇佣兵已被彻底消灭！
 ally-mercenaries = 说服雇佣兵与哈克南家族并肩作战。
 mercenary-leader-captured-allied = 首领已被俘。雇佣兵已被说服与哈克南家族并肩作战。
 cannot-stand-harkonnen-must-become-neutral = 我们无法与哈克南抗衡。我们必须保持中立。
@@ -157,3 +174,8 @@ additional-reinforcements-arrive-in = 后续增援将在 { $time } 后抵达
 defend-starport = 守住星港。
 ixian-reinforcements-in = 第一批伊克斯增援将在 { $time } 后抵达
 enemy-reinforcements-arrived = 敌方增援已抵达。
+
+## ordos-07, ordos-08, ordos-09a, ordos-09b
+mercenary-leader = 雇佣兵首领：
+mercenaries-loses = 我们伤亡太惨重了！
+mercenaries-become-neutral = 我们损失了太多人，必须撤出支援！

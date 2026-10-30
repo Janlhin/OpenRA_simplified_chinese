@@ -84,6 +84,7 @@ label-tiling-path-type-start = 起点类型
 label-tiling-path-type-inner = 中间类型
 label-tiling-path-type-end = 终点类型
 label-tiling-path-deviation = 偏移上限
+checkbox-tiling-path-allow-end-deviation = 允许终点偏移
 checkbox-tiling-path-closed-loops = 环路只使用中间类型
 button-tiling-path-reverse = 反转路径
 button-tiling-path-reset = 放弃路径
@@ -123,10 +124,23 @@ label-tool-tiling-path = 路径铺装
 ## encyclopedia.yaml, mainmenu.yaml
 label-encyclopedia-title = EVA 数据库
 
+## load-game-browser.yaml
+label-load-game-browser-panel-title = 载入游戏
+label-load-game-browser-panel-choose-save = 选择存档
+label-load-game-browser-panel-incompatible-title = 存档不兼容
+label-load-game-browser-panel-incompatible-a = 该存档与当前
+label-load-game-browser-panel-incompatible-b = 版本的 OpenRA 不兼容
+label-load-game-browser-panel-human-player = 玩家
+button-load-game-browser-panel-load = 载入
+tooltip-savegame-date-created = 创建日期
+tooltip-savegame-map = 地图
+tooltip-savegame-duration = 时长
+tooltip-savegame-players = 玩家数量
+
 ## gamesave-browser.yaml
 label-gamesave-browser-panel-load-title = 载入游戏
 label-gamesave-browser-panel-save-title = 保存游戏
-label-bg-title = [新建文件]
+label-gamesave-browser-panel-no-save-selected = 选择一个存档以覆盖，或输入新的存档名
 button-bg-delete-all = 全部删除
 button-bg-delete = 删除
 button-bg-rename = 重命名
@@ -141,27 +155,6 @@ label-gamesave-loading-screen-desc = 按 Esc 取消载入并返回主菜单
 button-chat-chrome-mode =
     .label = 队伍
     .tooltip = 切换聊天模式
-
-## ingame-debug.yaml
-label-debug-panel-title = 调试选项
-checkbox-debug-panel-instant-build = 瞬间建造
-checkbox-debug-panel-enable-tech = 解锁全部建造项目
-checkbox-debug-panel-build-anywhere = 随处建造
-checkbox-debug-panel-unlimited-power = 无限电力
-checkbox-debug-panel-instant-charge = 瞬间充能
-checkbox-debug-panel-disable-visibility-checks = 关闭视野检查
-button-debug-panel-give-cash = 给予 $20,000
-button-debug-panel-grow-resources = 增长资源
-button-debug-panel-give-exploration = 清除迷雾
-button-debug-panel-reset-exploration = 重置迷雾
-label-debug-panel-visualizations-title = 可视化
-checkbox-debug-panel-show-unit-paths = 显示单位路径
-checkbox-debug-panel-show-customterrain-overlay = 显示自定义地形
-checkbox-debug-panel-show-actor-tags = 显示单位标签
-checkbox-debug-panel-show-combatoverlay = 显示战斗几何体
-checkbox-debug-panel-show-geometry = 显示渲染几何体
-checkbox-debug-panel-show-terrain-overlay = 显示地形几何体
-checkbox-debug-panel-show-screenmap = 显示屏幕地图
 
 ## ingame-debug-hpf.yaml
 dropdownbutton-hpf-overlay-locomotor = 选择移动类型
@@ -389,6 +382,8 @@ button-map-update-download-available-install = 安装地图
 label-map-preview-searching = 正在搜索 OpenRA 资源中心……
 label-map-unavailable-a = 在 OpenRA 资源中心
 label-map-unavailable-b = 未找到该地图
+label-map-generation-error-a = 该地图由
+label-map-generation-error-b = 不兼容的版本生成
 label-map-preview-error = 安装过程中发生错误
 label-map-update-available-a = 在你的电脑上发现了
 label-map-update-available-b = 该地图的新版本
@@ -506,7 +501,7 @@ checkbox-edgescroll-container = 屏幕边缘平移
 
 ## mainmenu.yaml
 label-singleplayer-title = 单人游戏
-label-main-menu-mainmenu-title = 主菜单
+label-main-menu-title = 主菜单
 button-extras-title = 额外内容
 button-main-menu-content = 内容管理
 button-singleplayer-menu-skirmish = 遭遇战
@@ -545,6 +540,10 @@ label-mapchooser-random-map-error = 地图生成失败
 button-mapchooser-random-map-generate = 生成
 label-mapchooser-random-map-tileset = 环境：
 label-mapchooser-random-map-size = 地图尺寸：
+label-mapchooser-random-map-preview-visibility = 预览可见性：
+label-mapchooser-random-map-preview-visibility-all = 所有人可见
+label-mapchooser-random-map-preview-visibility-mapchooser = 仅地图选择器可见
+label-mapchooser-random-map-preview-visibility-none = 隐藏
 label-mapchooser-random-map-error-desc = 请调整设置或重试。
 
 ## missionbrowser.yaml
@@ -617,26 +616,20 @@ label-bg-port = 端口：
 button-directconnect-panel-join = 加入
 
 ## playerprofile.yaml
-button-profile-header-logout = 登出
-label-generate-keys-desc-a = 连接论坛账号后，可以向其他玩家
-label-generate-keys-desc-b = 表明你的身份、加入私有
-label-generate-keys-desc-c = 服务器，并显示徽章。
-button-generate-keys-key = 连接 OpenRA 论坛账号
-label-generating-keys-desc-a = 正在生成认证密钥对。
-label-generating-keys-desc-b = 这需要几秒钟……
-label-register-fingerprint-desc-a = 认证密钥已复制到你的
-label-register-fingerprint-desc-b = 剪贴板。请把它添加到 OpenRA 论坛的
-label-register-fingerprint-desc-c = 用户控制面板，然后点击继续。
+label-profile-link-desc-a = 关联论坛账号，向其他玩家
+label-profile-link-desc-b = 表明身份、加入私有服务器，
+label-profile-link-desc-c = 并显示徽章。
+button-profile-link = 关联 OpenRA 论坛账号
+button-profile-unlink = 解除关联
 label-checking-fingerprint-desc-a = 正在从 OpenRA 论坛
 label-checking-fingerprint-desc-b = 查询账号信息……
-label-fingerprint-not-found-desc-a = 你的认证密钥尚未与
-label-fingerprint-not-found-desc-b = 任何 OpenRA 论坛账号关联。
 label-connection-error-desc-a = 连接 OpenRA 论坛失败。
 label-connection-error-desc-b = 请检查你的网络连接。
 
 ## replaybrowser.yaml
 label-replaybrowser-panel-title = 录像查看器
 label-filters-title = 筛选
+label-filters-flt-name-desc = 名称：
 label-filters-flt-gametype-desc = 类型：
 dropdownbutton-filters-any = 任意
 label-filters-flt-date-desc = 日期：
@@ -651,6 +644,7 @@ label-management-manage-title = 管理
 button-management-mng-rensel = 重命名
 button-management-mng-delsel = 删除
 button-management-mng-delall = 全部删除
+checkbox-load-game-filters = 筛选器
 label-replay-list-container-replaybrowser-title = 选择录像
 button-replaybrowser-panel-watch = 观看
 
@@ -663,6 +657,7 @@ checkbox-check-version-container = 检查更新
 checkbox-perftext-container = 显示性能文本
 checkbox-sendsysinfo-container = 发送系统信息
 label-sendsysinfo-checkbox-container-desc = 你的操作系统、OpenGL 与 .NET 运行时版本以及语言设置会连同匿名 ID 一起发送，用于帮助我们安排后续开发优先级。
+checkbox-enable-discord-service-container = 启用 Discord 游戏状态显示
 label-debug-section-header = 开发者
 label-debug-hidden-container-a = 更多开发者专用选项可通过
 label-debug-hidden-container-b = Debug.DisplayDeveloperSettings 设置或启动参数启用
@@ -695,6 +690,26 @@ label-auto-save-interval = 自动存档频率：
 label-auto-save-max-file-number = 自动存档上限：
 checkbox-hide-replay-chat-container = 在录像中隐藏聊天
 
+label-forum-profile-section-header = OpenRA 论坛账号
+label-forum-profile-description = 关联论坛账号，向其他玩家表明身份、加入私有服务器并显示徽章。
+label-forum-profile-checking-fingerprint = 正在从 OpenRA 论坛查询账号信息……
+label-forum-profile-connection-error = 无法连接到 OpenRA 论坛。
+
+label-forum-profile-result-unlinked = 密码仅用于向你的 OpenRA 论坛账号\n添加认证密钥，不会被保存。
+label-forum-profile-result-linked = 认证密钥可在 OpenRA 论坛的\n用户控制面板中管理与吊销。
+label-forum-profile-result-auth-failure = 认证失败。请检查用户名\n和密码后重试。
+label-forum-profile-result-login-attempts = 登录尝试次数已超出上限，\n请稍后再试。
+label-forum-profile-result-banned = 你已被 OpenRA 论坛封禁。
+label-forum-profile-result-connection-failed = 无法连接到 OpenRA 论坛。
+label-forum-profile-result-error = 发生错误，请重试。
+
+label-forum-profile-username = 用户名：
+label-forum-profile-password = 密码：
+button-forum-profile-link = 关联账号
+button-forum-profile-unlink = 解除关联账号
+button-forum-profile-retry = 重试
+button-forum-visit-forum = 访问论坛
+
 ## settings-display.yaml
 label-target-lines-dropdown-container = 目标连线：
 label-status-bar-dropdown-container-bars = 状态条：
@@ -716,6 +731,8 @@ label-video-mode-dropdown-container = 视频模式：
 dropdownbutton-video-mode-dropdown-container = 窗口化
 label-window-resolution-container-size = 窗口尺寸：
 label-window-resolution-container-x = x
+label-resolution-preset = 预设：
+dropdownbutton-resolution-select-preset = 选择预设
 label-display-selection-container = 选择显示器：
 dropdownbutton-display-selection-container-dropdown = 标准
 checkbox-vsync-container = 启用垂直同步
@@ -773,3 +790,4 @@ label-anonymous-player-tooltip-name = 匿名玩家
 label-bot-player-tooltip-name = 电脑玩家
 label-bot-managed-by-tooltip = 由 { $name } 管理的电脑玩家
 label-game-admin = 游戏管理员
+

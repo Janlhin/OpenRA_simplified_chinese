@@ -1,6 +1,6 @@
 Metadata:
 	Title: mod-title
-	Version: playtest-20260222
+	Version: playtest-20261026
 	Website: https://www.openra.net
 	WebIcon32: https://www.openra.net/images/icons/d2k_32x32.png
 	WindowTitle: mod-windowtitle
@@ -37,7 +37,7 @@ FileSystem: ContentInstallerFileSystem
 
 MapFolders:
 	d2k|maps: System
-	~^SupportDir|maps/d2k/playtest-20260222: User
+	~^SupportDir|maps/d2k/playtest-20261026: User
 
 Rules:
 	d2k|rules/misc.yaml
@@ -130,6 +130,7 @@ ChromeLayout:
 	common|chrome/editor.yaml
 	common|chrome/replaybrowser.yaml
 	common|chrome/gamesave-browser.yaml
+	common|chrome/load-game-browser.yaml
 	common|chrome/gamesave-loading.yaml
 	common|chrome/text-notifications.yaml
 	d2k|chrome/encyclopedia.yaml
@@ -137,6 +138,7 @@ ChromeLayout:
 FluentMessages:
 	common|fluent/common.ftl
 	common|fluent/chrome.ftl
+	common|fluent/ingame-debug.ftl
 	common|fluent/hotkeys.ftl
 	common|fluent/rules.ftl
 	d2k|fluent/d2k.ftl

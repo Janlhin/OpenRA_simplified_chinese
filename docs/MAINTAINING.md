@@ -34,7 +34,7 @@
 ```bash
 python tools/build_manifest.py --original "C:\Program Files\OpenRA (playtest)" \
                                --patched  "C:\Users\你\OpenRA-CN" \
-                               --version 1.3.1 --engine playtest-20260222 \
+                               --version 1.4.0 --engine playtest-20261026 \
                                --dry-run          # 先看要改哪些
 ```
 
@@ -44,6 +44,55 @@ python tools/build_manifest.py --original "C:\Program Files\OpenRA (playtest)" \
 - 所有 `.ftl` 写入时会自动加上 SPDX 许可头。
 - 该脚本会**清空并重拷 `files/`**，运行前请确认工作区没有未提交的手工改动。
 - 只想改一两个文件时，也可以直接改 `manifest.json` 里对应条目的 `size` / `sha256`。
+- `manifest.json` 的 `stats` 三项由脚本**按固定口径重算**，不要再手填：
+  `fluentMessages` = 非地图 `.ftl` 的顶层消息数（不含 `-term` 与属性）；
+  `installerTitles` = `*-content/installer/*.yaml` 的顶层节点数；
+  `mapBriefings` = 含 `briefing` 的 `maps/*/map.ftl` 个数。
+  口径在 1.4.0 统一过一次，因此**与 1.3.1 及更早的数字不可直接比较**。
+
+## 引擎升级:把译文迁到新版英文目录
+
+OpenRA 每个 playtest 都会改 Fluent 目录，而**键名对不上时引擎不回退英文，而是把键名直接画到界面上**。
+所以引擎一升级就要重做一版载荷，旧载荷不能直接套。
+
+`tools/port_translations.py` 把这件事变成机械操作：**结构取新版英文，取值取旧译文**。
+
+```bash
+# 1) 旧版英文基线:从上游 tag 稀疏取出需要的文件(别下拉整个仓库)
+git clone --filter=blob:none --no-checkout --depth 1 --branch <旧tag> https://github.com/OpenRA/OpenRA.git openra-old
+cd openra-old && git sparse-checkout init --no-cone
+printf 'mods/**/fluent/**\nmods/**/installer/**\nmods/**/chrome/**\nmods/**/maps/**/*.yaml\nmods/**/maps/**/*.lua\nmods/**/mod.yaml\nmods/**/missions.yaml\n' > .git/info/sparse-checkout
+git checkout && cd ..
+
+# 2) 生成译文底稿 + 四份报告
+python tools/port_translations.py \
+    --old-english "openra-old/mods" \
+    --old-payload "上一版/files/mods" \
+    --new-english "C:/Program Files/OpenRA (playtest)/mods" \
+    --out "stage/patched/mods" \
+    --font-from "common|FreeSans.ttf,common|FreeSansBold.ttf" --font-to "common|SimHei.ttf"
+
+# 3) 按报告补译,再用译表回灌
+python tools/port_translations.py ... --translations new.tsv --fix fix.tsv
+
+# 4) 重建载荷(见上一节)
+python tools/build_manifest.py --original "…" --patched "stage/patched" --version x.y.z --engine playtest-xxxxxxxx
+```
+
+四份报告各管一类问题：
+
+| 报告 | 含义 | 处理方式 |
+|---|---|---|
+| `port_untranslated.tsv` | 新版新增的键 | 逐条翻译，写成 `new.tsv` 回灌 |
+| `port_changed.txt` | 英文原文改过（附旧译文） | **必须逐条复核**，改成 `fix.tsv` 或直接编辑底稿 |
+| `port_placeholder.txt` | 占位符 / 复数选择器与英文不一致 | 必须改，否则引擎判为不匹配 |
+| `port_manual.txt` | 非 `.ftl` 且新旧英文不同 | 人工处理；本项目通常是 `d2k/missions.yaml` 的战役分组标题 |
+
+注意：
+
+- `--old-payload` 用**上一版 release 的 `files/mods`**（带 SPDX 头的载荷），不要用汉化后的安装目录。
+- 工具只负责"哪些还没翻"，**不判断译文是否仍然准确**——英文改过的地方要人看。
+- 新地图的 `map.ftl` 会以"新增键"的形式出现，照常翻译即可。
 
 ## 仓库与发布
 
@@ -104,21 +153,26 @@ git add -A && git commit -m "..." && git push
 ## 端到端验证记录
 
 安装脚本用 Windows PowerShell 5.1 语法编写（不依赖 PowerShell 7），
-在 `playtest-20260222` 的完整安装副本上从零跑通，并已在打包后的 zip 上复测：
+在 `playtest-20261026` 的完整安装副本上从零跑通（1.4.0，2026-10-30）：
 
 | 验证项 | 结果 |
 |---|---|
-| `install.bat` 安装（196 文件 + 字体） | 通过，SHA-256 载荷校验通过 |
-| `OpenRA.Utility.exe <mod> --check-yaml`（6 个模组） | 全部通过 |
-| `OpenRA.Utility.exe <mod> --check-yaml mods/<mod>/maps/<地图>/map.yaml`（151 张地图） | 全部通过 |
-| `--extract-chrome-strings` 界面键缺失检测 | 无缺失 |
+| `install.bat` 安装（208 文件 + 字体） | 通过，SHA-256 载荷校验通过 |
+| `OpenRA.Utility.exe <mod> --check-yaml`（6 个模组） | 全部通过（退出码 0） |
+| `OpenRA.Utility.exe <mod> --check-yaml mods/<mod>/maps/<地图>/map.yaml`（162 张地图） | 全部通过 |
+| `--extract-chrome-strings` 界面键缺失检测 | 无缺失（无 `Adding` 行） |
 | `check_yaml_fluent_refs.py` 与原版差分 | 0 个新出现的未解析键 |
-| `validate_ftl.py` 逐键比对（196 个载荷文件） | 键、占位符、复数选择器全部一致 |
-| `struct_check_maps.py` 地图文案结构校验（135 个 map.ftl） | 0 处问题 |
-| `audit_coverage.py` 覆盖率审计 | 硬编码英文 0 处、脚本上屏英文 0 处；仅剩 26 条应保留的英文（品牌 / 缩写 / 键盘按键名）与 144 处地图元数据 |
+| `validate_ftl.py` 逐键比对（174 个 `.ftl`） | 键、占位符、复数选择器全部一致 |
+| `struct_check_maps.py` 地图文案结构校验（146 个 `map.ftl`） | 0 处问题 |
+| `audit_coverage.py` 覆盖率审计 | 硬编码英文 0 处、脚本上屏英文 0 处；仅剩 26 条应保留的英文（品牌 / 缩写 / 键盘按键名）与 162 处地图元数据 |
 | 字体引用可落地性 / 字形覆盖 | 全部存在，无缺字 |
-| `-DryRun` 预演 | 确认零写入 |
-| `-Uninstall` 还原 | 全部文件还原 + 新增文件删除，与原版逐字节一致 |
+| `-DryRun` 预演 | 确认零写入（整棵目录树重新哈希，0 差异） |
+| `-Uninstall` 还原 | 2595 个文件逐字节一致，0 差异 |
+
+> **验证命令的副作用**：`OpenRA.Utility.exe <mod> --extract-chrome-strings` 不是只读命令，
+> 它会就地重写被加载的 chrome yaml（UTF-8 BOM 会丢）。只在**一次性的安装副本**上跑；
+> 在实机目录上跑过之后再做 `-Uninstall` 的逐字节比对，会看到 `chrome/load-game-browser.yaml`
+> 这类"内容不同"的假警报。
 
 ## 校验工具 CLI 备忘
 

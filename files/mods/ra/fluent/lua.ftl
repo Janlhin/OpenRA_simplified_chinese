@@ -197,7 +197,7 @@ chronosphere-explodes-in = 超时空传送仪将在 { $time } 后爆炸
 rescue-scientists-extraction-point = 营救科学家，并把他们护送到
     撤离点。
 
-## in-the-nick-of-time, situation-critical
+## in-the-nick-of-time, situation-critical, soviet-07
 too-late = 我们来得太晚了！
 
 ## infiltration

@@ -11,7 +11,7 @@ checkbox-explored-map =
 
 ## DeveloperMode
 checkbox-debug-menu =
-    .label = 调试菜单
+    .label = 作弊
     .description = 启用作弊与开发者命令
 
 ## CrateSpawner

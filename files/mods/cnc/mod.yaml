@@ -1,6 +1,6 @@
 Metadata:
 	Title: mod-title
-	Version: playtest-20260222
+	Version: playtest-20261026
 	Website: https://www.openra.net
 	WebIcon32: https://www.openra.net/images/icons/cnc_32x32.png
 	WindowTitle: mod-windowtitle
@@ -39,7 +39,7 @@ FileSystem: ContentInstallerFileSystem
 
 MapFolders:
 	cnc|maps: System
-	~^SupportDir|maps/cnc/playtest-20260222: User
+	~^SupportDir|maps/cnc/playtest-20261026: User
 
 Rules:
 	cnc|rules/misc.yaml
@@ -114,6 +114,7 @@ ChromeLayout:
 	cnc|chrome/mapchooser.yaml
 	cnc|chrome/replaybrowser.yaml
 	cnc|chrome/gamesave-browser.yaml
+	cnc|chrome/load-game-browser.yaml
 	cnc|chrome/gamesave-loading.yaml
 	cnc|chrome/ingame.yaml
 	cnc|chrome/ingame-chat.yaml
@@ -147,6 +148,7 @@ ChromeLayout:
 
 FluentMessages:
 	common|fluent/common.ftl
+	common|fluent/ingame-debug.ftl
 	common|fluent/hotkeys.ftl
 	common|fluent/rules.ftl
 	cnc|fluent/cnc.ftl

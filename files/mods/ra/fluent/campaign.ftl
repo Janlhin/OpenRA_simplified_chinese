@@ -43,7 +43,7 @@ actor-5tnk =
 
 actor-5tnk-husk-name = 残骸(超级坦克)
 
-## mousetrap, situation-critical
+## mousetrap, situation-critical, soviet-07
 actor-gas-name = 毒气
 
 ## sarin-gas-2-down-under

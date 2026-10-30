@@ -56,3 +56,6 @@ button-production-types-infantry-tooltip = 步兵
 button-production-types-vehicle-tooltip = 车辆
 button-production-types-aircraft-tooltip = 飞行器
 button-production-types-naval-tooltip = 海军
+
+## ingame-debug.yaml
+button-debug-panel-power-outage = 断电

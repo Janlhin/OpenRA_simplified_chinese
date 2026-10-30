@@ -6,6 +6,7 @@ notification-ironcurtain =
     .ready = 铁幕就绪。
 
 actor-mnlyr-name = 轰炸机
+
 actor-minvv =
     .description = 8 秒后爆炸的炸弹
     .name = 炸弹

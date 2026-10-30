@@ -13,6 +13,7 @@ options-difficulty =
     .tough = 真硬汉
 
 actor-mobiletent-name = 移动帐篷
+
 actor-sniper =
     .name = 狙击手
     .description = 精英狙击步兵单位。
@@ -21,6 +22,7 @@ actor-sniper =
       对车辆、飞行器弱
 
 actor-mig-bomber-name = 米格轰炸机
+
 ## rules.yaml
 bot-lonestarai-name = 孤星 AI
 actor-powerproxy-parabombs-description = 一架米格轰炸机向你的目标投下一批带降落伞的炸弹。

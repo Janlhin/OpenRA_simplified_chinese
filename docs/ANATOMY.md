@@ -20,7 +20,7 @@
 ```
 双击 install.bat
    └─ install.ps1（总调度）
-        ├─ 读 manifest.json           ← 版本、适配引擎版本、196 个载荷文件的 SHA-256
+        ├─ 读 manifest.json           ← 版本、适配引擎版本、208 个载荷文件的 SHA-256
         ├─ 探测 OpenRA 安装目录        ← 注册表 + Program Files\OpenRA*
         ├─ 逐文件校验 SHA-256          ← 与 manifest.json 比对，不一致就中止
         ├─ 备份被覆盖的文件            ← <OpenRA 目录>\_zhcn-backup\<时间戳>\
@@ -55,7 +55,7 @@ OpenRA_simplified_chinese/
 └─ .gitignore
 ```
 
-仓库共约 220 个文件（不含 `.git/`），其中 **`files/` 载荷 196 个**——载荷数是唯一需要精确盯住的
+仓库共约 257 个文件（不含 `.git/`），其中 **`files/` 载荷 208 个**——载荷数是唯一需要精确盯住的
 数字（它直接决定 `manifest.json` 的校验条目），其余是脚本、文档与仓库元文件。
 
 ---
@@ -68,7 +68,7 @@ OpenRA_simplified_chinese/
 | `uninstall.bat` | 双击还原入口 → `install.ps1 -Uninstall` | 玩家 |
 | `verify-uninstall.bat` | 双击「卸载校验」入口 → `install.ps1 -Verify` | 玩家 |
 | `install.ps1` | **安装/卸载/校验的全部逻辑**：目录探测、版本校验、SHA-256 校验、备份、UAC 提权、字体复制、`-DryRun`、还原、校验。Windows PowerShell 5.1 语法，UTF-8 **带 BOM**（否则 PS 5.1 会把中文读成乱码） | `install.bat` 等三个 bat |
-| `manifest.json` | **补丁的身份证**：`version`、`engineVersion`、`repository`、`font`、`stats`，以及 196 条 `{path, size, sha256}` | `install.ps1`、CI、`tools/verify_manifest.py` |
+| `manifest.json` | **补丁的身份证**：`version`、`engineVersion`、`repository`、`font`、`stats`，以及 208 条 `{path, size, sha256}` | `install.ps1`、CI、`tools/verify_manifest.py` |
 | `README.md` | 玩家文档 | 玩家 |
 | `CONTRIBUTING.md` | 贡献者文档：改译文流程、翻译规范、术语表、会被拒绝的改动 | 贡献者 |
 | `CHANGELOG.md` | 版本历史 | 所有人 |
@@ -119,7 +119,7 @@ OpenRA_simplified_chinese/
 | `fluent/{ra,cnc,d2k}.ftl` ×3 | 该模组的独有条目 | 常驻 |
 | `fluent/lua.ftl` ×3 | 战役目标与过场台词 | ⚠️ **不常驻**，见下 |
 | `fluent/campaign.ftl` ×3 | 战役浏览界面 | ⚠️ **不常驻**，见下 |
-| `maps/<地图>/map.ftl` ×135 | 单张地图的简报正文与难度选项 | 该地图被加载时 |
+| `maps/<地图>/map.ftl` ×146 | 单张地图的简报正文与难度选项 | 该地图被加载时 |
 
 **`lua.ftl` 与 `campaign.ftl` 不在 `mod.yaml` 的 `FluentMessages` 里**——这不是配置遗漏，
 而是引擎的设计：每张**战役地图**的 `map.yaml` 自带一行加载清单，形如
@@ -146,7 +146,7 @@ FluentMessages: ra|fluent/lua.ftl, ra|fluent/campaign.ftl, map.ftl
 | `mods/<mod>/mod.yaml` ×6 | `Fonts:` 段 → `common|SimHei.ttf`（`common/` 没有 mod.yaml，它不直接渲染界面） |
 | `mods/<mod>/missions.yaml` ×3 | 战役浏览器里的分组名（16 个，如「盟军战役」） |
 | `mods/<mod>/chrome/multiplayer-createserver.yaml` ×2 | 建服对话框的默认服务器名 |
-| `mods/*-content/installer/*.yaml` ×19 | 内容下载源标题（30 条，如 `C&C The Ultimate Collection`） |
+| `mods/*-content/installer/*.yaml` ×19 | 内容下载源标题（20 条，如 `C&C The Ultimate Collection`） |
 | `mods/ra/maps/*/rules.yaml` ×3 | 3 张地图的 `CountdownText` 倒计时 |
 | `mods/ra/maps/allies-13/allies13.lua` ×1 | 全库唯一一处脚本上屏文本 |
 

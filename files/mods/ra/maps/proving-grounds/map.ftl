@@ -2,6 +2,7 @@
 ## 中文译文:OpenRA_simplified_chinese 项目贡献;原始英文文案版权归 OpenRA 项目 (GPL-3.0) 所有。
 ## rules.yaml
 actor-ats-name = 高级战术潜艇
+
 ## rules.yaml
 briefing = 
     关于我们新型高级战术潜艇的情报泄露给了盟军，他们已侵入我们的领土，决心阻止我们。你必须摧毁他们。

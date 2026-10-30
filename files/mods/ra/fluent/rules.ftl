@@ -200,7 +200,9 @@ meta-crate =
     .name = 补给箱
     .generic-name = 补给箱
 
-meta-mine-name = 地雷
+meta-mine =
+    .name = 地雷
+    .generic-name = 地雷
 
 ## fakes.yaml
 actor-fpwr =
