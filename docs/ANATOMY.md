@@ -18,7 +18,7 @@
 它是个**覆盖式补丁**，不是整包分发游戏——`files/` 里全是文本文件，安装时按目录结构盖到 OpenRA 安装目录上。
 
 ```
-双击 install.bat
+双击 setup.cmd（中文菜单）
    └─ install.ps1（总调度）
         ├─ 读 manifest.json           ← 版本、适配引擎版本、208 个载荷文件的 SHA-256
         ├─ 探测 OpenRA 安装目录        ← 注册表 + Program Files\OpenRA*
@@ -37,9 +37,10 @@
 ```
 OpenRA_simplified_chinese/
 ├─ README.md / CONTRIBUTING.md / CHANGELOG.md / LICENSE
-├─ install.bat / uninstall.bat / verify-uninstall.bat
-├─ install.ps1
+├─ setup.cmd                          玩家唯一入口（纯 ASCII + CRLF，双击出菜单）
+├─ install.ps1                        全部逻辑
 ├─ manifest.json
+├─ 安装说明.txt                        玩家说明：三步装 / 手动装 / AI 装 / FAQ
 ├─ files/                             载荷：覆盖树的根
 │   └─ mods/{common,ra,cnc,d2k,common-content,ra-content,cnc-content,d2k-content}/
 ├─ tools/                             10 个 Python 脚本（纯标准库）
@@ -60,20 +61,19 @@ OpenRA_simplified_chinese/
 
 ---
 
-## 根目录的 11 个文件
+## 根目录的 10 个文件
 
 | 文件 | 作用 | 谁读取 |
 |---|---|---|
-| `install.bat` | 双击入口。纯 ASCII + CRLF（避免代码页乱码），只做一件事：调用 `install.ps1` | 玩家 |
-| `uninstall.bat` | 双击还原入口 → `install.ps1 -Uninstall` | 玩家 |
-| `verify-uninstall.bat` | 双击「卸载校验」入口 → `install.ps1 -Verify` | 玩家 |
-| `install.ps1` | **安装/卸载/校验的全部逻辑**：目录探测、版本校验、SHA-256 校验、备份、UAC 提权、字体复制、`-DryRun`、还原、校验。Windows PowerShell 5.1 语法，UTF-8 **带 BOM**（否则 PS 5.1 会把中文读成乱码） | `install.bat` 等三个 bat |
+| `setup.cmd` | **玩家唯一入口**。纯 ASCII + CRLF（避免代码页乱码）：不带参数时调 `install.ps1 -Menu` 出中文菜单，带参数时原样透传给 `install.ps1`（`setup.cmd -Uninstall` 等价于原来的 `uninstall.bat`） | 玩家 |
+| `install.ps1` | **安装/卸载/校验的全部逻辑**：目录探测、版本校验、SHA-256 校验、备份、UAC 提权、字体复制、`-DryRun`、还原、校验。Windows PowerShell 5.1 语法，UTF-8 **带 BOM**（否则 PS 5.1 会把中文读成乱码） | `setup.cmd` |
 | `manifest.json` | **补丁的身份证**：`version`、`engineVersion`、`repository`、`font`、`stats`，以及 208 条 `{path, size, sha256}` | `install.ps1`、CI、`tools/verify_manifest.py` |
-| `README.md` | 玩家文档 | 玩家 |
+| `安装说明.txt` | 给玩家的纯文本说明（UTF-8 带 BOM + CRLF，记事本直接看）：三步装、手动安装、让 AI 助手安装、常见问题 | 玩家 |
+| `README.md` | 玩家文档（同一份内容的 Markdown 版） | 玩家 |
 | `CONTRIBUTING.md` | 贡献者文档：改译文流程、翻译规范、术语表、会被拒绝的改动 | 贡献者 |
 | `CHANGELOG.md` | 版本历史 | 所有人 |
 | `LICENSE` | GPL-3.0-or-later 全文 | 法律 |
-| `.gitattributes` | 行尾规则。**`files/** -text` 是关键**：载荷必须逐字节保真，否则别的平台检出时改写换行会让 `manifest.json` 的哈希集体失效。`*.bat` / `*.ps1` 声明 CRLF | git |
+| `.gitattributes` | 行尾规则。**`files/** -text` 是关键**：载荷必须逐字节保真，否则别的平台检出时改写换行会让 `manifest.json` 的哈希集体失效。`*.bat` / `*.cmd` / `*.ps1` / `*.txt` 声明 CRLF | git |
 | `.gitignore` | 挡掉 `*.zip`（发布产物）、`_zhcn-backup/`（安装时生成的备份）、`Thumbs.db` / `.DS_Store`、`.vscode/` / `.idea/` | git |
 
 ## `.github/`
@@ -182,7 +182,7 @@ CI 里还有一条内联守卫：`files/` 中若出现 `.ttf` / `.ttc` / `.otf` 
 | 脚本 | 作用 |
 |---|---|
 | `build_manifest.py` | diff 英文原版与汉化目录，**重建 `files/` 与全部哈希**。它会清空并重拷 `files/`，运行前确认没有未提交的手工改动 |
-| `build_release.py` | 把仓库打成**确定性**发布包 zip（时间戳取自 `manifest.json` 的 `releaseDate`），`--verify` 会解压并重跑四项校验 |
+| `build_release.py` | 把仓库打成**确定性**发布包 zip（时间戳取自 `manifest.json` 的 `releaseDate`）。默认走白名单（`setup.cmd` / `install.ps1` / `manifest.json` / `安装说明.txt` / `LICENSE` / `files/**`），`--dev` 打全量；`--verify` 在包内做自校验（入口齐全、载荷 size/sha256、无多余文件） |
 
 ### 开发审计（需要游戏本体或字体，CI 不跑）
 

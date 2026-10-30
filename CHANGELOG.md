@@ -1,5 +1,46 @@
 # 更新日志
 
+## 1.4.1 — 2026-10-30
+
+只改「怎么装」，**译文一个字都没动**：载荷 208 个文件与 1.4.0 逐字节相同，哈希未变。
+
+**入口合并：三个 bat → 一个 `setup.cmd`**
+
+- `install.bat` / `uninstall.bat` / `verify-uninstall.bat` 删掉，合并为 `setup.cmd`。
+  双击出中文菜单（安装 / 还原 / 卸载校验 / 预演），全部逻辑仍在 `install.ps1`。
+- `setup.cmd` 保持**纯 ASCII + CRLF**（bat 里放中文会因代码页乱码）；带参数时原样透传给
+  `install.ps1`，所以 `setup.cmd -Uninstall` 与原来的 `uninstall.bat` 等价。
+- `install.ps1` 新增 `-Menu`；`-Uninstall` / `-DryRun` 结束时补 `exit 0`，避免菜单里返回码漂移。
+
+**新增 `安装说明.txt`（给玩家的纯文本，UTF-8 + BOM + CRLF，记事本直接看）**
+
+含四段：三步装好 / **手动安装** / **让 AI 助手帮你装** / 常见问题。
+
+手动安装强调了一个容易踩的坑：补丁的 `mod.yaml` 已经指向 `common|SimHei.ttf`，所以必须
+**先放字体、再覆盖文本**——顺序反了不是"变方块"，而是引擎启动时读不到字体文件、**直接报错退出**。
+
+**发布包瘦身：258 → 213 个文件**
+
+`build_release.py` 改为**白名单**打包，发布包只含：
+
+```
+setup.cmd / install.ps1 / manifest.json / 安装说明.txt / LICENSE / files/**
+```
+
+`tools/`、`docs/`、`.github/`、`CONTRIBUTING.md`、`CHANGELOG.md`、`.gitattributes` 不再进包
+（原来解压出来是一堆 `.py`）。要全量快照用 `--dev`，输出 `*-dev.zip`。
+体积 387 KB → **260 KB**。
+
+`--verify` 同时改为**包内自校验**（不再依赖 `tools/`）：入口文件是否齐全、包内 `manifest.json`
+是否与仓库一致、208 个载荷的 size/sha256、`files/` 里有没有多余文件。
+
+**校验**
+
+- `build_release.py --verify` 通过（213 个文件 / 260 KB），包内 208 个载荷 size+sha256 全对。
+- 在 `playtest-20261026` 的完整副本上跑「菜单 → 预演 → 安装 → 卸载校验 → 还原」：
+  安装 208 文件 + 字体正常，`-DryRun` 零写入，还原后与英文原版**逐字节一致**（2595 文件，0 差异）。
+- CI 四项本地复跑通过（载荷↔清单、Fluent 规范、地图结构、Markdown 链接）。
+
 ## 1.4.0 — 2026-10-30
 
 适配 **OpenRA `playtest-20261026`**。上游这次改动不小：新增 164 条文案、改写 18 处英文原文、

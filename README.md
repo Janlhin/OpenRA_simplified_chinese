@@ -16,26 +16,32 @@
 
 ## 快速开始
 
-**系统要求**：Windows + 系统自带的 Windows PowerShell 5.1（无需额外安装任何东西）。
+**系统要求**：Windows 10 / 11，用系统自带的 PowerShell 5.1（无需额外安装任何东西）。
 
-1. 把 Release 中下载的 zip 解压到一个**英文路径**下，例如 `D:\OpenRA_simplified_chinese`。
+1. 把 Release 中下载的 zip 解压到一个**英文路径**下，例如 `D:\OpenRA_CN`。
 2. **关闭 OpenRA**。
-3. 双击 **`install.bat`**。
+3. 双击 **`setup.cmd`**，在菜单里输入 `1` 回车。
    - 自动探测 OpenRA 安装目录（注册表 + `Program Files\OpenRA*`）。找不到时会提示你用 `-Target` 指定。
    - 目标在 `C:\Program Files` 等受保护位置时，会自动弹出 UAC 提权窗口继续。
    - 若你的引擎版本不是 `playtest-20261026`，会先警告，再询问是否继续。
 4. 启动游戏（例如 `C:\Program Files\OpenRA (playtest)\RedAlert.exe`），界面即为中文。
 
-### 命令行安装
+`setup.cmd` 是**唯一入口**：安装、还原、卸载校验、预演都在同一个菜单里，
+不用记参数，也不用找第二个脚本。
+
+### 命令行安装（等价用法）
 
 ```bat
-install.bat -Target "C:\Program Files\OpenRA (playtest)"
-install.bat -DryRun                 :: 只预览，不写任何文件
-install.bat -Uninstall              :: 还原
-install.bat -FontPath "D:\NotoSansSC-Regular.ttf"   :: 指定中文字体
+setup.cmd -Target "C:\Program Files\OpenRA (playtest)"
+setup.cmd -DryRun                 :: 只预览，不写任何文件
+setup.cmd -Uninstall              :: 还原
+setup.cmd -Verify                 :: 校验是否已卸干净
+setup.cmd -FontPath "D:\NotoSansSC-Regular.ttf"   :: 指定中文字体
 ```
 
 ### 安装参数
+
+`setup.cmd` 会把参数原样透传给 `install.ps1`，两者等价：
 
 | 参数 | 说明 |
 |---|---|
@@ -48,6 +54,33 @@ install.bat -FontPath "D:\NotoSansSC-Regular.ttf"   :: 指定中文字体
 | `-NoVerify` | 跳过载荷 SHA-256 校验 |
 | `-Uninstall` | 从最近一次备份还原 |
 | `-Verify` | 校验「汉化是否已卸载干净」 |
+
+## 手动安装（不运行脚本）
+
+适用：不想跑脚本，或公司电脑用组策略禁掉了 PowerShell。
+
+**顺序不能错**：补丁里的 `mod.yaml` 已经指向 `common|SimHei.ttf`，所以「先覆盖文本、后放字体」
+会让引擎找不到字体文件——那是**启动就报错**，不是变方块。
+
+1. **备份**：把 `<游戏目录>\mods` 整个复制一份到别处。
+2. **先放字体**：`C:\Windows\Fonts\simhei.ttf` → `<游戏目录>\mods\common\simhei.ttf`。
+   本机没有 `simhei.ttf` 就复制任意中文字体并**保持原文件名**，再把 6 个 `mod.yaml` 里的
+   `common|SimHei.ttf` 改成那个名字。
+3. **再覆盖文本**：把本包 `files\mods\` 的内容按同名路径覆盖到 `<游戏目录>\mods\`
+   （208 个文件，其中 12 个是新增：`common\fluent\ingame-debug.ftl` + 11 个 `d2k\maps\*\map.ftl`）。
+4. 启动游戏。
+
+自检两条：`<游戏目录>\mods\common\simhei.ttf` 与
+`<游戏目录>\mods\common\fluent\ingame-debug.ftl` 都存在。
+
+完整步骤（含还原、常见问题）见 **[安装说明.txt](安装说明.txt)**。
+
+## 让 AI 助手帮你装
+
+把 [安装说明.txt](安装说明.txt) 里「让 AI 助手帮你装」那段整段复制给能在你电脑上执行命令的助手。
+那段提示词要求它：先校验 `mods\ra\mod.yaml` 的 `Version` 是否为 `playtest-20261026`、先备份整个
+`mods`、按结构覆盖 `files\mods`、复制字体、**不碰 `map.yaml` 与 `mod.yaml`**，最后报告 208 个
+文件是否到位。`Program Files` 需要管理员权限，它可能会要你点一次 UAC。
 
 ## 覆盖范围
 
@@ -91,24 +124,39 @@ OpenRA 的 `Fonts:` 配置默认指向 `common|FreeSans.ttf`，该字体**没有
 - 好处：不必随包分发字体，避免字体授权问题；安装后完全不依赖网络。
 - 如果本机字体不是 `simhei.ttf`，脚本会把 `mod.yaml` 里的引用同步改成实际文件名。
 - 想换更好看的字体（例如[思源黑体](https://github.com/notofonts/noto-cjk)）：
-  `install.bat -FontPath "D:\NotoSansSC-Regular.ttf"`。
+  `setup.cmd -FontPath "D:\NotoSansSC-Regular.ttf"`。
+- **本机一个中文字体都没有**（英文版 / 精简版 Windows 可能如此）时，安装会中止并提示，
+  必须先装一个中文字体——这也是手动安装最容易踩的坑，详见 [安装说明.txt](安装说明.txt)。
 
 ## 卸载与还原
 
 所有被覆盖的文件都备份到 `<OpenRA 目录>\_zhcn-backup\<时间戳>\`，并附 `backup.json` 记录清单。
 
-- 双击 `uninstall.bat`，或 `install.bat -Uninstall`：还原全部文件、删除新增的字体文件。
+- 双击 `setup.cmd` → 菜单输入 `2`：还原全部文件、删除新增的字体文件。
 - 也可以手动把备份目录里的文件复制回去。
 - 备份目录不会被自动删除（还原后改名为 `*.已还原`），方便反复折腾。
 
 ### 卸载后校验
 
-还原之后想确认「到底卸干净没有」，双击 `verify-uninstall.bat`（或 `install.bat -Verify`）。
+还原之后想确认「到底卸干净没有」，双击 `setup.cmd` → 菜单输入 `3`（等价于 `setup.cmd -Verify`）。
 它会按 `manifest.json` 里 208 个载荷的 SHA-256 逐文件比对安装目录：
 
 **全部不一致 → 已彻底卸载（英文原版）；仍有哈希一致的 → 列出来告诉你哪些没卸掉。**
 
 字体残留（`mods/common/SimHei.ttf`）也会一并提示。退出码 0 表示干净、1 表示仍有残留。
+
+## 包里有什么
+
+| 文件 | 作用 |
+|---|---|
+| `setup.cmd` | 唯一入口，双击出菜单 |
+| `install.ps1` | 全部逻辑：探测 / 备份 / 哈希校验 / UAC 提权 / 还原 |
+| `manifest.json` | 版本、引擎版本、208 个载荷的 SHA-256 |
+| `安装说明.txt` | 给玩家的说明：三步装、手动装、AI 装、常见问题 |
+| `LICENSE` | GPL-3.0 |
+| `files\mods\` | 208 个文本载荷 |
+
+研发资产（`tools/`、`docs/`、`.github/`、`CONTRIBUTING.md` 等）只留在仓库里，**不进发布包**。
 
 ## 引擎升级后请注意
 

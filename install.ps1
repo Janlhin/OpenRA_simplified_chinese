@@ -33,6 +33,13 @@
 .PARAMETER NoVerify
     跳过载荷文件哈希校验。
 
+.PARAMETER Verify
+    校验「汉化是否已卸载干净」:逐文件比对载荷哈希,列出仍残留的文件。
+
+.PARAMETER Menu
+    显示中文交互菜单(安装 / 还原 / 校验 / 预演),由 setup.cmd 双击进入。
+    菜单里的每一项都通过子进程重新调用本脚本,互不影响。
+
 .EXAMPLE
     .\install.ps1
     .\install.ps1 -Target "D:\Games\OpenRA" -SkipFont
@@ -48,7 +55,8 @@ param(
     [switch]$Yes,
     [switch]$SkipFont,
     [switch]$NoVerify,
-    [switch]$Verify
+    [switch]$Verify,
+    [switch]$Menu
 )
 
 $ErrorActionPreference = 'Stop'
@@ -205,7 +213,7 @@ function Invoke-Install {
     }
     if (-not $Target) {
         Fail '没能找到 OpenRA 安装目录。请用 -Target 手动指定,例如:'
-        Say  '    install.bat -Target "C:\Program Files\OpenRA (playtest)"' 'DarkGray'
+        Say  '    setup.cmd -Target "C:\Program Files\OpenRA (playtest)"' 'DarkGray'
         exit 1
     }
     $Target = (Resolve-Path $Target).Path.TrimEnd('\')
@@ -342,8 +350,9 @@ function Invoke-Install {
             if (Test-Path (Join-Path $Target $exe)) { Say ("    " + (Join-Path $Target $exe)) 'White' }
         }
         Say ''
-        Say '  想还原英文:双击 uninstall.bat,或 install.bat -Uninstall' -ForegroundColor DarkGray
+        Say '  想还原英文:重新运行 setup.cmd,选 2' -ForegroundColor DarkGray
     }
+    exit 0
 }
 
 # ---------------------------------------------------------------- 卸载
@@ -406,6 +415,7 @@ function Invoke-Uninstall {
         Move-Item -LiteralPath $latest.FullName -Destination $done -Force
         Info "本次备份已标记为已还原:$done"
     }
+    exit 0
 }
 
 # ---------------------------------------------------------------- 卸载校验
@@ -472,14 +482,52 @@ function Invoke-Verify {
         foreach ($r in $report) { Say ('    ' + $r) 'Red' }
         if ($fontRemain) { Warn "字体 $fontName 也仍残留于 mods\common\" }
         Say ''
-        Say '  建议:重新运行 uninstall.bat(或 install.bat -Uninstall)完成还原。' 'Yellow'
+        Say '  建议:重新运行 setup.cmd 选 2(或 install.ps1 -Uninstall)完成还原。' 'Yellow'
         exit 1
+    }
+}
+
+# ---------------------------------------------------------------- 交互菜单
+function Invoke-MenuAction([string[]]$ActionArgs) {
+    # 三个动作函数内部都有 exit,直接调用会结束整个脚本、菜单也就退出了。
+    # 因此每一项都用子进程重新跑一次本脚本,退出码只影响返回值。
+    $argv = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $PSCommandPath)
+    if ($Target) { $argv += @('-Target', $Target) }
+    if ($ActionArgs) { $argv += $ActionArgs }
+    & powershell.exe @argv
+}
+
+function Invoke-Menu {
+    while ($true) {
+        Clear-Host
+        $manifest = Get-Manifest
+        $ver = if ($manifest) { $manifest.version } else { '?' }
+        Title "OpenRA 简体中文汉化补丁  v$ver"
+        Say '  1) 安装汉化' 'White'
+        Say '  2) 还原英文(卸载)' 'White'
+        Say '  3) 检查是否已卸载干净' 'White'
+        Say '  4) 只看不装(预演,不写任何文件)' 'White'
+        Say '  0) 退出' 'White'
+        Say ''
+        $choice = $null
+        try { $choice = (Read-Host '  请输入序号后回车').Trim() } catch { return }
+        switch ($choice) {
+            '1' { Invoke-MenuAction @() }
+            '2' { Invoke-MenuAction @('-Uninstall') }
+            '3' { Invoke-MenuAction @('-Verify') }
+            '4' { Invoke-MenuAction @('-DryRun') }
+            '0' { return }
+            default { continue }
+        }
+        Say ''
+        try { Read-Host '  按回车返回菜单' | Out-Null } catch { return }
     }
 }
 
 # ---------------------------------------------------------------- 入口
 try {
-    if ($Verify)        { Invoke-Verify }
+    if ($Menu)          { Invoke-Menu }
+    elseif ($Verify)    { Invoke-Verify }
     elseif ($Uninstall) { Invoke-Uninstall }
     else                { Invoke-Install }
 } catch {
