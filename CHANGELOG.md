@@ -10,6 +10,10 @@
 - **README 重写**：顶层 9 项（6 文件 + 3 目录）逐项说明"干什么 / 谁在用 / 能删吗"；
   新增「`files\mods\` 里到底装了什么」，讲清覆盖树、8 个目录各管什么、6 种文件各是什么；
   新增**附录 A：全部 208 个文件清单**（每个文件一行，含大小与作用）。
+- **仓库首页与包内 README 分开**：原来同一个 `README.md` 既当 GitHub 首页又打进 zip，
+  结果包里 6 个链接（`CONTRIBUTING.md`、`CHANGELOG.md`、`docs/*`）指向 zip 里不存在的文件。
+  现在仓库根是开发者向的 `README.md`，包内是 `PACKAGE-README.md`（打包时改名回 `README.md`），
+  后者只引用包内确实存在的文件；`build_release.py --verify` 新增**包内死链检查**兜住这类问题。
 - **清单不再手写**：`tools/build_readme_inventory.py` 从 `manifest.json` 渲染附录，
   `--check` 断言 README 与清单一致，CI 加了一步。以后改载荷忘了同步 README 会被直接挡下。
 - 顺手修掉 1.5.0 遗留的过期表述：README 里"不分发字体""手动安装复制 simhei.ttf"

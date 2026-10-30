@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: GPL-3.0-or-later
-"""把 manifest.json 里的载荷清单渲染进 README.md 的附录,并校验它没走样。
+"""把 manifest.json 里的载荷清单渲染进**包内 README** 的附录,并校验它没走样。
 
 为什么要有这个脚本:README 里"包里有什么"如果手写,改一次载荷就要人肉同步一次,
 而这种清单**最容易悄悄过期**——玩家照着 README 数文件,数和实际对不上,就没人再信它了。
@@ -13,7 +13,7 @@
     <!-- INVENTORY:END -->
 
 用法:
-    python tools/build_readme_inventory.py            # 写入 README.md
+    python tools/build_readme_inventory.py            # 写入 PACKAGE-README.md
     python tools/build_readme_inventory.py --check    # 只校验,不写;不一致退出码 1
     python tools/build_readme_inventory.py --stdout   # 打到标准输出,便于肉眼比对
 """
@@ -24,7 +24,9 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-README = os.path.join(ROOT, 'README.md')
+# 这是发布包里那份 README 的源文件:打包时改名成 README.md(见 tools/build_release.py
+# 的 PACKAGE_LAYOUT)。仓库首页是另一份,两份的读者不同,不要互相复制。
+PACKAGE_README = os.path.join(ROOT, 'PACKAGE-README.md')
 MANIFEST = os.path.join(ROOT, 'manifest.json')
 
 BEGIN = '<!-- INVENTORY:BEGIN 由 tools/build_readme_inventory.py 生成,勿手改 -->'
@@ -182,7 +184,7 @@ def render(manifest, entries):
 def splice(readme_text, block):
     pattern = re.compile(re.escape(BEGIN) + r'.*?' + re.escape(END), re.S)
     if not pattern.search(readme_text):
-        print('README 里找不到清单标记,请先手工放好这两行:')
+        print('PACKAGE-README.md 里找不到清单标记,请先手工放好这两行:')
         print('  ' + BEGIN)
         print('  ' + END)
         sys.exit(1)
@@ -202,20 +204,20 @@ def main():
         print(block)
         return 0
 
-    text = open(README, encoding='utf-8').read()
+    text = open(PACKAGE_README, encoding='utf-8').read()
     new_text = splice(text, block)
 
     if args.check:
         if new_text == text:
-            print('README 的载荷清单与 manifest.json 一致(%d 个文件)' % len(entries))
+            print('包内 README 的载荷清单与 manifest.json 一致(%d 个文件)' % len(entries))
             return 0
-        print('README 的载荷清单**已过期**:manifest.json 有 %d 个文件,README 里的不清单不一致。'
+        print('包内 README 的载荷清单**已过期**:manifest.json 有 %d 个文件,README 里的清单不一致。'
               % len(entries))
         print('请运行:python tools/build_readme_inventory.py')
         return 1
 
-    open(README, 'w', encoding='utf-8', newline='\n').write(new_text)
-    print('已把 %d 个载荷清单写入 README.md' % len(entries))
+    open(PACKAGE_README, 'w', encoding='utf-8', newline='\n').write(new_text)
+    print('已把 %d 个载荷清单写入 PACKAGE-README.md' % len(entries))
     return 0
 
 

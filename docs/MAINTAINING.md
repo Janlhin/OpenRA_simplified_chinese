@@ -111,8 +111,9 @@ python tools/struct_check_maps.py files/mods
 git add -A && git commit -m "..." && git push
 ```
 
-> README 的「附录 A 全部文件清单」**不要手改**——它由 `build_readme_inventory.py` 从
-> `manifest.json` 渲染，CI 用 `--check` 断言两者一致；改了载荷忘了重跑，CI 会直接挡下。
+> 包内 README（`PACKAGE-README.md`，包里叫 `README.md`）的「附录 A 全部文件清单」**不要手改**——
+> 它由 `build_readme_inventory.py` 从 `manifest.json` 渲染，CI 用 `--check` 断言两者一致；
+> 改了载荷忘了重跑，CI 会直接挡下。
 
 ## 发新版本
 
@@ -188,13 +189,22 @@ python tools/check_font_coverage.py
 
 ## CI
 
-`.github/workflows/validate.yml` 在 `push` / `pull_request` 时跑五步（Linux runner）：
+`.github/workflows/validate.yml` 在 `push` / `pull_request` 时跑八步（Linux runner）：
 
 1. `verify_manifest.py` —— 载荷与 `manifest.json` 逐字节一致；
 2. `lint_ftl.py files/mods` —— Fluent 规范（BOM / 换行 / 缩进 / 花括号）；
 3. `struct_check_maps.py files/mods` —— 地图文案结构自检；
 4. `check_links.py .` —— Markdown 相对链接与锚点（`docs/` 引用根目录文件必须写 `../`）；
-5. 守卫：`files/` 中不得出现 `.ttf` / `.ttc` / `.otf`。
+5. `build_readme_inventory.py --check` —— 包内 README 的附录 A 与 `manifest.json` 一致；
+6. `check_font_coverage.py` —— 载荷里的每个字符，随包字体都画得出来；
+7. 守卫：`files/` 中不得出现 `.ttf` / `.ttc` / `.otf`；
+8. `build_release.py --verify` —— 打包自校验：入口齐全、`bin/manifest.json` 一致、
+   载荷与字体的 size+sha256、**包内 Markdown 的相对链接必须落在包里**。
+
+> 第 4 步只保证链接"在仓库里"能解析。README 一旦打进 zip，指向 `CONTRIBUTING.md` /
+> `docs/` 的链接就会全变成死链，而仓库侧完全看不出来——所以第 8 步另做一次包内链接检查。
+> 这也正是**仓库首页 `README.md` 与包内 `PACKAGE-README.md` 必须分开**的原因：读者不同，
+> 能引用的文件也不同。
 
 > 第 2 步对 **CRLF 换行**判错并返回退出码 1。`.gitattributes` 已声明 `files/** -text`（不转换换行），
 > 所以载荷在本地就必须是 LF——不要用编辑器批量转换换行，否则 `manifest.json` 的哈希会全部失效。

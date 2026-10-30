@@ -83,7 +83,7 @@ OpenRA 升级会带来新键、删改旧键。Fluent **不会**在缺键时回�
 | `tools/lint_ftl.py` | Fluent 文件规范(CI 必跑) |
 | `tools/struct_check_maps.py` | 地图 .ftl 结构;给两个参数时与英文原版比对键集合 |
 | `tools/check_links.py` | Markdown 相对链接与锚点(CI 必跑) |
-| `tools/build_readme_inventory.py` | 把 `manifest.json` 的载荷清单渲染进 README「附录 A」；`--check` 断言两者一致(CI 必跑) |
+| `tools/build_readme_inventory.py` | 把 `manifest.json` 的载荷清单渲染进包内 README（`PACKAGE-README.md`）的「附录 A」；`--check` 断言两者一致(CI 必跑) |
 | `tools/audit_coverage.py` | 覆盖率审计:列出还差哪些没翻,并说明哪些是故意不改的 |
 | `tools/validate_ftl.py` | 与英文原文逐键比对占位符 / 复数选择器 |
 | `tools/check_yaml_fluent_refs.py` | yaml 里引用的消息键是否都能解析(支持与原版差分) |

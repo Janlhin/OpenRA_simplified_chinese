@@ -25,6 +25,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import shutil
 import sys
 import tempfile
@@ -33,13 +34,17 @@ import zipfile
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # 发布包白名单：改这里等于改「玩家拿到什么」
-RELEASE_FILES = ('setup.cmd', 'README.md', '安装说明.txt', '安装说明.md', 'LICENSE', 'LICENSE-OFL.txt')
+RELEASE_FILES = ('setup.cmd', '安装说明.txt', '安装说明.md', 'LICENSE', 'LICENSE-OFL.txt')
 RELEASE_DIRS = ('files', 'fonts')
 
 # 仓库路径 -> 包内路径（脚本与清单统一收进 bin\，顶层只留入口与说明）
+#
+# PACKAGE-README.md 是**包内**那份 README 的源文件：它的链接只指向 zip 里确实存在的
+# 文件，与仓库首页（README.md，面向读源码的人）分开维护。包里它就叫 README.md。
 PACKAGE_LAYOUT = {
     'install.ps1': 'bin/install.ps1',
     'manifest.json': 'bin/manifest.json',
+    'PACKAGE-README.md': 'README.md',
 }
 
 
@@ -91,6 +96,32 @@ def package_path(rel):
     return PACKAGE_LAYOUT.get(rel, rel)
 
 
+LINK = re.compile(r'\[[^\]]*\]\(([^)\s]+)\)')
+
+
+def check_package_links(vroot):
+    """包内 Markdown 的相对链接必须指向包里真实存在的文件。
+
+    仓库里 check_links.py 只保证"在仓库里能解析"——README 一旦被放进 zip，
+    指向 CONTRIBUTING.md / docs/ 的链接就全成了死链，而仓库侧完全看不出来。
+    """
+    problems = []
+    for name in sorted(os.listdir(vroot)):
+        if not name.lower().endswith(('.md', '.txt')):
+            continue
+        path = os.path.join(vroot, name)
+        if not os.path.isfile(path):
+            continue
+        text = open(path, encoding='utf-8', errors='ignore').read()
+        for target in set(LINK.findall(text)):
+            if target.startswith(('http://', 'https://', 'mailto:', '#')):
+                continue
+            rel = target.split('#')[0]
+            if not os.path.exists(os.path.join(vroot, rel.replace('/', os.sep))):
+                problems.append('包内死链：%s 里的 %s' % (name, target))
+    return problems
+
+
 def verify_package(vroot, root, manifest):
     """在解压出的包上做自校验，返回问题列表（空 = 通过）。"""
     problems = []
@@ -118,6 +149,8 @@ def verify_package(vroot, root, manifest):
             problems.append('大小不符：%s（实际 %d，清单 %d）' % (rel, size, entry['size']))
         if sha256(path) != entry['sha256']:
             problems.append('哈希不符：%s' % rel)
+
+    problems.extend(check_package_links(vroot))
 
     if os.path.isdir(os.path.join(vroot, 'files')):
         for rel in walk_dir(vroot, 'files'):     # 相对包根，形如 files/mods/...
@@ -197,6 +230,7 @@ def main():
         print('  [通过] 入口文件齐全，bin/manifest.json 与仓库一致')
         print('  [通过] 随包字体 %d 个，size+sha256 与 manifest 一致' % len((manifest.get('font') or {}).get('bundled', [])))
         print('  [通过] %d 个载荷 size+sha256 全部一致，无多余文件' % len(manifest['files']))
+        print('  [通过] 包内 Markdown/TXT 的相对链接都落在包里')
         return 0
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
