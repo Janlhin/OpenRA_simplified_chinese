@@ -132,7 +132,7 @@ git add -A && git commit -m "..." && git push
 `build_release.py` 默认走**白名单**，只打玩家需要的文件：
 
 ```
-src/setup.cmd  src/安装说明.txt  src/安装说明.md  LICENSE  LICENSE-OFL.txt   ← 原样落到包根
+src/setup.ps1  src/安装说明.txt  src/安装说明.md  LICENSE  LICENSE-OFL.txt   ← 原样落到包根
 src/install.ps1   src/manifest.json          ← 按 PACKAGE_LAYOUT 收进 bin/
 src/PACKAGE-README.md                        ← 改名成包内的 README.md
 fonts/NotoSansSC-Regular.ttf  fonts/NotoSansSC-Bold.ttf  files/**
@@ -191,25 +191,22 @@ python tools/check_font_coverage.py
 
 ## 脚本与入口约定
 
-**Windows 侧一律 `.ps1`，不再新增 `.bat` / `.cmd`。** 存量只有一个例外：`src/setup.cmd`，
-它只做参数转发（纯 ASCII + CRLF，≤50 行），不含任何业务逻辑。
+**仓库里不允许任何 `.bat` / `.cmd`；Windows 侧脚本一律 `.ps1`。** CI 有守卫，出现即失败，零例外。
 
-为什么不是现在就删：
+入口是 `src/setup.ps1`：只做参数转发，**不含业务逻辑**，逻辑全在 `src/install.ps1`。
 
-- 双击 `.ps1` 的默认动词是 `Edit`（用记事本打开），**不是运行**；
-- 右键「使用 PowerShell 运行」依赖注册表关联，且 `AllSigned` 策略下不会被覆盖；
-- 企业机器上执行策略常被 `MachinePolicy` 封死，反而是 `.cmd` 能起来——但那条路也只剩下转发。
+已知限制：Windows 对 `.ps1` 的默认动词是 `Edit`（用记事本打开），所以**双击不会运行**，
+必须右键 →「使用 PowerShell 运行」，或者在 PS 里执行。1.5.3 及以前靠一个 `.cmd` 垫片绕开这点；
+现在宁可要求右键，也不维护两套入口。
 
-退役条件（三条都满足才动）：
+要恢复"双击即装"，需要一个**不依赖文件关联、也不依赖执行策略**的入口，候选：
 
-1. 有**不依赖执行策略**的双击入口，候选：① `.lnk` 快捷方式指向
-   `powershell.exe -NoProfile -ExecutionPolicy Bypass -File ...`；② 单文件 `.exe`
-   （Inno / ps2exe，未签名会触发 SmartScreen 提示）；
-2. 在"没有 PowerShell / 策略封死"的机器上验证过降级路径（当前是安装说明里的手动安装）；
-3. 回归清单跑完：装 → 校验 → 卸，**仓库布局与包布局各一遍**。
+1. `.lnk` 快捷方式指向 `powershell.exe -NoProfile -ExecutionPolicy Bypass -File ...`。
+   难点：lnk 内是绝对路径，压缩包换目录就失效，需要在首次运行或安装时重写；
+2. 单文件 `.exe`（ps2exe / Inno Setup）。能双击，但未签名会触发 SmartScreen，且构建要在 Windows 上做，
+   Linux CI 无法复现。
 
-在那之前，新功能只写在 `src/install.ps1` 里，`setup.cmd` 只允许改转发行。
-CI 有一条守卫：除 `src/setup.cmd` 外，仓库里出现任何 `.bat` / `.cmd` 直接失败。
+选定方案前，文档统一写「右键 → 使用 PowerShell 运行」，不要写"双击"。
 
 ## CI
 
@@ -240,7 +237,7 @@ CI 有一条守卫：除 `src/setup.cmd` 外，仓库里出现任何 `.bat` / `.
 
 | 验证项 | 结果 |
 |---|---|
-| `setup.cmd`（菜单 1）安装（208 文件 + 字体） | 通过，SHA-256 载荷校验通过 |
+| `setup.ps1`（菜单 1）安装（208 文件 + 字体） | 通过，SHA-256 载荷校验通过 |
 | `OpenRA.Utility.exe <mod> --check-yaml`（6 个模组） | 全部通过（退出码 0） |
 | `OpenRA.Utility.exe <mod> --check-yaml mods/<mod>/maps/<地图>/map.yaml`（162 张地图） | 全部通过 |
 | `--extract-chrome-strings` 界面键缺失检测 | 无缺失（无 `Adding` 行） |

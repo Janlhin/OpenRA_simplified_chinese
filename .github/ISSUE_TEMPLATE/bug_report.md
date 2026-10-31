@@ -24,7 +24,7 @@ labels: bug
 - 补丁版本（`manifest.json` 的 `version`）：
 - Windows 版本：
 - 是否装过其他 Mod / 汉化包：
-- 安装方式：`setup.cmd` / 手动覆盖
+- 安装方式：`setup.ps1`（右键运行）/ 手动覆盖
 
 **还有别的信息吗**
 （比如 `%APPDATA%\OpenRA\Logs` 里的报错片段）

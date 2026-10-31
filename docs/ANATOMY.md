@@ -18,7 +18,7 @@
 它是个**覆盖式补丁**，不是整包分发游戏——`files/` 里全是文本文件，安装时按目录结构盖到 OpenRA 安装目录上。
 
 ```
-双击 setup.cmd（中文菜单）
+右键 setup.ps1 → 使用 PowerShell 运行（中文菜单）
    └─ install.ps1（总调度）
         ├─ 读 manifest.json           ← 版本、适配引擎版本、208 个载荷文件的 SHA-256
         ├─ 探测 OpenRA 安装目录        ← 注册表 + Program Files\OpenRA*
@@ -43,7 +43,7 @@ OpenRA_simplified_chinese/
 ├─ README.md                          仓库首页（给读源码的人，不是包内那份）
 ├─ LICENSE / LICENSE-OFL.txt          补丁的 GPL 与字体的 SIL OFL
 ├─ src/                               打包源
-│   ├─ setup.cmd                      玩家唯一入口（纯 ASCII + CRLF，双击出菜单）
+│   ├─ setup.ps1                      玩家唯一入口（UTF-8 带 BOM + CRLF，右键运行出菜单）
 │   ├─ install.ps1                    全部逻辑
 │   ├─ manifest.json                  版本、适配引擎、208 条哈希、字体清单
 │   ├─ PACKAGE-README.md              包内 README 的源文件（打包时改名 README.md）
@@ -85,7 +85,7 @@ OpenRA_simplified_chinese/
 
 | 文件 | 作用 | 包内位置 |
 |---|---|---|
-| `setup.cmd` | **玩家唯一入口**。纯 ASCII + CRLF（避免代码页乱码）：不带参数时调 `install.ps1 -Menu` 出中文菜单，带参数时原样透传 | `setup.cmd` |
+| `setup.ps1` | **玩家唯一入口**。UTF-8 带 BOM + CRLF：不带参数时调 `install.ps1 -Menu` 出中文菜单，带参数时原样透传。Windows 双击 `.ps1` 只会打开记事本，必须右键「使用 PowerShell 运行」 | `setup.ps1` |
 | `install.ps1` | **安装/卸载/校验的全部逻辑**：目录探测、版本校验、SHA-256 校验、备份与挑选、UAC 提权、字体部署、`-DryRun`、还原、校验。脚本为 UTF-8 **带 BOM** + CRLF | `bin\install.ps1` |
 | `manifest.json` | **补丁的身份证**：`version`、`engineVersion`、`repository`、`font`、`stats`，以及 208 条 `{path,size,sha256}` | `bin\manifest.json` |
 | `PACKAGE-README.md` | 包内 README 的源文件：逐文件说明 + 附录 A（由 `tools/build_readme_inventory.py` 生成）。**链接只指向包内文件**，不要写仓库路径 | `README.md` |
@@ -207,7 +207,7 @@ CI 里还有一条内联守卫：`files/` 中若出现 `.ttf` / `.ttc` / `.otf` 
 | 脚本 | 作用 |
 |---|---|
 | `build_manifest.py` | diff 英文原版与汉化目录，**重建 `files/` 与全部哈希**。它会清空并重拷 `files/`，运行前确认没有未提交的手工改动 |
-| `build_release.py` | 把仓库打成**确定性**发布包 zip（时间戳取自 `manifest.json` 的 `releaseDate`）。默认走白名单（`setup.cmd` / `README.md` / `安装说明.txt` / `安装说明.md` / `LICENSE` / `install.ps1` / `manifest.json` / `files/**`），并按 `PACKAGE_LAYOUT` 把 `install.ps1`、`manifest.json` 映射进包内 `bin\`；`--dev` 打全量；`--verify` 在包内做自校验（入口齐全、`bin/manifest.json` 与仓库一致、载荷 size/sha256、无多余文件） |
+| `build_release.py` | 把仓库打成**确定性**发布包 zip（时间戳取自 `manifest.json` 的 `releaseDate`）。默认走白名单（`setup.ps1` / `README.md` / `安装说明.txt` / `安装说明.md` / `LICENSE` / `install.ps1` / `manifest.json` / `files/**`），并按 `PACKAGE_LAYOUT` 把 `install.ps1`、`manifest.json` 映射进包内 `bin\`；`--dev` 打全量；`--verify` 在包内做自校验（入口齐全、`bin/manifest.json` 与仓库一致、载荷 size/sha256、无多余文件） |
 
 ### 开发审计（需要游戏本体或字体，CI 不跑）
 

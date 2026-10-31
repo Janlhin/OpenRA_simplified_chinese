@@ -41,7 +41,7 @@
     -Backup "20261030-180424"。
 
 .PARAMETER Menu
-    显示中文交互菜单(安装 / 还原 / 校验 / 预演),由 setup.cmd 双击进入。
+    显示中文交互菜单(安装 / 还原 / 校验 / 预演),由 setup.ps1 转发进入。
     菜单里的每一项都通过子进程重新调用本脚本,互不影响。
 
 .EXAMPLE
@@ -306,7 +306,7 @@ function Invoke-Install {
     }
     if (-not $Target) {
         Fail '没能找到 OpenRA 安装目录。请用 -Target 手动指定,例如:'
-        Say  '    setup.cmd -Target "C:\Program Files\OpenRA (playtest)"' 'DarkGray'
+        Say  '    setup.ps1 -Target "C:\Program Files\OpenRA (playtest)"' 'DarkGray'
         exit 1
     }
     $Target = (Resolve-Path $Target).Path.TrimEnd('\')
@@ -503,7 +503,7 @@ function Invoke-Install {
             if (Test-Path (Join-Path $Target $exe)) { Say ("    " + (Join-Path $Target $exe)) 'White' }
         }
         Say ''
-        Say '  想还原英文:重新运行 setup.cmd,选 2' -ForegroundColor DarkGray
+        Say '  想还原英文:重新运行 setup.ps1,选 2' -ForegroundColor DarkGray
     }
     exit 0
 }
@@ -670,7 +670,7 @@ function Invoke-Verify {
         foreach ($r in $report) { Say ('    ' + $r) 'Red' }
         if ($fontRemain) { Warn ("字体 {0} 也仍残留于 mods\common\" -f ($leftFonts -join ', ')) }
         Say ''
-        Say '  建议:重新运行 setup.cmd 选 2(或 install.ps1 -Uninstall)完成还原。' 'Yellow'
+        Say '  建议:重新运行 setup.ps1 选 2(或 install.ps1 -Uninstall)完成还原。' 'Yellow'
         exit 1
     }
 }

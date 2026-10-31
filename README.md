@@ -37,18 +37,18 @@
 1. ⬇️ 到 **[Releases](https://github.com/Janlhin/OpenRA_simplified_chinese/releases)** 下载最新的 `OpenRA_simplified_chinese-x.y.z.zip`
 2. 📂 解压到一个**英文路径**下，例如 `D:\OpenRA_CN`
 3. 🛑 **关闭 OpenRA**
-4. 🖱️ 双击 **`setup.cmd`** → 菜单输入 `1` → 回车
+4. 🖱️ **右键 `setup.ps1` → 使用 PowerShell 运行** → 菜单输入 `1` → 回车
 
 > 装在 `C:\Program Files` 会弹一次 UAC；引擎版本不匹配会先警告再询问。
 
 命令行等价用法：
 
 ```bat
-setup.cmd -Target "C:\Program Files\OpenRA (playtest)"   :: 指定目录
-setup.cmd -DryRun        :: 只预览，不写任何文件
-setup.cmd -Uninstall     :: 还原英文
-setup.cmd -Verify        :: 校验是否卸干净
-setup.cmd -FontPath "D:\你的字体.ttf"   :: 换字体
+setup.ps1 -Target "C:\Program Files\OpenRA (playtest)"   :: 指定目录
+setup.ps1 -DryRun        :: 只预览，不写任何文件
+setup.ps1 -Uninstall     :: 还原英文
+setup.ps1 -Verify        :: 校验是否卸干净
+setup.ps1 -FontPath "D:\你的字体.ttf"   :: 换字体
 ```
 
 ## 🧩 包里有什么
@@ -57,7 +57,7 @@ setup.cmd -FontPath "D:\你的字体.ttf"   :: 换字体
 
 ```text
 OpenRA_simplified_chinese\
-├─ 🖱️ setup.cmd                  ← 双击这个
+├─ 🖱️ setup.ps1                  ← 右键 → 使用 PowerShell 运行
 ├─ 📖 README.md                  ← 逐文件说明（含 208 行清单）
 ├─ 📄 安装说明.txt / .md           ← 三步装 / 手动装 / AI 装 / FAQ
 ├─ ⚖️ LICENSE / LICENSE-OFL.txt   ← 补丁 GPL、字体 OFL
@@ -90,7 +90,7 @@ OpenRA_simplified_chinese\
 ├─ 📄 README.md                       你正在看的
 ├─ ⚖️ LICENSE · LICENSE-OFL.txt       补丁 GPL-3.0 / 字体 SIL OFL 1.1
 ├─ 📦 src\                            打包源（进 zip 的就是这里）
-│   ├─ setup.cmd · install.ps1 · manifest.json
+│   ├─ setup.ps1 · install.ps1 · manifest.json
 │   ├─ PACKAGE-README.md              包内 README 的源文件
 │   └─ 安装说明.txt · 安装说明.md
 ├─ 📚 files\mods\                     208 个载荷（覆盖树）
@@ -136,8 +136,8 @@ python tools/build_release.py --verify # 打包自校验（含包内死链）
 <summary>🔁 卸载了但还是中文？</summary>
 
 1.5.2 之前确实会这样：卸载可能挑中"重复安装留下的译文快照"。现在会自动跳过这类备份，
-并用最早那份真正的英文快照还原。重跑 `setup.cmd` → `2` 即可；也可
-`setup.cmd -Uninstall -Backup <备份目录名>` 指定。
+并用最早那份真正的英文快照还原。重跑 `setup.ps1` → `2` 即可；也可
+`setup.ps1 -Uninstall -Backup <备份目录名>` 指定。
 </details>
 
 <details>
@@ -166,8 +166,9 @@ python tools/build_release.py --verify # 打包自校验（含包内死链）
 - [x] 🧯 安装器可回滚、可校验、卸载能挑对备份
 - [ ] 📸 补一组界面截图，放到 README 顶部
 - [ ] 🖋️ 可选主题字体（霞鹜文楷），做成独立附件
-- [ ] 🧨 **入口全面改用 `.ps1`**：退役 `setup.cmd`，替代方案二选一（`.lnk` 双击垫片 / 单文件 exe）
-- [ ] 📜 **约定落地**：不再新增 `.cmd` / `.bat`，CI 已加守卫；存量只剩 `setup.cmd` 一个转发器
+- [x] 🧨 **入口全面改用 `.ps1`**：`setup.ps1` 取代 `setup.cmd`，仓库与包里已无任何 `.bat` / `.cmd`
+- [x] 📜 **约定落地**：CI 守卫禁止任何 `.bat` / `.cmd`，**零例外**
+- [ ] 🖱️ **恢复双击体验**：`.ps1` 双击只会打开记事本；候选 `.lnk` 垫片或单文件 exe
 - [ ] 🐧 Linux / macOS 的一页式手动安装文档
 - [ ] 📝 术语表统一校对（借 `docs/archive/rasc-ref` 的对齐结果）
 

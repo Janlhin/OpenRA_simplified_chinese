@@ -21,28 +21,28 @@
 
 1. 把 zip 解压到一个**英文路径**下，例如 `D:\OpenRA_CN`。
 2. **关闭 OpenRA**。
-3. 双击 **`setup.cmd`**，在菜单里输入 `1` 回车。
+3. **右键 `setup.ps1` → 使用 PowerShell 运行**，在菜单里输入 `1` 回车。
    - 自动探测 OpenRA 安装目录（注册表 + `Program Files\OpenRA*`），找不到会提示你指定。
    - 装在 `C:\Program Files` 时会弹一次 UAC。
    - 引擎版本不是 `playtest-20261026` 会先警告，再问你是否继续。
 4. 启动游戏，界面即为中文。
 
-`setup.cmd` 是**唯一入口**：安装 / 还原 / 卸载校验 / 预演都在同一个菜单里，
+`setup.ps1` 是**唯一入口**：安装 / 还原 / 卸载校验 / 预演都在同一个菜单里，
 不用记参数，也不用找第二个脚本。
 
 ### 命令行（等价用法）
 
 ```bat
-setup.cmd -Target "C:\Program Files\OpenRA (playtest)"
-setup.cmd -DryRun                 :: 只预览，不写任何文件
-setup.cmd -Uninstall              :: 还原英文
-setup.cmd -Verify                 :: 校验是否已卸干净
-setup.cmd -FontPath "D:\你的字体.ttf"   :: 换字体
+setup.ps1 -Target "C:\Program Files\OpenRA (playtest)"
+setup.ps1 -DryRun                 :: 只预览，不写任何文件
+setup.ps1 -Uninstall              :: 还原英文
+setup.ps1 -Verify                 :: 校验是否已卸干净
+setup.ps1 -FontPath "D:\你的字体.ttf"   :: 换字体
 ```
 
 ### 参数表
 
-`setup.cmd` 把参数原样透传给 `bin\install.ps1`，两者等价：
+`setup.ps1` 把参数原样透传给 `bin\install.ps1`，两者等价：
 
 | 参数 | 说明 |
 |---|---|
@@ -62,7 +62,7 @@ setup.cmd -FontPath "D:\你的字体.ttf"   :: 换字体
 
 ```
 OpenRA_simplified_chinese\
-├─ setup.cmd                     ← 双击这个
+├─ setup.ps1                     ← 右键 → 使用 PowerShell 运行
 ├─ README.md                     ← 你正在看的
 ├─ 安装说明.txt                   ← 同一份说明的记事本版
 ├─ 安装说明.md                    ← 同一份说明的 Markdown 版
@@ -80,8 +80,8 @@ OpenRA_simplified_chinese\
 
 | 项 | 它到底干什么 | 谁在用 | 能删吗 |
 |---|---|---|---|
-| `setup.cmd` | **唯一入口**。双击出中文菜单；带参数时原样透传给 `bin\install.ps1` | 玩家 | 删了只能手动安装 |
-| `bin\install.ps1` | 全部逻辑：找游戏、判版本、校验哈希、备份、提权、部署字体、还原 | `setup.cmd` 调用 | **不能删** |
+| `setup.ps1` | **唯一入口**。右键「使用 PowerShell 运行」出中文菜单；带参数时原样透传给 `bin\install.ps1` | 玩家 | 删了只能手动安装 |
+| `bin\install.ps1` | 全部逻辑：找游戏、判版本、校验哈希、备份、提权、部署字体、还原 | `setup.ps1` 调用 | **不能删** |
 | `bin\manifest.json` | 补丁的身份证：版本、适配的引擎、208 个载荷的 `{path,size,sha256}`、字体清单 | 安装器校验用 | **不能删** |
 | `files\mods\` | 208 个中文文本，目录结构与游戏 `mods\` 完全一致（见下节） | 安装器覆盖进游戏 | **不能删**（删了等于空包） |
 | `fonts\NotoSansSC-Regular.ttf` | 正文字体，装进 `mods\common\` | 安装器 | **不能删**（删了回退系统字体，系统也没有就装不了） |
@@ -90,7 +90,7 @@ OpenRA_simplified_chinese\
 | `安装说明.txt` / `安装说明.md` | 安装步骤（纯文本版，记事本直接看；Markdown 版内容相同） | 玩家 | 可以删 |
 | `LICENSE` / `LICENSE-OFL.txt` | 补丁的 GPL-3.0；随包字体的 SIL OFL 1.1 | 法律 | **不能删**（合规） |
 
-`bin\` 里两个文件互相依赖，别单独挪动——`setup.cmd` 按相对路径找它们。
+`bin\` 里两个文件互相依赖，别单独挪动——`setup.ps1` 按相对路径找它们。
 
 研发资产（`tools/`、`docs/`、`.github/`、`CONTRIBUTING.md`、`CHANGELOG.md` 等）
 只留在仓库里，**不进发布包**。
@@ -175,7 +175,7 @@ OpenRA 默认字体 `common|FreeSans.ttf` **没有中文字形**，不换字体�
 - 安装时复制到 `<游戏目录>\mods\common\`，**不依赖本机有没有中文字体**，英文版 Windows 也能显示中文。
 - 字体是 **Noto Sans SC 全量字形**（SIL OFL 1.1，允许随包分发），用 `fonttools` 从上游可变字体
   固化成 Regular / Bold 两个静态实例，**没有删掉任何字**；许可全文见 `LICENSE-OFL.txt`。
-- 想换字体：`setup.cmd -FontPath "D:\你的字体.ttf"`，安装器会把两处引用都改成它。
+- 想换字体：`setup.ps1 -FontPath "D:\你的字体.ttf"`，安装器会把两处引用都改成它。
 - 包内 `fonts\` 缺失时（比如有人只拷了 `files\`）安装器才会回退到系统字体；系统也没有就**直接中止**，
   不会装出"启动就报错"的半成品。这是安装器的兜底逻辑，**手动安装只拷这两个自带字体，不碰系统字体**。
 
@@ -183,10 +183,10 @@ OpenRA 默认字体 `common|FreeSans.ttf` **没有中文字形**，不换字体�
 
 所有被覆盖的文件都备份到 `<OpenRA 目录>\_zhcn-backup\<时间戳>\`，并附 `backup.json` 记录清单。
 
-- 双击 `setup.cmd` → 菜单输入 `2`：还原全部文件、删掉新增的两个字体，并顺手清掉补丁以前留下的字体。
+- 右键 `setup.ps1` →「使用 PowerShell 运行」→ 菜单输入 `2`：还原全部文件、删掉新增的两个字体，并顺手清掉补丁以前留下的字体。
 - 有多份备份时，安装器自动挑**最早的那份「真正的安装前快照」**：已经还原过的（名字带 `.已还原`）
   和重复安装时生成的（里面存的其实是译文）都会被跳过，并在屏幕上说明跳过了哪一份。
-- 想指定用哪一份：`setup.cmd -Uninstall -Backup 20261030-180424`
+- 想指定用哪一份：`setup.ps1 -Uninstall -Backup 20261030-180424`
   （值可以是备份目录名，也可以是完整路径）。
 - 备份目录不会被自动删除（还原后改名成 `*.已还原`），方便反复折腾。
 - 如果提示「没有可用的备份」，说明英文原件已经不在备份里了（多半是反复覆盖安装过）：
@@ -194,7 +194,7 @@ OpenRA 默认字体 `common|FreeSans.ttf` **没有中文字形**，不换字体�
 
 ### 卸载后校验
 
-还原之后想确认「到底卸干净没有」，`setup.cmd` → 菜单输入 `3`（等价于 `-Verify`）。
+还原之后想确认「到底卸干净没有」，`setup.ps1` → 菜单输入 `3`（等价于 `-Verify`）。
 它按 `manifest.json` 里 208 个载荷的 SHA-256 逐文件比对安装目录：
 
 **全部不一致 → 已彻底卸载（英文原版）；还有哈希一致的 → 列出来告诉你哪些没卸掉。**
@@ -239,7 +239,7 @@ Fluent **不会**在缺键时回退英文，而是把键名直接显示出来（
   要微调就改 `mods\<模组>\mod.yaml` 的 `Fonts:` 段（`Size` 加 1~2），或 `mods\common\metrics.yaml`。
 - 只做了 Windows 脚本；Linux / macOS 用户可手动把 `files/` 覆盖到安装目录，再把 `fonts/` 里的
   两个 TTF 放进 `mods/common/`。
-- `setup.cmd` 依赖 PowerShell。若目标机器被组策略禁用脚本，请走上面的「手动安装」。
+- `setup.ps1` 依赖 PowerShell。若目标机器被组策略禁用脚本，请走上面的「手动安装」。
 
 ## 附录 A：全部 208 个文件清单
 

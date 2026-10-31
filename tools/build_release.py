@@ -5,7 +5,7 @@
 CONTRIBUTING 等）留在仓库里，不进包。玩家解压后看到的布局：
 
     LICENSE / LICENSE-OFL.txt               ← 原样落到包根
-    setup.cmd                               ← 来自 src/
+    setup.ps1                               ← 来自 src/
     bin/install.ps1 / bin/manifest.json     ← 来自 src/，收进 bin/
     README.md / 安装说明.txt / 安装说明.md    ← 来自 src/（README 由 PACKAGE-README 改名）
     files/**                                 ← 208 个文本载荷
@@ -44,7 +44,7 @@ RELEASE_DIRS = ('files', 'fonts')
 # PACKAGE-README.md 是**包内**那份 README 的源文件：它的链接只指向 zip 里确实存在的
 # 文件，与仓库首页（README.md，面向读源码的人）分开维护。包里它就叫 README.md。
 PACKAGE_LAYOUT = {
-    'src/setup.cmd': 'setup.cmd',
+    'src/setup.ps1': 'setup.ps1',
     'src/install.ps1': 'bin/install.ps1',
     'src/manifest.json': 'bin/manifest.json',
     'src/PACKAGE-README.md': 'README.md',
