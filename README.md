@@ -189,6 +189,20 @@ python tools/build_release.py --verify # 打包自校验（含包内死链）
 - 随包字体 Noto Sans SC：**SIL OFL 1.1**，全文见 [`LICENSE-OFL.txt`](LICENSE-OFL.txt)
 - 原始英文文案版权归 OpenRA 项目（GPL-3.0）所有
 
+## 💖 赞助支持
+
+如果这个汉化补丁让你玩得更顺手，欢迎用下面的方式请作者喝杯咖啡 ☕ —— 所有赞助都会用于补丁维护与字体版权。
+
+<div align="center">
+
+| 微信赞赏 | 支付宝 |
+|:---:|:---:|
+| <img src="docs/assets/sponsor-wechat.jpg" width="220" alt="微信赞赏码" /> | <img src="docs/assets/sponsor-alipay.jpg" width="220" alt="支付宝收款码" /> |
+
+</div>
+
+> 扫码即可，金额随意。不想掏钱也完全没关系，点个 ⭐ Star 同样是很大的支持。
+
 ---
 
 <div align="center">
