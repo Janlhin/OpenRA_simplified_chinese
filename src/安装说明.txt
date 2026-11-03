@@ -1,156 +1,127 @@
 ﻿==============================================================
- OpenRA 简体中文汉化补丁  1.5.4
- 适配引擎：playtest-20261026（红警 / 泰伯利亚黎明 / 沙丘 2000）
+ OpenRA 简体中文汉化补丁 1.5.5
+ 适配引擎 playtest-20261026｜红警 · 泰伯利亚黎明 · 沙丘 2000
+ 非官方社区作品，与 OpenRA 项目无隶属关系｜GPL-3.0-or-later
 ==============================================================
 
-这个包做了什么
-  · 把三个模组的界面、单位与建筑名称、任务目标、战役简报换成简体中文
-  · 只包含文本文件：不改游戏本体、不改地图数据、不联网
-  · 只改 mods 目录下的文本，地图文件 map.yaml 一个都没动，
-    所以联机与旧录像完全兼容
-
-装之前
-  · Windows 10 / 11，用系统自带的 PowerShell 5.1（不用另装）
-  · 先关闭 OpenRA（三个 exe 的窗口都要关）
-  · 把 zip 解压到一个英文路径，例如 D:\OpenRA_CN
-    （路径带中文时部分解压工具会捣乱，英文最稳）
-
-三步装好
-  1. 右键 setup.ps1 -> 使用 PowerShell 运行
-  2. 菜单里输入 1，回车
-  3. 按提示启动游戏：RedAlert.exe / TiberianDawn.exe / Dune2000.exe
-
-  安装器会自动：找到 OpenRA 目录 → 备份将被覆盖的文件 → 覆盖 208 个文本
-  → 部署包内自带的两个中文字体 → 逐文件校验 SHA-256
-  备份在 <游戏目录>\_zhcn-backup\<时间戳>\，还原就靠它
-
-想还原英文
-  同上方式运行 -> 输入 2 -> 回车
-  想确认是否真的卸干净：同样方式运行 -> 输入 3
-
-找不到游戏目录
-  安装器会先查注册表和 Program Files；查不到会停下并提示。这时用命令行
-  指定（路径换成你自己的）：
-
-      setup.ps1 -Target "D:\Games\OpenRA"
-
-  其他参数（高级）：
-      setup.ps1 -DryRun        只看要改哪些文件，一个字都不写
-      setup.ps1 -Uninstall     还原
-      setup.ps1 -Verify        校验是否卸干净
-      setup.ps1 -FontPath "D:\NotoSansSC-Regular.ttf"    换字体
-      setup.ps1 -Yes           不提问，全部按“是”处理
+  ※ 纯文本版 安装说明.txt 与本文内容一致（由本文生成）；包内每个文件的作用见
+    README.md。
 
 --------------------------------------------------------------
- 手动安装（不想跑脚本，或公司电脑禁用了 PowerShell）
+ ① PS1 一键安装（推荐）
 --------------------------------------------------------------
-手动安装没有任何校验，**顺序不能错**。四步照做即可。
 
-  第 1 步：备份
-    把 <游戏目录>\mods 整个文件夹复制一份到别处（约 100 MB）。
+  前提：Windows 10 / 11，系统自带 PowerShell 5.1；先关掉 OpenRA 三个 exe 的窗
+  口；zip 解压到英文路径（如 D:\OpenRA_CN）。
 
-  第 2 步：先放字体（顺序很重要）
-    把本包 fonts\ 里的两个文件复制到 <游戏目录>\mods\common\：
-        fonts\NotoSansSC-Regular.ttf  ->  mods\common\NotoSansSC-Regular.ttf
-        fonts\NotoSansSC-Bold.ttf     ->  mods\common\NotoSansSC-Bold.ttf
+  1. 右键 setup.ps1 → 使用 PowerShell 运行
+  2. 菜单输入 1 → 回车
+  3. 按提示启动游戏
 
-    这两个文件就是补丁自带的中文字体（Noto Sans SC，SIL OFL 1.1）。
-    缺了它们，mod.yaml 指向的字体文件不存在，游戏启动会直接报错。
+  菜单：1 安装 · 2 还原英文 · 3 校验是否卸干净
 
-  第 3 步：覆盖文本
-    把本包 files\mods\ 里的所有内容，按同名路径覆盖到 <游戏目录>\mods\
-    （208 个文件，其中 12 个是新增：common\fluent\ingame-debug.ftl
-      和 11 个 d2k\maps\*\map.ftl）
+  安装器自动完成：定位游戏目录 → 备份 → 覆盖 208 个文本 → 部署两个中文字体 →
+  逐文件 SHA-256 校验。
+  备份在 <游戏目录>\_zhcn-backup\<时间戳>\，还原靠它；卸载完成后可安全删除。
 
-  第 4 步：启动游戏
-
-  为什么顺序不能错：
-    · 先覆盖文本、后放字体 → mod.yaml 已指向 NotoSansSC-Regular/Bold.ttf
-      但文件不存在，引擎启动时读不到字体，游戏会**直接报错退出**（不是变方块）
-    · 只放字体、不覆盖文本 → 能进游戏，但界面仍是英文（字体没用上）
-
-  自检（建议做）：
-      dir "<游戏目录>\mods\common\NotoSansSC-*.ttf"
-      dir "<游戏目录>\mods\common\fluent\ingame-debug.ftl"
-    两个都存在 = 文件到位
-
-  还原：把第 1 步备份的 mods 文件夹覆盖回去，再删掉
-        <游戏目录>\mods\common\NotoSansSC-Regular.ttf 与 NotoSansSC-Bold.ttf
+  参数                         作用
+  ---------------------------------------------------------------
+  -Target "D:\Games\OpenRA"    指定游戏目录（自动探测失败时）
+  -Uninstall                   还原英文
+  -Verify                      校验是否卸干净
+  -DryRun                      只预览要改哪些文件，不写入任何文件
+  -FontPath "D:\yourfont.ttf"  换字体
+  -Yes                         全部按“是”处理
 
 --------------------------------------------------------------
- 让 AI 助手帮你装
+ ② 让 AI 助手安装
 --------------------------------------------------------------
-把下面整段复制给能在你电脑上执行命令的 AI 助手（Program Files 需要
-管理员权限，它可能要你点一次 UAC 确认）：
+
+  把下面整段交给能在你电脑上执行命令的 AI 助手（装在 Program Files 需要管理员
+  权限，它可能要你点一次 UAC）：
 
     把这个目录里的 OpenRA 简体中文汉化补丁装到我电脑上的 OpenRA。
-    1) 先读 <游戏目录>\mods\ra\mod.yaml 里的 Version，必须是
-       playtest-20261026；不是就停下来告诉我当前版本。
+    1) 读 <游戏目录>\mods\ra\mod.yaml 的 Version，必须为 playtest-20261026；否则停下并报告当前版本。
     2) 把整个 <游戏目录>\mods 备份到 <本包目录>\_manual-backup\<时间戳>\。
-    3) 把本包 files\mods\ 下的所有内容覆盖到 <游戏目录>\mods\
-       （保持子目录结构）。
-    4) 把本包 fonts\ 里的 NotoSansSC-Regular.ttf 与 NotoSansSC-Bold.ttf
-       复制到 <游戏目录>\mods\common\。
-    5) 不要修改任何 map.yaml；也不要改 mod.yaml 里的字体名（包里已改好）。
-    6) 完成后报告：208 个文件是否都到位、两个 NotoSansSC 字体是否存在、
-       mods\ra\mod.yaml 的 Version 是否仍为 playtest-20261026。
+    3) 把本包 files\mods\ 下的内容按同名路径覆盖到 <游戏目录>\mods\。
+    4) 把本包 fonts\ 的 NotoSansSC-Regular.ttf 与 NotoSansSC-Bold.ttf 复制到 <游戏目录>\mods\common\。
+    5) 不要改任何 map.yaml，也不要改 mod.yaml 里的字体名（包里已改好）。
+    6) 完成后报告：208 个文件是否到位、两个字体是否存在、mod.yaml 的 Version 是否仍为 playtest-20261026。
 
   如果它没有管理员权限，让它把第 3、4 步交给你手动执行。
 
 --------------------------------------------------------------
- 常见问题
+ ③ 手动安装
 --------------------------------------------------------------
-Q: 卸载后界面还是中文？
-A: 说明还原用错了备份。安装器现在会自动跳过「已还原过」的备份和「重复安装时生成的
-   译文快照」，正常情况重跑一次 setup.ps1 选 2 即可。若提示「没有可用的备份」，
-   说明英文原件已不在备份里，用同版本的 OpenRA 安装包重新覆盖 mods\ 目录最稳妥；
-   也可以用 setup.ps1 -Uninstall -Backup <备份目录名> 指定用哪一份。
 
-Q: 界面还是英文？
-A: 文本没覆盖成功。确认 files\mods 覆盖到的是 <游戏目录>\mods，
-   而不是 <游戏目录>\mods\mods（多套一层是最常见的错）。
+  适用：不想跑脚本，或公司电脑用组策略禁用了 PowerShell。没有任何校验，四步顺
+  序不能错。
 
-Q: 中文全是方块？
-A: 字体没生效：mods\common\ 下没有 NotoSansSC-Regular.ttf / -Bold.ttf，
-   或 mod.yaml 里的字体名与实际文件名不一致。手动装的话回到第 2 步。
+  第 1 步：备份
 
-Q: 游戏启动就报错 / 闪退？
-A: 多半是“覆盖了文本但没放字体”。照第 2 步放好两个 NotoSansSC 字体再启动。
+  把 <游戏目录>\mods 整个复制到别处（约 100 MB）。
 
-Q: 界面出现 label-xxx 这样的原始键名？
-A: 补丁版本与游戏版本不匹配（游戏升级过）。卸载本补丁，去下载页找对应
-   新版本的补丁。
+  第 2 步：先放字体
 
-Q: 会影响联机或存档吗？
-A: 不改地图数据，联机兼容；存档在 %APPDATA%\OpenRA 下，补丁不碰那里。
-   但若服务器装了文件校验类插件，理论上可能判定为改文件。
+  把本包 fonts\ 两个文件复制到 <游戏目录>\mods\common\：
+  NotoSansSC-Regular.ttf、NotoSansSC-Bold.ttf
 
-Q: 杀毒软件报毒？
-A: 安装器是未签名的 PowerShell 脚本，部分杀软会提示。不放心就用上面的
-   手动安装，效果完全一样。
+  第 3 步：覆盖文本
 
---------------------------------------------------------------
- 包里有什么
---------------------------------------------------------------
-  setup.ps1        唯一入口（右键运行出菜单）
-  bin\             脚本与清单：install.ps1（全部逻辑）、manifest.json（哈希清单）
-  files\mods\      208 个文本文件（以 .ftl 为主）
-  fonts\           NotoSansSC-Regular.ttf / -Bold.ttf（补丁自带的中文字体）
-  README.md        每个文件是干什么的、能不能删
-  LICENSE          GPL-3.0（译文派生自 OpenRA 的 GPL 授权文本）
-  LICENSE-OFL.txt  字体的 SIL OFL 1.1 许可
-  安装说明.txt     本文件（同一份内容的 Markdown 版：安装说明.md）
+  把本包 files\mods\ 的全部内容按同名路径覆盖到 <游戏目录>\mods\
+  （208 个，其中 12 个是新增：common\fluent\ingame-debug.ftl 与 11 个
+  d2k\maps\*\map.ftl）
 
-  208 个文件逐个说明（含大小与作用）见 README.md 的「附录 A」。
+  第 4 步：启动游戏
 
-  别单独挪动 bin\ 里的文件：setup.ps1 按相对路径找它。
-  安装后 <游戏目录>\_zhcn-backup\ 里的备份，卸载完可以安全删除。
+  按提示选 RedAlert.exe / TiberianDawn.exe / Dune2000.exe。
+
+  ※ 顺序反了会怎样：先覆盖文本、后放字体 → mod.yaml 已指向 NotoSansSC 但文件
+    不存在，引擎直接报错退出（不是变方块）；只放字体、不覆盖文本 → 能进游戏，
+    但界面仍是英文。
+
+  自检：<游戏目录>\mods\common\ 下应同时有 NotoSansSC-Regular.ttf、
+  NotoSansSC-Bold.ttf 与 fluent\ingame-debug.ftl。
+
+  还原：把第 1 步备份的 mods 覆盖回去，再删掉那两个 NotoSansSC-*.ttf。
 
 --------------------------------------------------------------
- 许可与来源
+ ④ 问题排查
 --------------------------------------------------------------
-  本补丁以 GPL-3.0-or-later 发布，译文派生自 OpenRA 项目（GPL-3.0）。
-  随包字体为 Noto Sans SC，按 SIL Open Font License 1.1 分发（见 LICENSE-OFL.txt）。
-  非官方社区作品，与 OpenRA 项目无隶属关系。
-  项目地址：https://github.com/Janlhin/OpenRA_simplified_chinese
+
+  · 界面全是方块
+      字体没生效。mods\common\ 缺 NotoSansSC-*.ttf，或 mod.yaml 的字体名对不上；
+      手动安装的回到第 2 步
+
+  · 界面仍是英文
+      文本没覆盖成功。确认盖的是 mods\ 而不是 mods\mods\（多套一层最常见）
+
+  · 卸载后仍是中文
+      还原用错了备份。重跑选 2；仍不行用 -Uninstall -Backup <备份目录名> 指定
+
+  · 启动即报错 / 闪退
+      多半是“覆盖了文本但没放字体”，照第 2 步补齐两个字体
+
+  · 出现 label-xxx 键名
+      补丁与游戏版本不匹配（游戏升级过）。卸载后换对应新版本的补丁
+
+  · 影响联机 / 存档吗
+      不改地图数据，联机与旧录像兼容；存档在 %APPDATA%\OpenRA，补丁不碰。服务
+      器若装文件校验插件，理论上可能判定为改文件
+
+  · 杀毒软件报毒
+      安装器是未签名 PowerShell 脚本。不放心就走手动安装，效果完全相同
+
 --------------------------------------------------------------
+ ⑤ 其他
+--------------------------------------------------------------
+
+  · 包里有什么：setup.ps1 入口 · bin\ 脚本与哈希清单 · files\mods\ 208 个文
+    本 · fonts\ 两个中文字体 · README.md 逐文件说明 · 两个许可证。208 个文件的
+    逐个作用见 README.md 附录 A。
+  · 别单独挪动 bin\：setup.ps1 按相对路径找它。
+  · 只适配 playtest-20261026：引擎升级后先卸载旧补丁再更新。
+  · 字体：Noto Sans SC 全量字形约 20 MB，换来不依赖本机字体；个别 UI 缩放档
+    位行高可能略挤。
+  · 许可：补丁 GPL-3.0-or-later；字体 SIL OFL 1.1（见 LICENSE-OFL.txt）。
+  · 反馈：https://github.com/Janlhin/OpenRA_simplified_chinese/issues

@@ -121,10 +121,11 @@ git add -A && git commit -m "..." && git push
 1. 改版本号：`src/manifest.json` 的 `version` / `releaseDate`（或用
    `build_manifest.py --version x.y.z --date YYYY-MM-DD` 连带重算），并在 `CHANGELOG.md` 顶部加一节。
 2. 若动过 `files/`，按上节重建载荷与哈希。
-3. 构建发布包：`python tools/build_release.py --verify`
+3. 若动过 `src/安装说明.md`，先 `python tools/build_install_txt.py` 重新生成 `.txt`。
+4. 构建发布包：`python tools/build_release.py --verify`
    （产出 `dist/OpenRA_simplified_chinese-x.y.z.zip`，并打印 SHA-256——写进 Release 说明）
-4. 打 tag 并推送：`git tag -a vX.Y.Z -m "…" && git push origin vX.Y.Z`
-5. 在 GitHub 上以该 tag 创建 Release，把 `dist/*.zip` 作为附件上传；说明直接抄
+5. 打 tag 并推送：`git tag -a vX.Y.Z -m "…" && git push origin vX.Y.Z`
+6. 在 GitHub 上以该 tag 创建 Release，把 `dist/*.zip` 作为附件上传；说明直接抄
    `CHANGELOG.md` 对应版本那一节。
 
 ### 发布包里放什么
@@ -137,6 +138,8 @@ src/install.ps1   src/manifest.json          ← 按 PACKAGE_LAYOUT 收进 bin/
 src/PACKAGE-README.md                        ← 改名成包内的 README.md
 fonts/NotoSansSC-Regular.ttf  fonts/NotoSansSC-Bold.ttf  files/**
 ```
+
+`src/安装说明.txt` 是**生成物**：手改会在 CI 第 5 步被 `build_install_txt.py --check` 挡下来。
 
 `tools/`、`docs/`（含 CONTRIBUTING / CHANGELOG）、`.github/`、`.gitattributes`
 都留在仓库里，不进包——C 端解压后应该只看到一个入口、一份说明和 `files/`。
@@ -210,22 +213,27 @@ python tools/check_font_coverage.py
 
 ## CI
 
-`.github/workflows/validate.yml` 在 `push` / `pull_request` 时跑八步（Linux runner）：
+`.github/workflows/validate.yml` 在 `push` / `pull_request` 时跑九步（Linux runner）：
 
 1. `verify_manifest.py` —— 载荷与 `manifest.json` 逐字节一致；
 2. `lint_ftl.py files/mods` —— Fluent 规范（BOM / 换行 / 缩进 / 花括号）；
 3. `struct_check_maps.py files/mods` —— 地图文案结构自检；
 4. `check_links.py .` —— Markdown 相对链接与锚点（`docs/` 引用根目录文件必须写 `../`）；
-5. `build_readme_inventory.py --check` —— 包内 README 的附录 A 与 `manifest.json` 一致；
-6. `check_font_coverage.py` —— 载荷里的每个字符，随包字体都画得出来；
-7. 守卫：`files/` 中不得出现 `.ttf` / `.ttc` / `.otf`；
-8. `build_release.py --verify` —— 打包自校验：入口齐全、`bin/manifest.json` 一致、
+5. `build_install_txt.py --check` —— `安装说明.txt` 必须等于 `安装说明.md` 的生成结果；
+6. `build_readme_inventory.py --check` —— 包内 README 的附录 A 与 `manifest.json` 一致；
+7. `check_font_coverage.py` —— 载荷里的每个字符，随包字体都画得出来；
+8. 守卫：`files/` 中不得出现 `.ttf` / `.ttc` / `.otf`，仓库内不得出现 `.bat` / `.cmd`；
+9. `build_release.py --verify` —— 打包自校验：入口齐全、`bin/manifest.json` 一致、
    载荷与字体的 size+sha256、**包内 Markdown 的相对链接必须落在包里**。
 
 > 第 4 步只保证链接"在仓库里"能解析。README 一旦打进 zip，指向 `CONTRIBUTING.md` /
-> `docs/` 的链接就会全变成死链，而仓库侧完全看不出来——所以第 8 步另做一次包内链接检查。
+> `docs/` 的链接就会全变成死链，而仓库侧完全看不出来——所以第 9 步另做一次包内链接检查。
 > 这也正是**仓库首页 `README.md` 与包内 `PACKAGE-README.md` 必须分开**的原因：读者不同，
 > 能引用的文件也不同。
+
+> 第 5 步挡的是"改了 md 忘了同步 txt"这类漂移。这份说明早先由手写维护两份，
+> 结果 txt 里漏进了字面 `**`，所有校验都没报错，只有人眼能发现。现在 txt 是生成物：
+> 改说明只改 `src/安装说明.md`，然后 `python tools/build_install_txt.py`。
 
 > 第 2 步对 **CRLF 换行**判错并返回退出码 1。`.gitattributes` 已声明 `files/** -text`（不转换换行），
 > 所以载荷在本地就必须是 LF——不要用编辑器批量转换换行，否则 `manifest.json` 的哈希会全部失效。
@@ -270,6 +278,10 @@ python tools/check_font_glyphs.py "C:\Windows\Fonts\simhei.ttf" "安装游戏内
 
 # 地图文案结构校验（135 个 map.ftl，不需要第三方库）
 python tools/struct_check_maps.py "C:\Program Files\OpenRA (playtest)\mods" "C:\OpenRA-CN\mods"
+
+# 改完 安装说明.md 后重生成纯文本版（CI 会断言两者一致）
+python tools/build_install_txt.py            # 写入 src/安装说明.txt
+python tools/build_install_txt.py --stdout   # 只打到屏幕，先看看再写
 
 # 引擎自带的静态检查（退出码 0 即通过）
 OpenRA.Utility.exe ra --check-yaml

@@ -31,6 +31,9 @@ jobs:
       - name: Markdown 相对链接与锚点（docs/ 引用根目录文件须用 ../）
         run: python tools/check_links.py .
 
+      - name: 安装说明.txt 必须与 安装说明.md 的生成结果一致（txt 是生成物）
+        run: python tools/build_install_txt.py --check
+
       - name: README 附录的文件清单与 manifest.json 一致
         run: python tools/build_readme_inventory.py --check
 

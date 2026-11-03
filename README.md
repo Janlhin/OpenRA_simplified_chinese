@@ -59,7 +59,7 @@ setup.ps1 -FontPath "D:\你的字体.ttf"   :: 换字体
 OpenRA_simplified_chinese\
 ├─ 🖱️ setup.ps1                  ← 右键 → 使用 PowerShell 运行
 ├─ 📖 README.md                  ← 逐文件说明（含 208 行清单）
-├─ 📄 安装说明.txt / .md           ← 三步装 / 手动装 / AI 装 / FAQ
+├─ 📄 安装说明.txt / .md           ← PS1 装 / AI 装 / 手动装 / 问题排查
 ├─ ⚖️ LICENSE / LICENSE-OFL.txt   ← 补丁 GPL、字体 OFL
 ├─ 📦 bin\  install.ps1 · manifest.json
 ├─ 🔤 fonts\ NotoSansSC-Regular.ttf · -Bold.ttf
@@ -110,13 +110,14 @@ OpenRA_simplified_chinese\
 
 ## 🛠️ 本地校验
 
-CI 跑同样的八步，本地先跑能省一轮往返：
+CI 跑同样的步骤，本地先跑能省一轮往返：
 
 ```bash
 python tools/verify_manifest.py        # 载荷 ↔ src/manifest.json 逐字节一致
 python tools/lint_ftl.py files/mods    # Fluent 规范（BOM/换行/缩进/字面转义）
 python tools/struct_check_maps.py files/mods
 python tools/check_links.py .          # Markdown 链接与锚点
+python tools/build_install_txt.py --check  # 安装说明.txt 与 md 的生成结果一致
 python tools/build_readme_inventory.py --check   # 附录 A 与 manifest 一致
 python tools/check_font_coverage.py    # 载荷里的每个字，随包字体都画得出来
 python tools/build_release.py --verify # 打包自校验（含包内死链）

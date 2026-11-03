@@ -64,8 +64,8 @@ setup.ps1 -FontPath "D:\你的字体.ttf"   :: 换字体
 OpenRA_simplified_chinese\
 ├─ setup.ps1                     ← 右键 → 使用 PowerShell 运行
 ├─ README.md                     ← 你正在看的
-├─ 安装说明.txt                   ← 同一份说明的记事本版
-├─ 安装说明.md                    ← 同一份说明的 Markdown 版
+├─ 安装说明.txt                   ← 纯文本版（记事本直接看，由 md 生成）
+├─ 安装说明.md                    ← 完整说明：装 / 还原 / 手动装 / 排查
 ├─ LICENSE                       ← 补丁的 GPL-3.0
 ├─ LICENSE-OFL.txt               ← 字体的 SIL OFL 1.1
 ├─ bin\
@@ -87,7 +87,7 @@ OpenRA_simplified_chinese\
 | `fonts\NotoSansSC-Regular.ttf` | 正文字体，装进 `mods\common\` | 安装器 | **不能删**（删了回退系统字体，系统也没有就装不了） |
 | `fonts\NotoSansSC-Bold.ttf` | 粗体/标题字体，同上 | 安装器 | 同上 |
 | `README.md` | 本文件：每个文件是什么、怎么装、怎么还原、常见问题 | 玩家 | 可以删，但建议留着 |
-| `安装说明.txt` / `安装说明.md` | 安装步骤（纯文本版，记事本直接看；Markdown 版内容相同） | 玩家 | 可以删 |
+| `安装说明.txt` / `安装说明.md` | 安装步骤：PS1 一键装、让 AI 助手装、手动装、问题排查表（`.txt` 是纯文本版，记事本直接看；两版内容一致） | 玩家 | 可以删 |
 | `LICENSE` / `LICENSE-OFL.txt` | 补丁的 GPL-3.0；随包字体的 SIL OFL 1.1 | 法律 | **不能删**（合规） |
 
 `bin\` 里两个文件互相依赖，别单独挪动——`setup.ps1` 按相对路径找它们。

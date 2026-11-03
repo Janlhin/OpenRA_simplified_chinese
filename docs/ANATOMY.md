@@ -47,11 +47,11 @@ OpenRA_simplified_chinese/
 │   ├─ install.ps1                    全部逻辑
 │   ├─ manifest.json                  版本、适配引擎、208 条哈希、字体清单
 │   ├─ PACKAGE-README.md              包内 README 的源文件（打包时改名 README.md）
-│   └─ 安装说明.txt / 安装说明.md      玩家说明：三步装 / 手动装 / AI 装 / FAQ
+│   └─ 安装说明.txt / 安装说明.md      玩家说明：PS1 装 / AI 装 / 手动装 / 排查（.txt 由 .md 生成）
 ├─ files/                             载荷：覆盖树的根
 │   └─ mods/{common,ra,cnc,d2k,common-content,ra-content,cnc-content,d2k-content}/
 ├─ fonts/                             NotoSansSC-Regular/Bold.ttf（随包中文字体）
-├─ tools/                             13 个 Python 脚本（纯标准库）
+├─ tools/                             14 个 Python 脚本（纯标准库）
 ├─ docs/                              仓库自己的文档，不进发布包
 │   ├─ ANATOMY.md                     本文档
 │   ├─ MAINTAINING.md                 维护者操作手册
@@ -66,7 +66,7 @@ OpenRA_simplified_chinese/
 └─ .gitignore
 ```
 
-仓库共 264 个文件（不含 `.git/`），其中 **`files/` 载荷 208 个**——载荷数是唯一需要精确盯住的
+仓库共 267 个文件（不含 `.git/`、`dist/`），其中 **`files/` 载荷 208 个**——载荷数是唯一需要精确盯住的
 数字（它直接决定 `manifest.json` 的校验条目），其余是脚本、文档与仓库元文件。
 
 ---
@@ -89,7 +89,7 @@ OpenRA_simplified_chinese/
 | `install.ps1` | **安装/卸载/校验的全部逻辑**：目录探测、版本校验、SHA-256 校验、备份与挑选、UAC 提权、字体部署、`-DryRun`、还原、校验。脚本为 UTF-8 **带 BOM** + CRLF | `bin\install.ps1` |
 | `manifest.json` | **补丁的身份证**：`version`、`engineVersion`、`repository`、`font`、`stats`，以及 208 条 `{path,size,sha256}` | `bin\manifest.json` |
 | `PACKAGE-README.md` | 包内 README 的源文件：逐文件说明 + 附录 A（由 `tools/build_readme_inventory.py` 生成）。**链接只指向包内文件**，不要写仓库路径 | `README.md` |
-| `安装说明.txt` / `安装说明.md` | 给玩家的说明，同一份内容的两个版本：`.txt` 纯文本（UTF-8 带 BOM + CRLF，记事本直接看），`.md` 有标题层级与表格 | 同名 |
+| `安装说明.txt` / `安装说明.md` | 给玩家的说明。**`.md` 是唯一真相源**（标题层级 + 表格），`.txt` 由 `tools/build_install_txt.py` 生成：UTF-8 带 BOM + CRLF、按显示宽度折行，记事本直接看。改说明只改 `.md`，然后跑一次生成器 | 同名 |
 
 ## `docs/`：仓库自己的文档（不进发布包）
 
@@ -187,11 +187,11 @@ FluentMessages: ra|fluent/lua.ftl, ra|fluent/campaign.ftl, map.ftl
 
 ---
 
-## `tools/` 10 个脚本
+## `tools/` 14 个脚本
 
 纯标准库，任意平台可跑。按「谁在什么时候跑」分三组：
 
-### CI 每推必跑（4 个脚本）
+### CI 每推必跑（5 个脚本）
 
 | 脚本 | 作用 |
 |---|---|
@@ -199,6 +199,7 @@ FluentMessages: ra|fluent/lua.ftl, ra|fluent/campaign.ftl, map.ftl
 | `lint_ftl.py` | Fluent 规范：BOM / 换行 / 缩进 / 花括号。**载荷里出现 CRLF 即视为错误并返回退出码 1** |
 | `struct_check_maps.py` | 地图 `.ftl` 结构自检：键集合、空值、掉到第 0 列的值行 |
 | `check_links.py` | Markdown 相对链接与锚点是否存在（`docs/` 引用根目录文件必须写 `../`） |
+| `build_install_txt.py` | 由 `安装说明.md` 生成 `安装说明.txt`；`--check` 断言两者一致（防手写双份漂移） |
 
 CI 里还有一条内联守卫：`files/` 中若出现 `.ttf` / `.ttc` / `.otf` 直接判失败。
 
