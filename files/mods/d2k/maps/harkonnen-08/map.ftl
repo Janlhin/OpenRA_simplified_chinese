@@ -1,5 +1,5 @@
 ## OpenRA 简体中文汉化补丁 (SPDX-License-Identifier: GPL-3.0-or-later)
-## 中文译文:OpenRA_simplified_chinese 项目贡献;原始英文文案版权归 OpenRA 项目 (GPL-3.0) 所有。
+## 中文译文:OpenRA_Simplified_Chinese 项目贡献;原始英文文案版权归 OpenRA 项目 (GPL-3.0) 所有。
 ## rules.yaml
 briefing = 
     凭借新获得的武器，奥多斯不断壮大。奥多斯知道哈克南的怒火即将降临，已与阿特雷德斯结盟。

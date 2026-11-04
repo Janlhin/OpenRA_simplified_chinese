@@ -1,5 +1,5 @@
 ## OpenRA 简体中文汉化补丁 (SPDX-License-Identifier: GPL-3.0-or-later)
-## 中文译文:OpenRA_simplified_chinese 项目贡献;原始英文文案版权归 OpenRA 项目 (GPL-3.0) 所有。
+## 中文译文:OpenRA_Simplified_Chinese 项目贡献;原始英文文案版权归 OpenRA 项目 (GPL-3.0) 所有。
 ## rules.yaml
 briefing = 
     一座边境小镇一直在公开支持盟军的事业。这些人不再是苏联人，而是我们伟大帝国的敌人。既然是敌人，就必须消灭。

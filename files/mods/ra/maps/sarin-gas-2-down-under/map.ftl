@@ -1,5 +1,5 @@
 ## OpenRA 简体中文汉化补丁 (SPDX-License-Identifier: GPL-3.0-or-later)
-## 中文译文:OpenRA_simplified_chinese 项目贡献;原始英文文案版权归 OpenRA 项目 (GPL-3.0) 所有。
+## 中文译文:OpenRA_Simplified_Chinese 项目贡献;原始英文文案版权归 OpenRA 项目 (GPL-3.0) 所有。
 ## rules.yaml
 briefing = 
     我们追踪车队的路线来到一处地下设施。我们怀疑这里是通往苏联主要沙林工厂的隐秘入口。

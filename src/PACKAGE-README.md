@@ -1,7 +1,7 @@
 # OpenRA 简体中文汉化补丁
 
 > 本文是**发布包内**的说明，解释这个 zip 里每个文件是什么、怎么装、怎么还原。
-> 源码、开发文档与版本历史在仓库主页 <https://github.com/Janlhin/OpenRA_simplified_chinese>。
+> 源码、开发文档与版本历史在仓库主页 <https://github.com/Janlhin/OpenRA_Simplified_Chinese>。
 
 给 **[OpenRA](https://www.openra.net/)**（`playtest-20261026`）加上简体中文的补丁：
 红警 / 泰伯利亚黎明 / 沙丘 2000 三个模组的界面、单位与建筑名称、任务目标，以及全部战役简报。
@@ -61,7 +61,7 @@ setup.ps1 -FontPath "D:\你的字体.ttf"   :: 换字体
 解压后**顶层 9 项**（6 个文件 + 3 个目录），连子目录一共 **218 个文件**：
 
 ```
-OpenRA_simplified_chinese\
+OpenRA_Simplified_Chinese\
 ├─ setup.ps1                     ← 右键 → 使用 PowerShell 运行
 ├─ README.md                     ← 你正在看的
 ├─ 安装说明.txt                   ← 纯文本版（记事本直接看，由 md 生成）
@@ -530,6 +530,6 @@ Fluent **不会**在缺键时回退英文，而是把键名直接显示出来（
 ## 反馈与许可
 
 - 发现译文问题、方块字、漏翻，或想帮忙翻译 → 到仓库提 issue / PR：
-  <https://github.com/Janlhin/OpenRA_simplified_chinese>。
+  <https://github.com/Janlhin/OpenRA_Simplified_Chinese>。
 - 许可证：本补丁以 **GPL-3.0-or-later** 发布（全文见包内 `LICENSE`），译文派生自 OpenRA 项目。
 - 随包字体 Noto Sans SC 以 **SIL OFL 1.1** 分发（全文见包内 `LICENSE-OFL.txt`）。

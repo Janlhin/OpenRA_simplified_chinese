@@ -39,7 +39,7 @@
 仓库自己的说明与历史在 `docs/`，工具在 `tools/`：
 
 ```
-OpenRA_simplified_chinese/
+OpenRA_Simplified_Chinese/
 ├─ README.md                          仓库首页（给读源码的人，不是包内那份）
 ├─ LICENSE / LICENSE-OFL.txt          补丁的 GPL 与字体的 SIL OFL
 ├─ src/                               打包源

@@ -1,5 +1,5 @@
 ## OpenRA 简体中文汉化补丁 (SPDX-License-Identifier: GPL-3.0-or-later)
-## 中文译文:OpenRA_simplified_chinese 项目贡献;原始英文文案版权归 OpenRA 项目 (GPL-3.0) 所有。
+## 中文译文:OpenRA_Simplified_Chinese 项目贡献;原始英文文案版权归 OpenRA 项目 (GPL-3.0) 所有。
 ## rules.yaml
 briefing = 
     你的目标是阿特雷德斯的高科技工厂——那是公爵联合帝国部队的计划中薄弱的一环。没有这座设施，帝国的搬运机很快就会失修，无法继续往战场运送增援。

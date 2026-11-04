@@ -1,5 +1,5 @@
 ## OpenRA 简体中文汉化补丁 (SPDX-License-Identifier: GPL-3.0-or-later)
-## 中文译文:OpenRA_simplified_chinese 项目贡献;原始英文文案版权归 OpenRA 项目 (GPL-3.0) 所有。
+## 中文译文:OpenRA_Simplified_Chinese 项目贡献;原始英文文案版权归 OpenRA 项目 (GPL-3.0) 所有。
 ## rules.yaml
 briefing = 
     在帝国盆地开采香料。建造一座香料精炼厂，并抵御散布在盆地各处的哈克南部队。你只被配属了有限的进攻兵力——要善加使用。

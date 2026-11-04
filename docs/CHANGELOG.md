@@ -1,5 +1,38 @@
 # 更新日志
 
+## 1.6.0 — 2026-11-04
+
+**仓库与发布包统一改名为 `OpenRA_Simplified_Chinese`。译文与载荷内容一字未改，改的是项目标识本身。**
+
+- **仓库改名**：`Janlhin/OpenRA_simplified_chinese` → `Janlhin/OpenRA_Simplified_Chinese`。
+  GitHub 对旧地址保留 301 重定向，老链接不会失效。
+- **发布包标识跟着改**：`src/manifest.json` 的 `name` 字段是发布包文件名与包内顶层目录的
+  **唯一来源**（见 `tools/build_release.py`），改成 `OpenRA_Simplified_Chinese` 后，
+  发布包由 `OpenRA_simplified_chinese-x.y.z.zip` 变为 `OpenRA_Simplified_Chinese-x.y.z.zip`，
+  包内顶层目录同理。安装器读的是 `manifest` 的 `version` / `engineVersion` / `files[].sha256`
+  与 `font`，**不读 `name`**，所以安装与卸载行为零变化，只是包名变了。
+- **174 个 `.ftl` 的 SPDX 署名头同步**：头部第二行 `## 中文译文:<项目名> 项目贡献;…`
+  里的项目名一并更正，署名与仓库名保持一致。随之 **208 个载荷的 size + sha256 全部重算**
+  （`tools/build_manifest.py` 需要英文原版与汉化版两个游戏目录才能整体重建，
+  这次只动署名头，故按字节重算写回 `manifest.json`）。
+- **文档更正**：仓库 `README.md`（徽章、Releases 链接、下载文件名、目录树）、
+  `LICENSE` 版权行、`docs/ANATOMY.md`、`docs/MAINTAINING.md`、`src/安装说明.md`、
+  包内 `src/PACKAGE-README.md` —— 共 20 处指向当前名称的引用。
+- **生成物同步**：`src/安装说明.txt`（由 md 渲染）与包内 README 附录 A（由 manifest 渲染）
+  分别用 `build_install_txt.py` 与 `build_readme_inventory.py` 重新生成，未手改。
+- **历史记录有意不改**：`docs/CHANGELOG.md` 里 1.2.x→1.3.0 那次改名的条目、
+  `docs/archive/rasc-ref/` 下归档的参考脚本（译名对齐的证据链）、以及
+  「首个 Release v1.3.1 的附件名」都保持原样 —— 它们记述的是已经发生的事，
+  不是当前名称。旧 Release 的附件也仍是旧名，不做追溯性改名。
+- **旧 Release 不受影响**：v1.5.5 及更早的附件名保持 `OpenRA_simplified_chinese-*.zip`，
+  下载链接照常可用；新包从 v1.6.0 起改名。
+
+**验证**：`verify_manifest.py`（208 个载荷逐字节一致）、`lint_ftl.py`（174 个，问题 0 处）、
+`struct_check_maps.py`（146 个，问题 0 处）、`check_links.py`、`build_install_txt.py --check`、
+`build_readme_inventory.py --check`、`check_font_coverage.py`（1579 个字符全部有字形）、
+`build_release.py --verify` 全绿。发布包 `OpenRA_Simplified_Chinese-1.6.0.zip`，
+13,001,820 字节，sha256 `1450b39edee498f103d8951ad334d5ef41f03b4ac2c888475bd5edaa8a70f828`。
+
 ## 1.5.5 — 2026-11-03（本地构建，未发布）
 
 **只动玩家说明：`安装说明` 重排为三段式并瘦身，`.txt` 不再是手写副本，改由 `.md` 生成。载荷与译文零改动。**

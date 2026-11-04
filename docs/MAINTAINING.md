@@ -97,9 +97,9 @@ python tools/build_manifest.py --original "…" --patched "stage/patched" --vers
 
 ## 仓库与发布
 
-- **远端**：<https://github.com/Janlhin/OpenRA_simplified_chinese>（`origin`，默认分支 `main`）
+- **远端**：<https://github.com/Janlhin/OpenRA_Simplified_Chinese>（`origin`，默认分支 `main`）
 - `src/manifest.json` 的 `repository` 字段已填。
-- `LICENSE` 的版权行是 `Copyright (C) 2026 OpenRA_simplified_chinese contributors`，
+- `LICENSE` 的版权行是 `Copyright (C) 2026 OpenRA_Simplified_Chinese contributors`，
   若想挂到个人名下可自行改。
 
 日常更新（**改了载荷就必须先重算哈希**，否则 CI 会挡下）：
@@ -123,7 +123,7 @@ git add -A && git commit -m "..." && git push
 2. 若动过 `files/`，按上节重建载荷与哈希。
 3. 若动过 `src/安装说明.md`，先 `python tools/build_install_txt.py` 重新生成 `.txt`。
 4. 构建发布包：`python tools/build_release.py --verify`
-   （产出 `dist/OpenRA_simplified_chinese-x.y.z.zip`，并打印 SHA-256——写进 Release 说明）
+   （产出 `dist/OpenRA_Simplified_Chinese-x.y.z.zip`，并打印 SHA-256——写进 Release 说明）
 5. 打 tag 并推送：`git tag -a vX.Y.Z -m "…" && git push origin vX.Y.Z`
 6. 在 GitHub 上以该 tag 创建 Release，把 `dist/*.zip` 作为附件上传；说明直接抄
    `CHANGELOG.md` 对应版本那一节。
@@ -189,7 +189,7 @@ python tools/check_font_coverage.py
 - CI 徽章已在 README 顶部启用：
 
 ```markdown
-[![validate](https://github.com/Janlhin/OpenRA_simplified_chinese/actions/workflows/validate.yml/badge.svg)](https://github.com/Janlhin/OpenRA_simplified_chinese/actions/workflows/validate.yml)
+[![validate](https://github.com/Janlhin/OpenRA_Simplified_Chinese/actions/workflows/validate.yml/badge.svg)](https://github.com/Janlhin/OpenRA_Simplified_Chinese/actions/workflows/validate.yml)
 ```
 
 ## 脚本与入口约定

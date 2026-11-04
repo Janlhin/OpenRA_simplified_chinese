@@ -4,8 +4,8 @@
 
 **红警 · 泰伯利亚黎明 · 沙丘 2000 —— 界面、单位、任务、简报，一次全中文**
 
-[![validate](https://github.com/Janlhin/OpenRA_simplified_chinese/actions/workflows/validate.yml/badge.svg)](https://github.com/Janlhin/OpenRA_simplified_chinese/actions/workflows/validate.yml)
-[![release](https://img.shields.io/github/v/release/Janlhin/OpenRA_simplified_chinese?label=release&color=2ea44f)](https://github.com/Janlhin/OpenRA_simplified_chinese/releases)
+[![validate](https://github.com/Janlhin/OpenRA_Simplified_Chinese/actions/workflows/validate.yml/badge.svg)](https://github.com/Janlhin/OpenRA_Simplified_Chinese/actions/workflows/validate.yml)
+[![release](https://img.shields.io/github/v/release/Janlhin/OpenRA_Simplified_Chinese?label=release&color=2ea44f)](https://github.com/Janlhin/OpenRA_Simplified_Chinese/releases)
 [![license](https://img.shields.io/badge/license-GPL--3.0--or--later-blue.svg)](LICENSE)
 ![platform](https://img.shields.io/badge/platform-Windows%2010%20%7C%2011-0078D4)
 
@@ -34,7 +34,7 @@
 
 ## 📥 三分钟装好
 
-1. ⬇️ 到 **[Releases](https://github.com/Janlhin/OpenRA_simplified_chinese/releases)** 下载最新的 `OpenRA_simplified_chinese-x.y.z.zip`
+1. ⬇️ 到 **[Releases](https://github.com/Janlhin/OpenRA_Simplified_Chinese/releases)** 下载最新的 `OpenRA_Simplified_Chinese-x.y.z.zip`
 2. 📂 解压到一个**英文路径**下，例如 `D:\OpenRA_CN`
 3. 🛑 **关闭 OpenRA**
 4. 🖱️ **右键 `setup.ps1` → 使用 PowerShell 运行** → 菜单输入 `1` → 回车
@@ -56,7 +56,7 @@ setup.ps1 -FontPath "D:\你的字体.ttf"   :: 换字体
 解压后**顶层 9 项**，连子目录共 218 个文件：
 
 ```text
-OpenRA_simplified_chinese\
+OpenRA_Simplified_Chinese\
 ├─ 🖱️ setup.ps1                  ← 右键 → 使用 PowerShell 运行
 ├─ 📖 README.md                  ← 逐文件说明（含 208 行清单）
 ├─ 📄 安装说明.txt / .md           ← PS1 装 / AI 装 / 手动装 / 问题排查

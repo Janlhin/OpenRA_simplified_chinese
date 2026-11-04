@@ -1,5 +1,5 @@
 ## OpenRA 简体中文汉化补丁 (SPDX-License-Identifier: GPL-3.0-or-later)
-## 中文译文:OpenRA_simplified_chinese 项目贡献;原始英文文案版权归 OpenRA 项目 (GPL-3.0) 所有。
+## 中文译文:OpenRA_Simplified_Chinese 项目贡献;原始英文文案版权归 OpenRA 项目 (GPL-3.0) 所有。
 ## rules.yaml
 briefing = 
     长期给我们添麻烦的希腊指挥官斯塔夫罗斯终于走投无路了。他躲进了一座装满他超时空科技的地下掩体。向他证明，任何盟军的伎俩都挡不住苏联的怒火。找到他，除掉他。
